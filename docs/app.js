@@ -482,7 +482,7 @@ async function refreshModelStatus(){
    const planConsent=document.querySelector('#plan-model-consent-wrap span');
    if(planConsent)planConsent.textContent='我同意由 Coding Plan 真实模型从两个科学校验通过的候选中选择下一步；不发送历史记录，不自动执行。';
   }
-  $('model-state').textContent=state.modelActive?(codingPlanDemo?'研发演示 AI：':s.providerSource==='judge-session'?'我的 AI：':'学校 AI：')+s.provider+(s.providerVerified?' ✓':'（待验证）'):'AI 尚未连接';
+  $('model-state').textContent=state.modelActive?(codingPlanDemo?'研发演示 AI：':(s.providerSource==='judge-session'||s.providerSource==='browser-BYOK')?'我的 AI：':'学校 AI：')+s.provider+(s.providerVerified?' ✓':'（待验证）'):'AI 尚未连接';
   $('institution-provider').textContent=state.modelActive?'当前模型：'+s.provider+' · '+s.model+'（Key 仅保留在服务端）':'选择 DeepSeek 官方 API，连接你的 AI 导师';
   $('mentor-connection-note').textContent=state.modelActive?'已配置 '+s.provider+'，勾选授权后才会使用 AI。':'尚未连接 AI；点击首页“配置我的 AI”即可启用';
   $('privacy-consent').hidden=!state.modelActive;
