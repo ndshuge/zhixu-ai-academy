@@ -48,10 +48,22 @@ function baseMentor(run){
  rationale:'浏览器本地科学方法提示，不是 AI 模型生成。',
  availability:'当前未授权真实 DeepSeek 在线请求'};
 }
+const evoTransfer={prompt:'两种模拟合作策略在两个随机种子的重复实验中有差异。可以直接认为合作在所有情境都有普遍优势吗？',options:['可以，两个种子足以证明普遍结论','不能，需要更多独立重复，提前规定指标并检验条件边界','可以，因为200个tick就是200个独立实验'],answer:1,explanation:'随机种子对应模拟世界重复单位，而不是每个tick都代表一次独立实验；模型结果不能无条件外推到现实。'};
 const transfer={prompt:'同样使用 Logistic 映射和同一个 r，两个接近初值在若干次迭代后分开。这意味着什么？',
  options:['相同参数必然完全重合','相同规则也可能对初值高度敏感','只要迭代规则相同，轨迹永远重合'],
  answer:1,explanation:'敏感初值依赖意味着在某些参数区域，微小初值差异会随迭代放大，不能仅根据相同公式断定轨迹一致。'};
 const proposal=(run,goal)=>{
+ if(run.result.experiment==='evo-pair'){
+  const from=run.result.condition.baseSeed,to=(from+104729)>>>0;
+  return {plannerMode:'rules',toolId:'browser-evo-world-pair',
+    experiment:'evo-pair',goal,studyQuestion:'更换配对随机种子后，合作机制的相对效果是否仍然稳定？',
+    why:'只更改随机种子，保持模型参数、合作开关、200步与重复次数一致。',
+    limits:'两组种子只是很小的模拟样本，不能推出真实生态中的普遍结论。',
+    controlPolicy:'one-variable',fixedVariables:['model','cooperation','ticks','repeats'],
+    changes:[{field:'seed',from,to}],seed:to,params:null,
+    budget:1,round:run.depth+2,approvalRequired:true,autoExecuted:false,
+    note:'需要学生独立写出下一轮预测并明确批准。'};
+ }
  const x=run.result.condition,from=x.logDelta??-10,to=Math.max(-14,Math.min(-3,from-1));
  const params={...x,logDelta:to};
  return {plannerMode:'rules',toolId:'browser-local-logistic-compare',experiment:run.result.experiment,goal,studyQuestion:'减小初值扰动后，两条轨迹在相同迭代窗口会怎样？',
@@ -67,13 +79,18 @@ async function handler(path,init={}){
  const data=method==='POST'?JSON.parse(init.body||'{}'):{};
  if(url.pathname==='/api/status'){
   const active=model()?.status?.()===true;
-  return result({ok:true,app:'知序 AI 学院 Pages',version:'0.4.2-pages-adapter',pflVersion:VERSION,evoVersion:'browser-evo-unavailable',mentorMode:active?'llm-configured':'rules',provider:active?'DeepSeek':null,model:active?'deepseek-chat':null,providerVerified:active,providerSource:'browser-BYOK',usage:{today:0,limit:12,tokensToday:0},
-    experiments:['sensitivity','logistic'],experimentPlanner:{mode:'browser-rules-and-optional-LLM',approvalRequired:true,maxRounds:3,scope:'one-variable',constrainedLLMSelectionAvailable:active}});
+  return result({ok:true,app:'知序 AI 学院 Pages',version:'0.4.2-pages-adapter',pflVersion:VERSION,evoVersion:'evoworld-0.1.1-browser',mentorMode:active?'llm-configured':'rules',provider:active?'DeepSeek':null,model:active?'deepseek-chat':null,providerVerified:active,providerSource:'browser-BYOK',usage:{today:0,limit:12,tokensToday:0},
+    experiments:['sensitivity','logistic','evo-pair'],experimentPlanner:{mode:'browser-rules-and-optional-LLM',approvalRequired:true,maxRounds:3,scope:'one-variable',constrainedLLMSelectionAvailable:active}});
  }
- if(url.pathname==='/api/transfer')return result({prompt:transfer.prompt,options:transfer.options});
+ if(url.pathname==='/api/transfer'){
+  const target=getRun(url.searchParams.get('runId'))?.result?.experiment==='evo-pair'?evoTransfer:transfer;
+  return result({prompt:target.prompt,options:target.options});
+ }
  if(url.pathname==='/api/run'&&method==='POST'){
   const prediction=clip(data.prediction);if(!prediction)return error(400,'必须先提交个人预测');
-  const resultValue=experiment(data.experiment,data.params||data);
+  const resultValue=data.experiment==='evo-pair'
+   ?await (await import('./pages-evo-pair.mjs')).runEvoPair(data.seed)
+   :experiment(data.experiment,data.params||data);
   const runId=rnd();runs.set(runId,{prediction,result:resultValue,mentored:false,depth:0});
   return result({runId,...resultValue});
  }
@@ -110,38 +127,62 @@ async function handler(path,init={}){
   if(newPrediction.length<8)return error(400,'请填写至少8字的第二轮预测');
   const parent=getRun(p.runId);if(newPrediction===parent.prediction)return error(400,'请填写与第一轮不同的新预测');
   p.used=true;const prop=p.proposal;
-  const out=experiment(prop.experiment,prop.params),runId=rnd();
+  const out=prop.experiment==='evo-pair'
+   ?await (await import('./pages-evo-pair.mjs')).runEvoPair(prop.seed)
+   :experiment(prop.experiment,prop.params);
+  const runId=rnd();
   const lineage={parentRunId:p.runId,changed:prop.changes,toolId:prop.toolId,plannerMode:prop.plannerMode,studyQuestion:prop.studyQuestion,goal:prop.goal,why:prop.why,limits:prop.limits,approvedAt:new Date().toISOString()};
   runs.set(runId,{prediction:newPrediction,result:out,depth:parent.depth+1,mentored:false});
   return result({runId,...out,lineage,studentApproval:'explicit-browser-local',planConsumed:true});
  }
  if(url.pathname==='/api/evaluate'&&method==='POST'){
   if(!getRun(data.runId))return error(404,'科学实验记录不存在');
-  return result({correct:data.answer===transfer.answer,explanation:transfer.explanation});
+  const target=getRun(data.runId).result.experiment==='evo-pair'?evoTransfer:transfer;
+  return result({correct:data.answer===target.answer,explanation:target.explanation});
  }
  if(url.pathname==='/api/learning/questions'){
-  const q=await questions(),stage=url.searchParams.get('stage'),experiment=url.searchParams.get('experiment');
-  return result({questions:(q.questions||[]).filter(x=>(!stage||x.stage===stage)&&(!experiment||x.experiment===experiment))});
+  const q=await import('./pages-quiz-bank.mjs');
+  return result({questions:q.listPublicQuestions({stage:url.searchParams.get('stage')||undefined,
+   experiment:url.searchParams.get('experiment')||undefined})});
  }
  if(url.pathname==='/api/learning/item'){
-  const q=await questions(),id=url.searchParams.get('itemId'),item=(q.questions||[]).find(x=>x.itemId===id)|| (q.sampleItem?.itemId===id?q.sampleItem:null);
-  if(!item)return error(404,'该练习尚未迁移，请选择其他题目');
-  const token=rnd();attempts.set(token,{id,used:false});return result({...item,attemptToken:token});
+  const q=await import('./pages-quiz-bank.mjs');
+  const id=url.searchParams.get('itemId'),item=q.getPublicQuestion(id);
+  if(!item)return error(404,'题目不存在');
+  const token=rnd();attempts.set(token,{id,used:false,created:Date.now()});
+  return result({...item,attemptToken:token});
  }
  if(url.pathname==='/api/learning/grade'&&method==='POST'){
-  const token=attempts.get(data.attemptToken);if(!token||token.id!==data.itemId||token.used)return error(409,'答题凭据不合法或已使用');
-  token.used=true;
-  const sample=(await questions()).sampleGrade;
-  if(sample?.itemId===data.itemId){
-   const correct=Number(data.answer)===Number(sample.correctAnswer);
-   return result({...sample,studentAnswer:data.answer,correct,gradedResult:correct?'correct':'incorrect',feedback:correct?'回答正确。'+(sample.feedback||''): '请重新检查证据。'+(sample.feedback||'')});
-  }
-  return result({itemId:data.itemId,studentAnswer:data.answer,gradedResult:'unverified',correct:null,feedback:'Pages浏览器版保存了你的回答，但缺少此题官方离线评分规则，暂不判定对错。',conceptIds:[],nextStep:'请在完整服务器版获得正式评分。'});
+  const token=attempts.get(data.attemptToken);
+  if(!token||token.id!==data.itemId||token.used)return error(409,'题目凭据不存在、已使用或不匹配');
+  if(Date.now()-token.created>30*60*1000)return error(410,'答题凭据已过期');
+  const q=await import('./pages-quiz-bank.mjs');
+  try{
+   const graded=q.gradeQuestion(data.itemId,data.answer);
+   token.used=true;
+   return result({...graded,suggestedReviewItem:q.recommendedReviewItem(graded.conceptIds[0]),
+    provenance:'original-versioned-rubric-browser-local-not-server-enforced'});
+  }catch(e){return error(400,e.message)}
  }
- if(url.pathname==='/api/learning/concepts')return result({concepts:[]});
+ if(url.pathname==='/api/learning/concepts'){
+  const q=await import('./pages-quiz-bank.mjs');return result({concepts:q.CONCEPTS});
+ }
  if(url.pathname==='/api/agent/tools')return result({plannerMode:'browser-local',approvalRequired:true,tools:[{id:'browser-local-logistic-compare',name:'浏览器 Logistic 单变量对照实验'}]});
  if(url.pathname==='/api/evidence/summary')return result({scope:'pages-browser-local',actualStudentParticipants:0,notice:'非真实学习成效评估数据'});
- if(url.pathname.startsWith('/api/safety/'))return result({cases:[],notice:'此安全案例需要原 Node 服务器复核；Pages 不虚构服务端评估'});
+ if(url.pathname==='/api/safety/cases')return result({cases:[
+ {id:'extra-field',name:'输出夹带指令',summary:'模型选择之外又附加了 shell 命令',protectedBy:'严格单字段 JSON 白名单'},
+ {id:'tool-injection',name:'越权工具请求',summary:'模型尝试指定一个不存在的系统工具',protectedBy:'模型只能选择 A/B'},
+ {id:'change-unapproved-variable',name:'擅改多个参数',summary:'提案尝试修改未经授权的科学变量',protectedBy:'浏览器版单变量科学校验'}
+],scope:'FIXED_LOCAL_SIMULATION_NOT_REAL_MODEL_INCIDENT'});
+ if(url.pathname==='/api/safety/check'){
+  const id=url.searchParams.get('id');
+  const names={'extra-field':['输出夹带指令','严格 JSON 字段校验','INVALID_MODEL_OUTPUT'],
+   'tool-injection':['越权工具请求','仅允许 A/B 选择','UNKNOWN_TOOL_FORBIDDEN'],
+   'change-unapproved-variable':['擅改多个参数','单变量白名单','SCIENCE_VARIABLE_DENIED']};
+  if(!names[id])return error(400,'未知安全案例');
+  const [name,protectedBy,reason]=names[id];
+  return result({scenario:id,name,summary:'固定离线案例，不代表真实大模型攻击',protectedBy,blocked:true,decision:'REJECTED',reason,modelCalls:0,scientificExecutions:0,scope:'FIXED_LOCAL_SIMULATION_NOT_REAL_MODEL_INCIDENT',approvalRequired:true});
+ }
  return error(501,'此服务端功能尚未迁移到 Pages，不能伪装已完成。');
 }
 const orig=window.fetch.bind(window);
