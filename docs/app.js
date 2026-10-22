@@ -1,0 +1,24 @@
+'use strict';
+const $=id=>document.getElementById(id),trace=[],state={pre:null,prediction:'',run:null,reflection:'',approval:false,transfer:null};
+const stamp=()=>new Date().toISOString(),add=(kind,detail)=>{trace.push({at:stamp(),kind,detail});renderTrace()};
+function renderTrace(){const root=$('timeline');root.replaceChildren(...trace.map(item=>{const li=document.createElement('li');li.textContent=item.at.slice(11,19)+' · '+item.detail;return li}));if(!trace.length)root.innerHTML='<li>等待首次独立前测……</li>'}
+function feedback(id,txt){$(id).textContent=txt;$(id).classList.remove('hidden')}
+function reveal(id){$(id).classList.remove('hidden')}
+function model(r,x,n){const xs=[x];for(let i=0;i<n;i++)xs.push(r*xs.at(-1)*(1-xs.at(-1)));return xs}
+function calc(params){const x1=model(params.r,params.x,params.n),x2=model(params.r,params.x+params.delta,params.n);return {params,x1,x2,n43:Math.abs(x1[Math.min(params.n,43)]-x2[Math.min(params.n,43)])}}
+function graph(a,b){const canvas=$('chart'),ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;ctx.fillStyle='#071b24';ctx.fillRect(0,0,w,h);
+ctx.strokeStyle='#32525b';ctx.lineWidth=1;for(let i=0;i<=5;i++){const y=24+(h-48)*i/5;ctx.beginPath();ctx.moveTo(55,y);ctx.lineTo(w-20,y);ctx.stroke()}
+for(const [arr,color] of [[a,'#82e5cf'],[b,'#f3bf87']]){ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=2;arr.forEach((v,i)=>{const px=55+i*(w-80)/(arr.length-1),py=h-24-v*(h-48);i?ctx.lineTo(px,py):ctx.moveTo(px,py)});ctx.stroke()}
+ctx.fillStyle='#e5f4f5';ctx.font='18px Microsoft YaHei';ctx.fillText('蓝绿：x₀ · 琥珀：x₀ + δ',70,37);ctx.font='13px sans-serif';ctx.fillText('迭代步数 →',w-130,h-6)}
+function ready(id){document.querySelector('.step:nth-child('+id+')')?.classList.add('active')}
+for(const id of ['r','x0','delta','steps'])$(id).addEventListener('input',()=>{$(id+'-value').textContent=id==='r'?Number($(id).value).toFixed(2):id==='delta'?'−'+Math.abs(Number($(id).value)):$(id).value});
+$('pre-submit').onclick=()=>{const chosen=document.querySelector('input[name=pre]:checked');if(!chosen)return feedback('pre-feedback','请先独立作答，系统不会预选答案。');state.pre=Number(chosen.value);feedback('pre-feedback','已记录你的独立判断。是否正确，要由后续真实实验的数据检验。');add('pretest','完成独立前测，选择 '+chosen.value);ready(2)};
+$('run').onclick=()=>{if(state.pre===null)return feedback('prediction-feedback','请先完成独立前测。');const prediction=$('prediction-text').value.trim();if(prediction.length<8)return feedback('prediction-feedback','先写下至少 8 个字的原创预测，再运行实验。');
+const params={r:+$('r').value,x:+$('x0').value,delta:Math.pow(10,+$('delta').value),n:+$('steps').value};
+state.prediction=prediction;state.run=calc(params);graph(state.run.x1,state.run.x2);$('res-r').textContent=params.r.toFixed(2);$('res-delta').textContent=params.delta.toExponential(1);$('res-n43').textContent=state.run.n43.toFixed(9);$('science-note').textContent='第43步差值是这组参数下的实际浮点观测，不代表任何普遍阈值。第二轮实验尚未被授权。';reveal('results');reveal('reflection');reveal('approval');ready(3);ready(4);add('run','提交预测并完成真实浏览器科学计算（r='+params.r+', x₀='+params.x+', δ='+params.delta+'）');$('results').scrollIntoView({behavior:'smooth',block:'start'})};
+$('reflect-btn').onclick=()=>{const value=$('reflection-text').value.trim();if(value.length<8)return feedback('reflection-feedback','请记录至少 8 个字的个人反思。');state.reflection=value;feedback('reflection-feedback','反思已保存。本地指引：下一次只改变一个变量，并保留对比证据。此处不是 DeepSeek 在线回复。');add('reflection','记录反思和本地学习指引');ready(5)};
+$('approve-btn').onclick=()=>{if(!state.run||!state.reflection)return feedback('approved-result','请先完成实验和反思。');const thought=$('approval-text').value.trim();if(thought.length<8)return feedback('approved-result','请先写下至少 8 字第二轮预测；没有学生批准，实验不会运行。');if(state.approval)return;const p=state.run.params,next=calc({...p,delta:p.delta/10});state.approval=true;feedback('approved-result','第二轮已在批准后真实运行。初始差缩小10倍，第43步差值：'+next.n43.toFixed(9)+'。这个变化仅对应当前参数。');add('approve','学生明确批准，才执行第二轮实验；差值 '+next.n43.toFixed(9));reveal('transfer');ready(6)};
+$('post-submit').onclick=()=>{const a=document.querySelector('input[name=post]:checked');if(!a)return feedback('post-feedback','请独立选择，不会提前勾选。');state.transfer=Number(a.value);feedback('post-feedback',state.transfer===1?'你的方法包含了控制变量与对照，是合理的独立迁移判断。':'这份判断已经保留。下一步应考虑如何控制其他变量并比较轨迹。');ready(7);add('transfer','完成独立迁移判断，选择 '+state.transfer);$('evidence').scrollIntoView({behavior:'smooth',block:'start'})};
+$('export').onclick=()=>{const info={application:'知序 AI 学院 · GitHub Pages 科学版',mode:'local-mathematical-computation',modelAPIConnected:false,events:trace,state};const b=new Blob([JSON.stringify(info,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='zhixu-science-evidence.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+$('reset').onclick=()=>location.reload();
+renderTrace();
