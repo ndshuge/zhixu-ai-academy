@@ -42,5 +42,5 @@ set('pages-ai-reply','博士正在请求 DeepSeek……');doctor('thinking','正
 try{const a=await call([{role:'system',content:'你是知序 AI 学院的科学探究博士，解释简洁准确，必须区分数学事实与假说，绝不伪称已经运行实验。'}, {role:'user',content:q}],450);set('pages-ai-reply',a.reply+'\n\n真实模型：'+a.model+' · Token '+(a.usage??'未提供'));doctor('success','已完成真实 DeepSeek 在线答疑。')}catch(e){set('pages-ai-reply','请求失败：'+e.message)}finally{$('pages-ai-consent').checked=false}
 };
 $('pages-ai-clear').onclick=()=>{key='';verified=false;$('pages-ai-key').value='';$('pages-ai-mentor').hidden=true;set('pages-ai-status','密钥已从本页内存清除');launch.textContent='连接 DeepSeek API'};
-window.addEventListener('pagehide',()=>{key='';verified=false});
+if(new URLSearchParams(location.search).get('connect')==='1'){modal.dataset.open='true';}\nwindow.addEventListener('pagehide',()=>{key='';verified=false});
 })();
