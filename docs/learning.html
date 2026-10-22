@@ -1,0 +1,62 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>学习成长与智能错题｜AI学院</title><link rel="stylesheet" href="./style.css"/>
+</head><body style="background:#f8fbf9">
+<div class="learning-layout">
+ <header class="learning-header">
+  <a class="identity" href="/"><span class="logo">∑</span><span>AI 学院<small>LEARNING EVIDENCE</small></span></a>
+  <nav class="learning-nav" aria-label="导航">
+   <a href="/">科学实验</a><a class="active" href="./learning.html">我的学习</a><a href="./study.html">教育试测</a><a href="./admin.html">学校模型</a>
+  </nav>
+ </header>
+ <div class="learning-eyebrow">PERSONAL LEARNING · LOCAL EVIDENCE</div>
+ <h1>不只记录错题，<br/><em>记录理解如何改变。</em></h1>
+ <p class="learning-lead">错题有来源，误区可以纠正，复习有新题。所有学习记录默认只留在这个浏览器；本机尚未接入真实 AI 模型，也没有自动向学校上传数据。</p>
+ <div class="learning-callout" id="evidence-overview">正在读取本机学习记录…</div>
+ <section class="learning-statrow" aria-label="学习数据概览">
+  <div class="learning-stat"><strong id="stat-experiments">—</strong><small>真实科学探究次数</small></div>
+  <div class="learning-stat"><strong id="stat-answered">—</strong><small>已提交的概念题</small></div>
+  <div class="learning-stat"><strong id="stat-incorrect">—</strong><small>客观错题次数</small></div>
+  <div class="learning-stat"><strong id="stat-pending">—</strong><small>待复习概念数</small></div>
+ </section>
+ <div class="learning-grid">
+  <section class="learning-card">
+   <h2>知识点 · 证据状态</h2>
+   <p>这里不使用未经验证的“掌握率”。每一个状态都能追溯到你独立提交过的题目。</p>
+   <div id="concept-list"></div>
+  </section>
+  <section class="learning-card">
+   <h2>下一步复习</h2>
+   <p>从真实错误出发，练一道没有提前看过答案的新变式；成功一次也不直接宣称完全掌握。</p>
+   <div id="review-list"></div>
+   <div class="review-workspace hidden" id="review-workspace" aria-live="polite">
+    <h3 id="review-title">独立复习练习</h3>
+    <div id="review-quiz"></div>
+   </div>
+  </section>
+  <section class="learning-card wide" id="mistake-section">
+   <div class="section-label"><span class="num">02</span> 智能错题集 · 保留原始证据</div>
+   <h2>不只有正确答案，还有你的原始理解</h2>
+   <p>只有经过明确评分的题目才自动进入错题集。科学猜想被实验推翻属于探索过程，不会自动记作错误。</p>
+   <div id="mistake-list"></div>
+  </section>
+  <section class="learning-card">
+   <h2>概念误区 · 可确认或否认</h2>
+   <p>系统只能提出有具体答案支撑的候选解释；你可以拒绝错误的诊断，它不会被强行写成个人标签。</p>
+   <div id="misconception-list"></div>
+  </section>
+  <section class="learning-card">
+   <h2>我的证据时间线</h2>
+   <p>区分科学实验、客观题、反思和误区修正。旧版记录仅作历史迁移，不猜测成绩。</p>
+   <div id="timeline"></div>
+  </section>
+  <section class="learning-card wide">
+   <h2>我的数据，由我管理</h2>
+   <p>你可以导出个人学习事件和证据；清空之前请先自行备份。这里的数据可在浏览器修改，不是学校防篡改审计记录。</p>
+   <div class="record-actions"><button id="export-evidence">导出学习证据 JSON ↓</button><button id="clear-evidence" class="danger">清空本机全部学习记录</button><a class="learning-link" href="./study.html">了解真实学生试测 →</a></div>
+   <p class="learning-hint" id="learning-data-message" role="status"></p>
+  </section>
+ </div>
+ <p class="learning-foot">AI学院 · 本机学习证据版 · 个人知识状态仅作练习辅助；无临床、智力或正式学术成绩评定。真实用户试点数据尚未采集。</p>
+</div>
+<script type="module" src="./learning.js"></script></body></html>

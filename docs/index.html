@@ -1,18 +1,211 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#071b25"><title>知序 AI 学院 · 科学探究</title>
-<style>
-:root{color-scheme:dark;--bg:#071820;--surface:#102e39;--stroke:#315861;--teal:#86e6d3;--muted:#a9c5c9;--gold:#f6d69b}*{box-sizing:border-box}body{margin:0;font:16px/1.7 -apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;background:radial-gradient(ellipse at 80% 3%,#20515a 0%,transparent 48%),var(--bg);color:#f0fafb}header{border-bottom:1px solid #46727c5c;display:flex;justify-content:space-between;gap:14px;padding:23px clamp(20px,4vw,65px);align-items:center}.brand{letter-spacing:.16em;font-weight:750}.status{font-size:12px;border:1px solid #748b8e;border-radius:18px;padding:5px 11px;color:var(--gold)}main{max-width:1380px;margin:auto;padding:28px 24px 80px}.intro{display:grid;grid-template-columns:1.5fr .8fr;gap:20px;align-items:center;padding:26px 0 36px}h1{font-size:clamp(34px,5vw,66px);font-weight:650;letter-spacing:-.045em;line-height:1.23;margin:12px 0}h2{font-size:24px;line-height:1.35}p{color:var(--muted)}.kicker{color:var(--teal);font:12px ui-monospace,monospace;letter-spacing:.2em}.panel{background:linear-gradient(150deg,#12323d,#0b2530);border:1px solid var(--stroke);border-radius:16px;padding:23px}.note{font-size:13px}.steps{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 28px}.step{border:1px solid #46727c;border-radius:30px;padding:8px 15px;font-size:13px;color:#b8d3d4}.step.active{background:#184e54;color:#fff;border-color:var(--teal)}.layout{display:grid;grid-template-columns:1fr 1fr;gap:19px}section{scroll-margin-top:25px}label{display:block;font-size:13px;color:#ccdee0;margin:14px 0 6px}textarea,input[type=number]{font:inherit;width:100%;background:#071c26;color:#fff;border:1px solid #47717c;border-radius:9px;padding:13px}textarea{min-height:94px;resize:vertical}button{border:1px solid #468e8b;border-radius:10px;background:#1d5a61;color:#fff;padding:12px 17px;font:inherit;cursor:pointer}button:hover{background:#28727a}button:disabled{opacity:.35;cursor:not-allowed}.primary{background:#9be1cc;color:#062b2f;font-weight:750}.controls{display:grid;grid-template-columns:1fr 1fr;gap:13px}input[type=range]{width:100%;accent-color:#82e0d1}output{color:var(--gold)}.choices{display:grid;gap:11px}.choice{display:flex;align-items:center;gap:13px;border:1px solid var(--stroke);padding:14px;border-radius:10px;cursor:pointer}.choice:has(input:checked){background:#1c5457;border-color:var(--teal)}.choice input{accent-color:var(--teal)}.actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:18px}.feedback{margin-top:16px;border-left:3px solid var(--teal);padding:10px 15px;background:#163b42}.hidden{display:none!important}canvas{width:100%;height:auto;background:#071b24;border:1px solid var(--stroke);border-radius:12px}.metric{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}.metric div{padding:12px;background:#092631;border-radius:9px}.metric strong{display:block;color:var(--gold);font-size:18px}.metric small{color:#a8c8cb}.wide{grid-column:1/-1}.timeline{border-left:2px solid #579f9d;padding-left:18px;color:#c8dadd}.timeline li{margin:14px 0}.privacy{border:1px dashed #5e7377;padding:17px;border-radius:10px;font-size:13px;color:#b9ccce}.eyebrow{color:var(--teal);font:12px ui-monospace,monospace;letter-spacing:.1em}footer{margin-top:40px;font-size:12px;color:#91b0b4}a{color:var(--teal)}@media(max-width:850px){.intro,.layout{grid-template-columns:1fr}.metric{grid-template-columns:1fr}.controls{grid-template-columns:1fr}main{padding:20px 15px 55px}header{padding:15px}}
-</style></head><body>
-<header><div class="brand">知序 AI 学院 <span class="kicker">ZHIXU / ACADEMY</span></div><span class="status">Pages 科学实验 · 支持自带 Key 接入 DeepSeek</span></header>
-<main><div class="intro"><div><div class="kicker">COGNITION TRACE / 让每次思考都有迹可循</div><h1>先做出判断，<br>再让证据回答。</h1><p>从前测、预测、Logistic 科学实验，到反思、批准第二次实验与独立迁移。真实在浏览器中计算，保留学习过程。</p></div><div class="panel"><div class="eyebrow">DEPLOYMENT MODE</div><h2>公开、可复现的科学体验</h2><p>这一 Pages 版本运行浏览器本地数学计算。支持用户自带 Key 直接调用真实 DeepSeek；未连接时继续使用独立的本地科学计算。</p><p class="note">完整的服务器版 AI 学院需要单独托管 Node API；任何真实 API Key 都不应保存在公开网页中。</p></div></div>
-<div class="steps"><span class="step active">01 前测</span><span class="step">02 预测</span><span class="step">03 实验</span><span class="step">04 反思</span><span class="step">05 审批</span><span class="step">06 迁移</span><span class="step">07 证据</span></div>
-<div class="layout">
-<section class="panel" id="pretest"><div class="kicker">01 / INDEPENDENT PRETEST</div><h2>微小变化，会产生多大影响？</h2><p>对同一个非线性系统，只把初值改变极小的一点。你预测长期轨迹会怎样？</p><div class="choices" id="pre-options"><label class="choice"><input type="radio" name="pre" value="0">一直几乎重合</label><label class="choice"><input type="radio" name="pre" value="1">可能逐渐分开</label><label class="choice"><input type="radio" name="pre" value="2">必定完全相同</label></div><div class="actions"><button id="pre-submit" class="primary">提交我的独立判断</button></div><div id="pre-feedback" class="feedback hidden"></div></section>
-<section class="panel" id="prediction"><div class="kicker">02 / PREDICT FIRST</div><h2>先写下你的预测</h2><textarea id="prediction-text" placeholder="例如：两个几乎相同的初始值，经过很多次迭代可能会逐渐产生明显差异。"></textarea><div class="controls"><div><label>增长参数 r <output id="r-value">3.90</output></label><input id="r" type="range" min="3.3" max="4" value="3.9" step=".01"></div><div><label>初始值 x₀ <output id="x0-value">0.217</output></label><input id="x0" type="range" min=".01" max=".85" value=".217" step=".001"></div><div><label>扰动指数 log₁₀(δ) <output id="delta-value">−10</output></label><input id="delta" type="range" min="-14" max="-3" value="-10" step="1"></div><div><label>迭代步数 <output id="steps-value">150</output></label><input id="steps" type="range" min="20" max="300" value="150" step="10"></div></div><div class="actions"><button id="run" class="primary">运行真实科学计算</button></div><div id="prediction-feedback" class="feedback hidden"></div></section>
-<section class="panel wide hidden" id="results"><div class="kicker">03 / SCIENCE FRONTIER</div><h2>同一规则，两条真实轨迹</h2><p>Logistic 映射 xₙ₊₁ = r xₙ(1−xₙ)。两条曲线来自当前浏览器内的实际浮点计算。</p><canvas id="chart" width="1200" height="450" aria-label="两条Logistic轨迹"></canvas><div class="metric"><div><small>参数 r</small><strong id="res-r"></strong></div><div><small>初值差</small><strong id="res-delta"></strong></div><div><small>第 43 步差值</small><strong id="res-n43"></strong></div></div><div id="science-note" class="feedback"></div></section>
-<section class="panel hidden" id="reflection"><div class="kicker">04 / REFLECTION</div><h2>让证据反问你的预测</h2><textarea id="reflection-text" placeholder="你的原始判断是否得到数据支持？有什么新的问题？"></textarea><div class="actions"><button id="reflect-btn">保存真实反思</button></div><div id="reflection-feedback" class="feedback hidden"></div><div class="privacy">导师建议在这一静态版本中使用明确标注的本地实验指引，不调用 DeepSeek，不声称生成式 AI。</div></section>
-<section class="panel hidden" id="approval"><div class="kicker">05 / STUDENT APPROVAL</div><h2>下一轮实验，先由你批准</h2><p id="plan-copy">候选方案：只改变扰动大小，其余参数保持不变，再比较第43步的两轨差值。方案不会在你批准前运行。</p><textarea id="approval-text" placeholder="先写下第二轮预测（至少 8 个字），批准后才允许运行。"></textarea><div class="actions"><button id="approve-btn" class="primary">我已审阅，批准第二轮实验</button></div><div class="feedback hidden" id="approved-result"></div></section>
-<section class="panel hidden" id="transfer"><div class="kicker">06 / INDEPENDENT TRANSFER</div><h2>不看原题，能否迁移理解？</h2><p>如果另一个非线性系统对初始条件同样敏感，哪一种做法最能检验这种敏感性？</p><div class="choices" id="post-options"><label class="choice"><input type="radio" name="post" value="0">只观察一次结果，直接断言普遍成立</label><label class="choice"><input type="radio" name="post" value="1">控制其他变量，只改变初值并比较轨迹</label><label class="choice"><input type="radio" name="post" value="2">不记录参数，反复重试</label></div><div class="actions"><button id="post-submit" class="primary">提交独立迁移判断</button></div><div id="post-feedback" class="feedback hidden"></div></section>
-<section class="panel wide" id="ai-connection"><div class="kicker">AI MENTOR / DEEPSEEK BYOK</div><h2>使用你自己的 DeepSeek API</h2><p>此 Pages 页面支持浏览器直接请求 DeepSeek 官方接口，密钥只保存在当前标签页的临时内存中，不写入 GitHub、localStorage 或学习记录。连接测试会真实消耗少量 Token。</p><label for="ds-key">DeepSeek API Key（不会写入网页源码）</label><input type="password" id="ds-key" autocomplete="off" spellcheck="false" placeholder="请输入你自己的 DeepSeek API Key"/><div class="actions"><button id="ds-connect">测试并接入真实 DeepSeek</button><button id="ds-clear">清除会话密钥</button></div><div id="ds-status" class="feedback">尚未接入模型。浏览器数学实验仍可独立使用。</div><div class="privacy">此 BYOK 模式仅适合本人或授权测试。浏览器中的网络请求可能暴露密钥给浏览器扩展或设备管理者；不要在公共计算机上输入密钥。公开网页不内置任何共享的 API Key。</div><div id="ai-mentor" class="hidden"><h2>请求真实 AI 导师建议</h2><p id="ds-model-tag">DeepSeek · 当前未接入</p><label class="choice"><input id="ds-consent" type="checkbox"/>本次明确同意将预测、反思、数学参数及观察结果发送给 DeepSeek。仅用于生成本次导师建议。</label><div class="actions"><button id="ds-use" class="primary" disabled>请求 DeepSeek 导师建议</button></div><div id="ds-response" class="feedback" style="white-space:pre-wrap">等待授权。</div></div></section><section class="panel wide" id="evidence"><div class="kicker">07 / VERIFIABLE LEARNING TRACE</div><h2>把思考留下来，而不是只展示一个分数</h2><ol class="timeline" id="timeline"><li>等待首次独立前测……</li></ol><div class="actions"><button id="export">导出当前学习证据 JSON</button><button id="reset">重新开始</button></div><p class="note">所有记录留在当前浏览器内存，只有你主动导出才下载文件。此演示不收集真人数据。</p></section>
-</div><footer>© ZHIXU AI ACADEMY · Static Pages science build · 科学实验本地计算 / AI 仅经明确授权后调用 · <a href="https://github.com/ndshuge/zhixu-ai-academy">查看源仓库</a></footer></main>
-<script src="./app.js"></script><script src="./deepseek-byok.js"></script></body></html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="color-scheme" content="light"/>
+  <title>知序 AI 学院｜科学探究</title>
+  <link rel="stylesheet" href="./style.css"/>
+  <link rel="stylesheet" href="./premedia.css"/>
+<link rel="stylesheet" href="./mentor-ui.css"/></head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <a class="identity" href="/" aria-label="知序 AI 学院首页"><span class="logo">∑</span><span>知序 AI 学院<small>SCIENCE INQUIRY</small></span></a>
+    <div class="rail-head">探究工作台</div>
+    <nav aria-label="步骤">
+      <div class="nav-item active" data-step="1"><b>01</b> 提出假设</div>
+      <div class="nav-item" data-step="2"><b>02</b> 执行实验</div>
+      <div class="nav-item" data-step="3"><b>03</b> 观察与反思</div>
+      <div class="nav-item" data-step="4"><b>04</b> 迁移验证</div>
+    </nav>
+    <div class="rail-note"><span class="tiny-dot"></span>引擎结果真实计算<br/><span id="engine-version">正在读取科学引擎版本…</span></div>
+    <div class="rail-bottom">
+      <a class="subtle" href="./learning.html" style="display:block;text-align:left">我的学习画像与错题集 ↗</a>
+      <a class="subtle" href="./study.html" style="display:block;text-align:left">学习试测与研究记录 ↗</a>
+      <a class="subtle" href="./connect.html" style="display:block;text-align:left;font-weight:800">连接我的 AI 模型 ↗</a>
+      <a class="subtle" href="./admin.html" style="display:block;text-align:left">学校管理员设置 ↗</a>
+      <button class="subtle" id="download-learning">导出版本化学习证据 ↓</button>
+      <button class="subtle" id="download-record">导出我的探究记录 ↓</button>
+      <button class="subtle danger" id="clear-record">清除本地记录</button>
+    </div>
+  </aside>
+  <main>
+    <header class="topbar">
+      <div class="crumb">实验室 <span>/</span> 探究式学习</div>
+      <div class="topright"><span class="pill" id="model-state">导师状态检测中</span><span class="pill soft">本机 RC4 · 0.4.2</span></div>
+    </header>
+    <div class="content">
+      <div class="hero-eyebrow"><span class="hero-live-dot" aria-hidden="true"></span>AI SCIENCE INQUIRY · 由事实推动理解</div>
+      <h1>让一个错误的直觉，<br/><em>成为下一次科学发现。</em></h1>
+      <p class="intro">不是再给出一份标准答案，而是让每个判断都经历<strong>预测、真实计算、反例挑战与独立迁移</strong>。所有结果都能追溯到科学引擎。</p>
+      <section class="cognition-arc" aria-label="由真实学习事件驱动的认知变化轨迹">
+        <div class="arc-title"><span>COGNITION TRACE / 认知轨迹</span><strong id="arc-progress">0 / 4 已见证</strong></div>
+        <div class="arc-track">
+          <article class="arc-node" data-arc="hypothesis"><span class="arc-no">01</span><strong>原始直觉</strong><small>等待本人预测</small></article>
+          <article class="arc-node" data-arc="evidence"><span class="arc-no">02</span><strong>真实反例</strong><small>等待科学引擎</small></article>
+          <article class="arc-node" data-arc="plan"><span class="arc-no">03</span><strong>再设计实验</strong><small>等待安全方案</small></article>
+          <article class="arc-node" data-arc="transfer"><span class="arc-no">04</span><strong>独立迁移</strong><small>等待两道新题</small></article>
+        </div>
+        <p class="arc-foot" id="arc-notice">学习轨迹根据本次预测、实验与迁移记录更新，所有步骤都可以追溯。</p>
+      </section>
+      <section class="evidence-lens" aria-label="本次科学探究的三项关键证据" aria-live="polite">
+        <div class="evidence-lens-heading"><span class="lens-dot"></span><strong>本次学习证据</strong><span>原始预测 → 真实实验 → 可审核的下一步</span></div>
+        <div class="lens-grid">
+          <article class="lens-card" id="lens-hypothesis"><span>01 · 我的原始假设</span><p>等待你先作出科学预测</p></article>
+          <article class="lens-card" id="lens-evidence"><span>02 · 科学模型的观测</span><p>尚未运行；模型不会捏造数据</p></article>
+          <article class="lens-card" id="lens-next"><span>03 · 下一步验证</span><p>先依据真实证据提出问题</p></article>
+        </div>
+        <p class="lens-footnote">所有科学数值来自本机固定科学引擎；AI只能提出受约束的实验建议，执行前需你的独立预测和批准。</p>
+      </section>
+      <section class="focus-controls" id="focus-controls" aria-label="旗舰科学课程模式">
+        <div class="focus-header"><div><strong>旗舰科学课：用实验反驳一个直觉</strong><span>聚焦模式 · 同一个学习证据链，四步完成探究</span></div><button type="button" id="focus-toggle" class="secondary" aria-pressed="false">进入旗舰课 →</button></div>
+        <nav class="focus-steps" aria-label="旗舰课程四阶段">
+          <button type="button" data-focus-target="pre">01 前测</button>
+          <button type="button" data-focus-target="predict">02 预测</button>
+          <button type="button" data-focus-target="observe">03 实验与AI</button>
+          <button type="button" data-focus-target="transfer">04 迁移</button>
+        </nav>
+        <div class="focus-bottom"><span id="focus-status">先完成两道独立的概念前测，带着自己的判断进入科学实验。</span><button type="button" id="focus-next" class="secondary" disabled>完成当前阶段后继续 →</button></div>
+      </section>
+      <nav class="journey-links" aria-label="教学闭环"><a href="#pre-check">前测</a><a href="#question-title">预测与实验</a><a href="#results">科学证据</a><a href="./learning.html">诊断与复习</a></nav>
+      <div class="institution-banner">
+        <span class="institution-icon">⌘</span>
+        <div><strong>接入 DeepSeek，开启智能科学导师</strong><span id="institution-provider">支持自己的 DeepSeek 官方 API，也支持其他兼容模型</span></div>
+        <a href="./connect.html">配置我的 AI →</a>
+      </div>
+      <div class="learning-entry"><div><strong>学习不是一次答对，而是看见理解的变化。</strong><span>前测 → 科学探究 → 错因与迁移 → 复习证据</span></div><a href="./learning.html">查看我的学习画像 →</a></div>
+      <p class="muted" id="learning-store-warning" role="status"></p>
+      <section class="lab-entry" id="scientific-universe" aria-label="统一科学探索大厅">
+        <div class="universe-heading"><span class="universe-label">TWO WORLDS · ONE METHOD</span><h2>一个科学探究协议，探索两个真实计算世界。</h2><p>相同的是“预测—观察—质疑—再验证”；不同的是科学模型和证据边界。探索实验室之后，返回学院完成受控对照和独立迁移。</p><p id="exploration-resume" hidden role="status"></p></div>
+        <div class="universe-grid">
+          <article class="universe-card physics"><div class="universe-card-art" aria-hidden="true"><span>∿</span><i></i></div><div class="universe-card-copy"><small>WORLD 01 / NONLINEAR DYNAMICS</small><h3>混沌与非线性</h3><p>一条微小初值差异，会如何改变长期轨迹？用真实迭代看见分离，不把数值轨迹误当数学证明。</p><a href="./explore?lab=pfl">进入 PFL 物理世界 <span aria-hidden="true">↗</span></a></div></article>
+          <article class="universe-card biology"><div class="universe-card-art" aria-hidden="true"><span>✧</span><i></i></div><div class="universe-card-copy"><small>WORLD 02 / DIGITAL EVOLUTION</small><h3>生命与生态演化</h3><p>合作究竟有多少优势？观察真实模拟世界，并区分独立重复与单个世界中的时间步数。</p><a href="./explore?lab=evo">进入 EvoWorld 生命世界 <span aria-hidden="true">↗</span></a></div></article>
+        </div>
+        <div class="universe-common"><span>共同教学协议</span><strong>先假设 · 再运行 · 核对证据 · 控制变量 · 独立迁移</strong><a href="./?focus=1">开始旗舰学习课 →</a></div>
+      </section>
+      <section class="safety-lab" id="safety-lab" aria-label="AI失败防护演示">
+        <div class="safety-heading"><div><span class="universe-label">GUARDRAIL LAB / 可复现的安全拒绝</span><h2>AI的建议也必须接受科学检验。</h2><p>下面是固定构造的三种违规输出。点击运行的是本机真实解析和科学校验代码，<strong>不是一次实时大模型攻击或真实学生案例</strong>。</p></div><span class="safety-state" id="safety-state">待验证</span></div>
+        <div class="safety-examples" id="safety-examples">
+          <button type="button" data-safety-case="extra-field">01 · 输出夹带指令</button>
+          <button type="button" data-safety-case="tool-injection">02 · 越权工具请求</button>
+          <button type="button" data-safety-case="change-unapproved-variable">03 · 擅改科学变量</button>
+        </div>
+        <div class="safety-outcome" id="safety-outcome" role="status" aria-live="polite"><strong>等待选择一个测试案例</strong><p>真实模型无权跳过变量校验或学生批准。所有反例默认不会执行实验。</p></div>
+        <p class="safety-caption">SAFETY CHECK · 本机安全校验 · 不上传学习数据 · 未批准的科学实验不会执行</p>
+      </section>
+      <section class="evidence-ledger" id="evidence-ledger" aria-label="可复算的技术证据">
+        <div class="ledger-heading"><div><span class="universe-label">VERIFIABLE EVIDENCE / 技术证据账本</span><h2>不是一句“AI很聪明”，而是一组能复算的实验。</h2><p>这里展示经过复算的研发技术指标，模型验证与科学实验数据分别追溯；并非对学生学习效果的推断。</p></div><span class="ledger-status" id="ledger-status">正在核对本机证据…</span></div>
+        <div class="ledger-stats">
+          <div><strong id="ledger-cases">—</strong><span>离线科学情境</span></div>
+          <div><strong id="ledger-runs">—</strong><span>PFL真实候选复算</span></div>
+          <div><strong id="ledger-blocks">—</strong><span>违规输出被拒绝</span></div>
+          <div><strong id="ledger-live">—</strong><span>真实模型目标方向匹配</span></div>
+        </div>
+        <div class="ledger-contrast"><div><small>离线技术基线的目标方向匹配</small><strong id="ledger-offline">等待证据</strong></div><div><small>AI 模型与离线基线的对照</small><strong id="ledger-compare">等待证据</strong></div></div>
+        <p class="ledger-foot" id="ledger-foot">正在核对本机固定版本测试结果；没有通过核验则不显示成功数字。</p>
+      </section>
+      <section class="module-picker" aria-label="选择实验">
+        <button class="module selected" data-exp="sensitivity"><span class="glyph">∿</span><strong>初值敏感性</strong><span>Logistic · 混沌</span></button>
+        <button class="module" data-exp="logistic"><span class="glyph">ƒ</span><strong>非线性迭代</strong><span>Logistic · 动力学</span></button>
+        <button class="module" data-exp="evo-pair"><span class="glyph">✧</span><strong>数字生命对照</strong><span>EvoWorld · 演化</span></button>
+      </section>
+      <section class="lesson learning-check" id="pre-check" aria-label="概念前测">
+        <div class="section-label"><span class="num">00</span> 事前概念前测 · 答案不会预选</div>
+        <h2>在实验前，先留下你的理解</h2><p class="muted">真实作答将保存在本机，科学猜想后来被推翻不算答错题。</p>
+        <div id="pre-check-root" aria-live="polite"></div>
+      </section>
+      <section class="lesson" aria-labelledby="question-title">
+        <div class="section-label"><span class="num">01</span> 你的科学问题</div>
+        <h2 id="question-title">微小的初值变化，会改变长期结果吗？</h2>
+        <p id="question-description" class="muted">保持方程及参数不变，只让初始条件相差极小的一点。你认为两条轨道会永远相近吗？</p>
+        <div class="param-panel">
+          <div class="panel-head"><span>实验条件</span><small>有范围校验 · 每次修改均重新计算</small></div>
+          <div class="params" id="params">
+            <label><span>参数 r <output id="r-label">3.90</output></span><input id="r" type="range" min="3.3" max="4" step="0.01" value="3.9"/></label>
+            <label><span>初值 x₀ <output id="x0-label">0.217</output></span><input id="x0" type="range" min="0.01" max="0.85" step="0.001" value="0.217"/></label>
+            <label id="delta-wrap"><span>扰动 log₁₀(δ) <output id="delta-label">−10</output></span><input id="delta" type="range" min="-14" max="-3" step="1" value="-10"/></label>
+            <label><span>迭代步数 <output id="steps-label">150</output></span><input id="steps" type="range" min="20" max="300" step="10" value="150"/></label>
+          </div>
+          <div id="evo-params" hidden>
+            <div class="evo-note">真实运行 EvoWorld 的「合作开启/关闭」配对对照，固定其它环境变量；每组两个随机种子，各200 tick。<strong>这个样本量只能演示方法，不足以证明因果结论。</strong></div>
+            <label class="seedline">对照种子 <input type="number" id="seed" min="0" max="4294000000" step="1" value="73129"/></label>
+          </div>
+        </div>
+        <div class="prediction">
+          <div class="prediction-tag">预测优先 <span>不可事后补写</span></div>
+          <label for="prediction-input">在看到数据之前，你的判断是什么？为什么？</label>
+          <textarea id="prediction-input" maxlength="500" placeholder="例如：我认为它们最初会相近，但迭代足够久可能分开，因为……"></textarea>
+          <div class="run-row">
+            <span id="hint">写下自己的预测后，才能开始实验。</span>
+            <button class="primary" id="run" disabled>运行科学实验 <span>→</span></button>
+          </div>
+        </div>
+      </section>
+      <section class="lesson hidden" id="results" aria-live="polite">
+        <div class="section-label"><span class="num">02</span> 真实实验数据</div>
+        <div class="results-heading"><div><h2>观察计算结果</h2><p>下方曲线来自科学引擎，不是由语言模型画出的想象图。</p></div><span id="source-label" class="source">计算来源待定</span></div>
+        <div id="point-selection" class="point-selection">点击曲线，选取一个来自真实计算的数据点，再向导师追问。</div>
+        <div id="plots"></div>
+        <div id="metrics" class="metrics"></div>
+        <div id="warnings" class="warning"></div>
+        <div class="experiment-comparison hidden" id="experiment-comparison" aria-live="polite"></div>
+        <details><summary>查看原始条件、诊断与版本信息</summary><pre id="raw-output"></pre></details>
+      </section>
+      <section class="lesson hidden" id="tutoring">
+        <div class="section-label"><span class="num">03</span> AI 导师 · 知序博士</div>
+        <h2>解释、质疑、再设计一次实验</h2>
+        <p class="muted">导师只依据本次真实观测及你的预测引导思考；模型建议不自动改动实验参数。</p>
+        <label for="reflection">你觉得观测结果支持原来的猜想吗？你还有什么疑问？</label>
+        <textarea id="reflection" placeholder="这次我观察到……，我还不确定……"></textarea>
+        <div class="privacy-consent" id="privacy-consent" hidden><label><input type="checkbox" id="shareApproved"/><span>我同意本次将预测、反思及实验摘要发送至已选的 AI 模型服务；不发送 API Key 或完整历史记录。每次调用需重新授权。</span></label></div>
+        <div id="mentor-request-mode" class="ai-mode-note" role="status" aria-live="polite">正在核对导师模型…</div>
+        <div class="run-row"><span id="mentor-connection-note">连接 AI 后可获得个性化导师反馈</span><button id="ask" class="secondary">请导师分析 →</button></div>
+        <div class="ai-request-error" id="mentor-action-error" role="alert" hidden></div>
+        <div class="mentor-card hidden" id="mentor-output" aria-live="polite"></div>
+        <section class="agent-planning hidden" id="agent-planning" aria-label="导师实验规划与人工审批">
+          <div class="agent-planning-header"><span class="num">↗</span><div><strong>下一轮实验：AI 建议、学生批准</strong><small>从科学证据出发 · 一次只改变一个变量 · 执行前需亲自批准</small></div></div>
+          <label for="planning-goal">你想进一步检验什么？（选填）</label>
+          <textarea id="planning-goal" maxlength="300" placeholder="例如：初值差异变大，轨道的分离时间会提前吗？"></textarea>
+          <div class="privacy-consent" id="plan-model-consent-wrap" hidden><label><input type="checkbox" id="plan-model-consent"/><span>我同意本次使用已选的 AI 模型，从服务器核验过的候选实验中选择下一步；仅发送必要的预测、目标与实验摘要。模型不能自动执行实验，每次调用需重新授权。</span></label></div>
+          <div id="plan-request-mode" class="ai-mode-note" role="status" aria-live="polite">正在核对规划模式…</div>
+          <div class="run-row"><span id="plan-hint">科学工具：参数校验、单变量对照与计算预算</span><button class="secondary" id="request-plan">生成对照方案 →</button></div>
+          <div id="plan-preview" class="plan-preview hidden" aria-live="polite">
+            <div class="plan-badge">待学生批准 · 尚未执行</div>
+            <h3 id="plan-question"></h3>
+            <div id="plan-change" class="plan-change"></div>
+            <p id="plan-reason"></p>
+            <p id="plan-limits" class="plan-limits"></p>
+            <section class="explain-plan" id="explain-plan" aria-label="科学计划的可审核解释" aria-live="polite">
+              <div class="explain-top"><strong>规划决策审计</strong><span id="explain-mode">尚无方案</span></div>
+              <div class="explain-cells"><div><small>来源和依据</small><p id="explain-evidence">等待服务器返回有效科学证据。</p></div><div><small>科学控制变量</small><p id="explain-variable">等待生成下一轮方案。</p></div><div><small>可验证问题与局限</small><p id="explain-limit">只提出问题，不编造下一轮数值。</p></div></div>
+              <p class="explain-authority" id="explain-approval">未批准 → 不执行任何额外科学实验</p>
+            </section>
+            <label for="approval-prediction">新条件下，你预计会看到什么？为什么？</label>
+            <textarea id="approval-prediction" maxlength="500" placeholder="写下新的、独立的预测（至少8个字），批准后才会运行。"></textarea>
+            <div class="run-row"><button class="secondary" id="discard-plan">放弃这个方案</button><button class="primary" id="approve-plan" disabled>我批准，执行这次实验 →</button></div>
+          </div>
+        </section>
+        <button class="secondary hidden" id="retry">手动选择下一轮参数 →</button>
+      </section>
+      <section class="lesson hidden" id="transfer">
+        <div class="section-label"><span class="num">04</span> 迁移检验</div>
+        <h2>先做课堂即时判断，再做独立新题</h2>
+        <p id="quiz-prompt"></p>
+        <div class="quiz" id="quiz-options"></div>
+        <div class="run-row"><span>本题只用于即时教学反馈，不计入独立前后测与个人掌握证据；答案不会预选。</span><button class="secondary" id="grade" disabled>提交即时判断</button></div>
+        <div id="quiz-feedback" class="feedback hidden" role="status"></div>
+        <section class="post-check hidden" id="post-check" aria-label="独立迁移测验">
+          <div class="section-label"><span class="num">05</span> 独立迁移 · 与前测不同的新题</div>
+          <h2>换个情境，检验真正的理解</h2>
+          <div id="post-check-root" aria-live="polite"></div>
+          <p class="muted" id="learning-check-status"></p>
+        </section>
+      </section>
+      <footer>知序 AI 学院 · 0.4.2 RC4 · 西安交通大学 T.A 杯参赛候选。科学实验由 Physics Frontier Lab / EvoWorld 计算；AI 建议需经过科学核对和学生确认。模型内观测不代表现实规律已被证明。</footer>
+    </div>
+  </main>
+</div>
+<script type="module" src="./app.js"></script><script type="module" src="./rc-ui.js"></script><script type="module" src="./flagship-ui.js"></script><script type="module" src="./premedia-ui.js"></script>
+<script type="module" src="./mentor-ui.js"></script><script defer src="./original-pages-byok.js"></script></body>
+</html>

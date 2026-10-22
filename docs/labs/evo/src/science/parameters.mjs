@@ -1,0 +1,42 @@
+import { DEFAULTS } from '../core/config.mjs';
+// Executable knowledge registry. Formulae name exactly the frozen kernel operations.
+const world='src/core/world.mjs',config='src/core/config.mjs',genes='src/core/controllers.mjs';
+function entry(key,name,symbol,unit,range,intuition,anchor,formula,up,down,effects,interactions,misconception,experiment,file=world){
+ return {key,name,symbol,unit,range,defaultValue:DEFAULTS[key],intuition,source:{file,anchor},formula,increase:up,decrease:down,indirect:effects,interactions,limits:misconception,experiment};
+}
+export const PARAMETERS=[
+ entry('seed','随机种子','s','无量纲',[0,4294967295],'固定随机序列，便于重现同一个初始世界。','stream','RNG = stream(s, purpose)','换一个序列；没有大小优劣。','换一个序列；不是降低随机性。','不同初始资源、位置和基因可能改变终点。','参数和引擎版本也必须相同。','相同种子不等于干预后轨迹相同；seed大小无生态意义。','选一个机制变量，在多个相同种子上成对比较。',config),
+ entry('width','世界宽度','W','格',[12,96],'改变水平环面尺寸和资源格总数。','constructor','资源格数 = W × H','格数增多；固定种群时平均密度降低。','空间更拥挤。','资源总量和邻遇率都会变；不只是镜头缩放。','高度、创始种群、密度和通信半径。','改变尺寸会改变随机数映射，不能假设初始场逐格相同。','保持个体/面积比，比较空间效应。'),
+ entry('height','世界高度','H','格',[12,72],'改变垂直环面尺寸。','constructor','资源格数 = W × H','总资源位置更多。','空间变小。','同样改变拥挤度和相遇。','宽度和种群密度。','不是改变画布大小。','固定宽度，比较两种高度并说明资源总量差异。'),
+ entry('initialPopulation','创始种群','N₀','个体',[0,2048],'决定初始个体数，每名创始个体有58能量。','constructor','初始个体能量 = 58 N₀','初始消费和储能同时增加。','消费和初始能量同时减少。','竞争与合作相遇都可能变化。','不得超过种群上限；世界面积。','0个体不会自动生成新生命；不能把更多初始能量忽略。','同面积下改变N₀，报告每创始个体后代和总能量。'),
+ entry('maxPopulation','种群上限','Nmax','个体',[1,2048],'限制可用繁殖空位，避免无限增长。','availableSlots','空位 = Nmax − 当前幸存数','允许更多出生。','更早截断出生。','可能掩盖策略的繁殖差异。','创始数、再生和繁殖开关。','达到上限不代表生态自然平衡；cappedBirths记录被阻止次数。','比较两个上限，检查被截断出生数。'),
+ entry('regeneration','植物再生率','r','能量/有容量格/tick',[0,.2],'每个可生长资源格收到的光能输入上限。','regenerate','Δ植物 = min(剩余容量, r × 气候 × 空间乘数)','通常增加潜在外部输入。','减少外部输入；残体回收仍可继续。','生存、出生、资源竞争可能变化，资源饱和时效应减弱。','资源容量、季节、环境迁移和协作资源。','0不是所有资源立即消失；实际输入受容量限制。','固定其他参数与种子，对照r和r/2。'),
+ entry('resourceDensity','初始资源密度','ρ','比例',[0,1],'缩放播种时的资源存量，不改变可生长格位置。','constructor','植物初值 = 容量 × ρ × (0.3 + 0.7u)','增加初始可用能量。','减少初始能量。','影响早期存活和到达繁殖阈值的时间。','再生率和初始种群。','不是后续再生速度；ρ=0时仍可能再生。','相同seed比较ρ=.3与.7，分早期和后期观察。'),
+ entry('mutationRate','突变概率','μ','每参数概率',[0,1],'每次出生时，每个性状与每个网络参数独立尝试突变。','mutateGenome','g′ = clip(g + Bernoulli(μ) × ε)','更多参数有机会被扰动。','扰动机会更少；0完全继承。','变体可能增加，选择结果不保证更好。','突变幅度、繁殖和允许范围。','不是每tick学习率；个体一生不会因此改权重。','先预测，比较μ=0与.2的真实亲子差异。',genes),
+ entry('mutationScale','突变幅度','σ','归一化幅度',[0,1],'控制一次成功突变的最大扰动。','mutateGenome','性状ε ~ U(−σ,σ)×(hi−lo)；权重ε ~ U(−σ,σ)','变化步长更大，也更易碰边界。','变化步长更小；0时数值不变。','可能探索更多策略，也可能破坏已有策略。','μ、性状范围、权重截断±4。','高概率和高幅度是两个不同干预；夹紧会使实际变化非对称。','固定μ，仅改变σ，导出亲子差异。',genes),
+ entry('controller','控制器','C','类别',['mixed','rule','neural'],'选择规则决策、矩阵网络，或交替配置两类创始者。','decide','神经：h=φ(W₁x+b₁), u=φ(W₂h+b₂)','切换类别，非连续数值。','后代继承父代控制器类别。','行为改变；网络初始化会影响结果。','神经初始化和计算预算补齐。','使用网络不等于已经学会觅食；无个体强化学习。','在固定计算队列协议中比较三种控制条件。',genes),
+ entry('neuralInit','神经初始化','I','类别',['guided','random'],'guided向矩阵写入公开启发式先验；random使用随机权重。','newGenome','随机权重幅度 guided=.06，random=.75；guided再写入先验','选择guided增加人工先验。','选择random移除该先验。','可能改变创始行为及其留下后代的机会。','控制器类别与突变；规则也持有但不使用这些权重。','guided不是已经训练的网络。','规则、随机和先验网络各做独立重复。',genes),
+ entry('environment','资源环境','E','类别',['stable','seasonal','shifting'],'改变资源每tick接收光能的时间与空间乘数。','climate','丰/旱倍率1.35/.24；迁移左右倍率1.8/.18','切换环境，非单调。','stable使用倍率1。','资源位置和总输入会改变。','季节长度与再生率。','迁移和稳定组并非总能量严格匹配，不能只归因于时间变化。','固定种子对照环境，同时报告累计光能。'),
+ entry('seasonLength','环境阶段长度','T','tick',[40,10000],'每经过T步切换丰旱季或迁移方向。','climate','phase = floor(tick/T)','切换更慢。','切换更频繁。','生存和资源响应可能跟不上环境变化。','环境类型、寿命和每tick秒映射。','稳定环境中没有效果；并不改变每tick代谢。','固定总步数，比较多个T并记录切换次数。'),
+ entry('cooperation','合作与分享','K','开关',[false,true],'允许合作基因过阈值者共同采集硬资源与真实能量分享。','hardClaims','同格合作数≥2才采集硬资源；分享转移0.8，耗散.01','开启机制包。','关闭机制，并把创始及子代合作性状设为0。','收益依赖相遇、资源和分享意愿。','硬资源、合作基因>.5、消息与能量条件。','开关不是纯粹通信变量；不是证明合作自发起源。','相同再生率和种子，开/关合作并测协作采集量。'),
+ entry('hardResources','协作资源','Rhard','开关',[false,true],'控制播种及再生的硬资源供给。','regenerate','硬资源再生 = min(剩余容量, .65r × 气候)','启用额外能量池。','关闭供给。','合作开关的收益空间也会变。','cooperation与同格协作者阈值。','硬资源不等于普通植物；一名个体不能独自采集。','固定合作开关比较资源组成。'),
+ entry('communication','信息架构','G','类别',['none','local','central'],'接收上一步个体公开的资源消息；中心也不读取隐藏资源。','sense','局部：距离≤R且消息年龄≤12；中心：公开目标择近分配','切换消息拓扑。','none关闭发布与接收。','可能减少搜索，也可能带来费用或失效。','半径、掉线、策略发送意愿。','看见聚集不证明通信有效；中心失效与局部失效相关结构不同。','先比较none/local，再计划匹配失效的拓扑实验。'),
+ entry('communicationRadius','通信半径','R','格',[1,15],'局部接收及邻居密度输入的搜索范围。','sense','neighbors = {b: 环面距离(a,b)≤R}','可能看到更多邻居与消息。','局部信息范围更小。','网络密度输入也变，计算负载可能增加。','信息架构、空间大小、神经输入。','none和central下邻居密度输入仍使用这个半径。','固定架构比较R=3/6，记录消息和路由检查。'),
+ entry('dropout','掉线概率','pdrop','比例',[0,1],'按确定性哈希过滤局部链路或整个中心网关。','routeCentral','noise < pdrop 时丢弃；局部按链路，中心按tick网关','更多消息被过滤。','更少消息被过滤。','搜索效率与鲁棒性可能变。','通信类别与半径。','pdrop=1不关闭发送费；两架构失效相关性不同。','固定架构比较0与.4，统计完整重复世界。'),
+ entry('reproduction','允许繁殖','B','开关',[false,true],'决定能量和年龄合格个体是否有机会产生子代。','c.reproduction','能量≥88、年龄≥60、冷却0、空位>0；父代−31，子代+28，热+3','允许后代进入种群。','维持创始队列直到死亡。','决定是否存在跨代自然选择。','上限、能量、μ与冷却65tick。','关闭时没有跨代进化；μ变化不会改活体基因。','关闭繁殖比较固定队列，再开启观察谱系。'),
+ entry('lifespanScale','寿命倍率','L','倍',[.05,20],'把遗传寿命乘以L作为年龄死亡阈值。','a.age >=','年龄死亡阈值 = lifespan基因 × L','年龄死亡阈值延后。','阈值提前。','可能增加繁殖机会，仍可因能量耗尽而死。','寿命基因、资源和繁殖。','延寿不是免除饥饿或代谢。','固定资源比较L=.5与1。'),
+ entry('padControllerBudget','补齐控制计算','P','开关',[false,true],'为规则和死亡槽位执行不影响决策的网络前向，匹配矩阵预算。','padControllerBudget','每tick前向次数 = 创始队列大小（必须关闭繁殖）','执行补齐计算。','只算实际控制器所需前向。','CPU时间增加；生命行为不因此获得隐藏帮助。','reproduction必须false；固定创始数。','匹配的是136MAC额度，不是全部指令或墙钟。','使用正式控制器协议检查neuralMACs。'),
+ entry('sampleEvery','曲线采样间隔','Δtₛ','tick',[1,1000],'每隔若干真实步采样一次绘图历史。','sampleEvery','tick % Δtₛ = 0 时 sample()','图表更稀疏。','图表更细密。','可能漏看短暂峰值；不影响生命决策。','historyLimit和运行长度。','采样点不是独立重复样本；报告全程平均种群另算。','改变采样后对照相同tick的科学状态。'),
+ entry('historyLimit','曲线记录上限','Hmax','采样点',[1,10000],'限制保留的绘图记录数量。','historyLimit','超过Hmax移除最旧点，historyDropped++','保留更长曲线。','更早截断。','内存和导出范围改变。','sampleEvery；浏览器只显示最近300点。','不改变生态过程；报告说明缺失范围。','短窗口运行后检查截断计数。'),
+ entry('lineageLimit','谱系记录上限','Amax','记录',[1,100000],'限制内核保留的出生/死亡关系记录。','lineageLimit','超过Amax移除最旧关系','保留更多祖先关系。','可能缺失早期祖先。','影响可检查历史，不改变生物遗传。','旁路档案也有独立2000个体上限。','缺失关系不代表没有祖先。','小上限运行后核对缺失提示。'),
+ entry('unitsPerCell','每格空间单位','ℓ','单位/格',[.01,100],'把格坐标换算成显示单位。','unitsPerCell','显示距离 = 格距离 × ℓ','显示距离数字变大。','数字变小。','无生态影响；感知/移动仍按格定义。','世界宽高与感知半径。','只是单位映射，不重新计算物理或代谢。','用两个ℓ运行相同seed和tick，核对科学状态。',config),
+ entry('secondsPerTick','每tick模拟秒','Δt','秒/tick',[.001,10],'把固定步映射到模拟秒，同时控制播放调度。','secondsPerTick','模拟秒 = tick × Δt；播放步率 = 目标倍速/Δt','同tick显示更多秒，固定倍速需更少步。','固定倍速需更多步。','影响墙钟负载；相同tick生命轨迹不变。','所有代谢/再生阈值均按tick定义。','不是缩小数值积分步长；不能声称秒尺度物理重算。','改变Δt后在同一tick比较状态。',config)
+];
+export const EXPERIMENT_PARAMETERS=[
+ {key:'repeats',name:'独立重复次数',symbol:'n',unit:'种子对',range:[2,40],defaultValue:6,intuition:'多个独立世界成对比较，tick不是独立样本。',source:{file:'src/core/experiments.mjs',anchor:'planExperiment'},formula:'世界数 = n × 条件数',increase:'增加独立重复和计算预算。',decrease:'减少预算，区间更不稳定。',indirect:'不保证显著；预算总量≤600000世界步。',interactions:'ticks与协议臂数。',limits:'不能看见结果后加样本直到显著。',experiment:'开始前固定n与主指标。'},
+ {key:'ticks',name:'每个世界步数',symbol:'Tend',unit:'tick',range:[200,10000],defaultValue:1200,intuition:'每个条件固定推进相同步数后比较。',source:{file:'src/core/experiments.mjs',anchor:'advanceRun'},formula:'平均种群 = ΣN(t)/Tend',increase:'观察更长生态时域。',decrease:'观察更早期过程。',indirect:'可经历更多代，不保证收敛。',interactions:'寿命、季节、重复次数。',limits:'固定终点，不应跑到某组胜出才停。',experiment:'预注册两个时域并说明多重比较。'},
+ {key:'baseSeed',name:'首个实验种子',symbol:'s₀',unit:'无量纲',range:[0,4294967295],defaultValue:73129,intuition:'决定整批可重现且条件间配对的种子。',source:{file:'src/core/experiments.mjs',anchor:'104729'},formula:'seedᵢ = (s₀ + 104729i) mod 2³²',increase:'换一批世界，无单调效果。',decrease:'换一批世界。',indirect:'控制采样偶然性。',interactions:'所有实验条件共享同一组seed。',limits:'不能挑选对某策略有利的seed。',experiment:'用新的保留种子验证已有发现。'},
+ {key:'id',name:'科研问题',symbol:'Q',unit:'协议',range:['controllers','cooperation','mutation','environment','communication'],defaultValue:'controllers',intuition:'选择预先定义的变量、条件、主指标及混杂限制。',source:{file:'src/core/experiments.mjs',anchor:'PROTOCOLS'},formula:'协议 → 固定条件臂 → 配对世界 → planned contrasts',increase:'切换研究问题。',decrease:'切换研究问题。',indirect:'条件数和预算随协议变化。',interactions:'repeats、ticks和源码中的overrides。',limits:'本表单使用正式协议基础配置，不继承自由世界草稿。',experiment:'先读变量与边界，再写下预测。'}
+];
+export const KNOWLEDGE=Object.fromEntries([...PARAMETERS,...EXPERIMENT_PARAMETERS].map(p=>[p.key,p]));
+export function changedParameters(config,baseline=DEFAULTS){return Object.keys(DEFAULTS).filter(k=>config[k]!==baseline[k]).map(key=>({key,before:baseline[key],after:config[key],knowledge:KNOWLEDGE[key]}));}
