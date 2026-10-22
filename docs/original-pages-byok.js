@@ -20,7 +20,7 @@ modal.innerHTML=`<div id="pages-ai-card"><h2>知序 AI 学院 · DeepSeek</h2>
 <div id="pages-ai-status" role="status">尚未接入 · 本页保留原版 UI 和知序博士。GitHub Pages 不运行原版 Node API，原版后台功能需单独部署。</div>
 <div id="pages-ai-mentor" hidden><h3>真实 DeepSeek 导师答疑</h3><textarea id="pages-ai-question" placeholder="输入你要问博士的科学问题；建议先完成页面上的科学实验。"></textarea>
 <label><input id="pages-ai-consent" type="checkbox"> 我授权将以上问题发送至 DeepSeek 官方 API</label>
-<button id="pages-ai-ask" type="button">请博士分析</button><div id="pages-ai-reply">等待提问。</div></div>
+<button id="pages-ai-plan" type="button">请博士规划下一轮验证</button><button id="pages-ai-ask" type="button">请博士分析</button><div id="pages-ai-reply">等待提问。</div></div>
 <small>使用浏览器直连方式。公共设备、恶意浏览器扩展或浏览器开发工具可能读取输入的密钥；避免在不信任的设备上使用。</small></div>`;
 document.body.append(launch,modal);
 const $=id=>document.getElementById(id);let key='',verified=false,busy=false;
@@ -42,5 +42,7 @@ set('pages-ai-reply','博士正在请求 DeepSeek……');doctor('thinking','正
 try{const a=await call([{role:'system',content:'你是知序 AI 学院的科学探究博士，解释简洁准确，必须区分数学事实与假说，绝不伪称已经运行实验。'}, {role:'user',content:q}],450);set('pages-ai-reply',a.reply+'\n\n真实模型：'+a.model+' · Token '+(a.usage??'未提供'));doctor('success','已完成真实 DeepSeek 在线答疑。')}catch(e){set('pages-ai-reply','请求失败：'+e.message)}finally{$('pages-ai-consent').checked=false}
 };
 $('pages-ai-clear').onclick=()=>{key='';verified=false;$('pages-ai-key').value='';$('pages-ai-mentor').hidden=true;set('pages-ai-status','密钥已从本页内存清除');launch.textContent='连接 DeepSeek API'};
-if(new URLSearchParams(location.search).get('connect')==='1'){modal.dataset.open='true';}\nwindow.addEventListener('pagehide',()=>{key='';verified=false});
+document.getElementById('pages-ai-plan').onclick=async()=>{if(!verified){set('pages-ai-reply','请先完成模型连接测试');return;}const q=document.getElementById('pages-ai-question').value.trim();if(q.length<8){set('pages-ai-reply','请先输入至少八个字的验证目标');return;}if(!document.getElementById('pages-ai-consent').checked){set('pages-ai-reply','未授权发送学习问题，AI 不会运行');return;}set('pages-ai-reply','博士正在向 DeepSeek 生成科学验证方案……');doctor('thinking','正在规划下一步实验');try{const a=await call([{role:'system',content:'你是知序 AI 学院的科学博士。针对学生验证目标，仅提供候选对照实验方案，须包含目标、一个控制变量、可观测量、科学边界、学生批准要求。不能声称已执行任何实验。用中文简洁回答。'},{role:'user',content:q}],450);set('pages-ai-reply',a.reply+'\\n\\n此方案仅供审阅，未经学生批准绝不执行实验。\\n模型：'+a.model);doctor('success','已生成候选验证方案，等待学生审阅和批准。')}catch(e){set('pages-ai-reply','AI 规划失败：'+e.message)}finally{document.getElementById('pages-ai-consent').checked=false}};
+if(new URLSearchParams(location.search).get('connect')==='1'){modal.dataset.open='true';}
+window.addEventListener('pagehide',()=>{key='';verified=false});
 })();
