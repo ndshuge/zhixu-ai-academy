@@ -64,7 +64,7 @@ def assemble(root,out):
    marker='<script type="module" src="./app.js"></script>'
    if marker not in s:raise RuntimeError('Main app script marker missing')
    s=s.replace(marker,'<script src="./pages-api-shim.js"></script>'+marker,1)
-   s=s.replace('</body>','<script defer src="./original-pages-byok.js"></script><script defer src="./doctor-chat-ux.js"></script></body>',1)
+   s=s.replace('</body>','<script defer src="./original-pages-byok.js"></script><script defer src="./doctor-chat-ux.js"></script><link rel="stylesheet" href="./homepage-simplify.css"><script defer src="./homepage-simplify.js"></script></body>',1)
   else:
    marker='</head>'
    if marker not in s:raise RuntimeError('Head marker missing: '+name)
@@ -77,7 +77,7 @@ def assemble(root,out):
   html=f.read_text(encoding='utf8')
   html=re.sub(r'<a\b[^>]*\bhref=["\x27](?:\./)?admin(?:\.html)?["\x27][^>]*>.*?</a>','',html,flags=re.I|re.S)
   f.write_text(html,encoding='utf8')
- for name in ('connect.html','admin.html','original-pages-byok.js','doctor-chat-ux.js','pages-api-shim.js','pages-evo-pair.mjs','technical-evidence-summary.json'):
+ for name in ('connect.html','admin.html','original-pages-byok.js','doctor-chat-ux.js','homepage-simplify.js','homepage-simplify.css','pages-api-shim.js','pages-evo-pair.mjs','technical-evidence-summary.json'):
   shutil.copy2(overlay/name,out/name)
  q=(root/'quiz-bank.mjs').read_text(encoding='utf8')
  (out/'pages-quiz-bank.mjs').write_text('// Browser-local grade rubric adapted from original server source; publicly inspectable.\n'+q,encoding='utf8')
