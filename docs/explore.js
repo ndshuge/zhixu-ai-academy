@@ -8,7 +8,12 @@ function loadLab(){
  $('lab-frame').src='./labs/'+lab+'/';
  loadingTimer=setInterval(()=>{try{
   const doc=$('lab-frame').contentDocument,win=$('lab-frame').contentWindow;
-  const ready=lab==='evo'?win.evoEvidence?.tick>0:!!doc?.querySelector('[data-testid="visual-stage"][data-scene]');
+  const scene=doc?.querySelector('[data-testid="visual-stage"][data-scene]');
+  let ready=false;
+  if(lab==='evo')ready=Number(win.evoEvidence?.tick)>0;
+  else if(doc?.querySelector('canvas')&&scene&&doc.body?.innerText?.trim().length>200){
+   try{ready=!!JSON.parse(scene.getAttribute('data-scene'))?.row}catch{ready=false}
+  }
   if(ready){clearInterval(loadingTimer);$('lab-loading').textContent='实验室已就绪；可操作并记录真实观测。';$('capture-observation').disabled=false;}
   else if(Date.now()-started>15000){clearInterval(loadingTimer);$('lab-loading').textContent='加载尚未完成。请确认学院服务仍在运行，随后重新加载。';$('retry-lab').hidden=false;}
  }catch{}},250);
