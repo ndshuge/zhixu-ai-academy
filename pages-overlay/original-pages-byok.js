@@ -95,7 +95,7 @@ $('pages-ai-test').onclick=async()=>{
  if(!entered&&rawEntered){set('pages-ai-status','粘贴内容不是有效格式的 DeepSeek Key（应为英文 sk- 开头）。请只复制 API Key 本身，勿包含中文或说明文字。');return}
  if(!entered){set('pages-ai-status','请先输入 DeepSeek Key，或使用本浏览器此前保存的密钥');return}
  key=entered;$('pages-ai-key').value='';verified=false;announceStatus();set('pages-ai-status','正在请求 DeepSeek 官方模型……');
- try{const a=await call([{role:'user',content:'请只回答：连接成功'}],32);verified=true;activeModel=a.model;persistChoice();announceStatus();$('pages-ai-mentor').hidden=false;set('pages-ai-status','真实模型连接成功\n模型：'+a.model+'\n回复：'+a.reply+'\nToken：'+(a.usage??'未提供'));doctor('success','真实 DeepSeek 已连通。你可以授权发送问题让我分析。');launch.textContent='DeepSeek 已连通'}catch(e){verified=false;lastFailure=String(e.message||e);announceStatus();launch.textContent='连接 DeepSeek API';$('pages-ai-mentor').hidden=true;set('pages-ai-status','连接失败：'+(e.message||String(e))+'。密钥没有发送到 GitHub，可重试或清除本地保存。')}
+ try{const a=await call([{role:'user',content:'请只回答：连接成功'}],256);verified=true;activeModel=a.model;persistChoice();announceStatus();$('pages-ai-mentor').hidden=false;set('pages-ai-status','真实模型连接成功\n模型：'+a.model+'\n回复：'+a.reply+'\nToken：'+(a.usage??'未提供'));doctor('success','真实 DeepSeek 已连通。你可以授权发送问题让我分析。');launch.textContent='DeepSeek 已连通'}catch(e){verified=false;lastFailure=String(e.message||e);announceStatus();launch.textContent='连接 DeepSeek API';$('pages-ai-mentor').hidden=true;set('pages-ai-status','连接失败：'+(e.message||String(e))+'。密钥没有发送到 GitHub，可重试或清除本地保存。')}
 };
 $('pages-ai-ask').onclick=async()=>{if(!verified)return;const q=$('pages-ai-question').value.trim();if(q.length<3){set('pages-ai-reply','请先写下问题');return}
 set('pages-ai-reply','博士正在请求 DeepSeek……');doctor('thinking','正在分析你的问题');
