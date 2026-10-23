@@ -6,6 +6,30 @@
 (()=>{'use strict';
 const nativeFetch=window.fetch.bind(window),runs=new Map(),plans=new Map(),attempts=new Map();
 const pfx='/api/',VERSION='pages-logistic-float64-v1';
+const SNAPSHOT_KEY='zhixu-pages-science-session-v1';
+let evidenceTrace=[];
+function safeReadSnapshot(){
+ try{
+  const v=JSON.parse(sessionStorage.getItem(SNAPSHOT_KEY)||'null');
+  if(!v||v.version!==1||!Array.isArray(v.runs)||!Array.isArray(v.plans))return;
+  const now=Date.now();
+  for(const [id,obj] of v.runs.slice(-12))if(typeof id==='string'&&obj&&obj.result&&typeof obj.prediction==='string')runs.set(id,obj);
+  for(const [id,obj] of v.plans.slice(-15))if(typeof id==='string'&&obj&&now-obj.created<15*60e3)plans.set(id,obj);
+  for(const [id,obj] of (v.attempts||[]).slice(-20))if(typeof id==='string'&&obj&&now-obj.created<30*60e3)attempts.set(id,obj);
+  evidenceTrace=Array.isArray(v.trace)?v.trace.slice(-200):[];
+ }catch{}
+}
+function saveSnapshot(kind,fields={}){
+ const trace={kind,at:new Date().toISOString(),...fields};
+ evidenceTrace.push(trace);evidenceTrace=evidenceTrace.slice(-200);
+ try{
+  sessionStorage.setItem(SNAPSHOT_KEY,JSON.stringify({version:1,savedAt:Date.now(),
+   runs:[...runs.entries()].slice(-12),plans:[...plans.entries()].slice(-15),
+   attempts:[...attempts.entries()].slice(-20),trace:evidenceTrace}));
+ }catch{/* storage may be unavailable; calculations must still work */}
+}
+safeReadSnapshot();
+
 let questionsCache=null;
 const rnd=()=>crypto.randomUUID();
 const result=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json;charset=utf-8','Cache-Control':'no-store','X-Zhixu-Engine':'browser-local'}});
@@ -91,12 +115,12 @@ async function handler(path,init={}){
   const resultValue=data.experiment==='evo-pair'
    ?await (await import('./pages-evo-pair.mjs')).runEvoPair(data.seed)
    :experiment(data.experiment,data.params||data);
-  const runId=rnd();runs.set(runId,{prediction,result:resultValue,mentored:false,depth:0});
+  const runId=rnd();runs.set(runId,{prediction,result:resultValue,mentored:false,depth:0});saveSnapshot('scientific-run',{runId,experiment:data.experiment||'sensitivity'});
   return result({runId,...resultValue});
  }
  if(url.pathname==='/api/mentor'&&method==='POST'){
   const run=getRun(data.runId);if(!run)return error(404,'找不到本次实验');
-  run.mentored=true;const fallback=baseMentor(run);
+  run.mentored=true;saveSnapshot('mentor-reviewed',{runId:data.runId,authorized:data.shareApproved===true&&model()?.status?.()===true});const fallback=baseMentor(run);
   if(data.shareApproved===true&&model()?.status?.()===true){
    try{const reply=await model().ask([{role:'system',content:'你是知序 AI 学院博士。仅根据实验数值给出事实观察、一个追问和一个单变量验证建议，不虚构实验，不夸大学习效果。中文150字以内。'},{role:'user',content:JSON.stringify({prediction:run.prediction,reflection:clip(data.note),experiment:run.result.experiment,condition:run.result.condition,metrics:run.result.metrics,selectedPoint:data.selection})}],320);
     return result({...fallback,mode:'llm',reply:reply.reply,provider:'DeepSeek',model:reply.model,usage:reply.usage,availability:'本次授权后实际调用 DeepSeek 官方模型，科学结果由浏览器计算',qualityCheck:{scope:'browser-local-real-science',issues:[]}});
@@ -115,7 +139,7 @@ async function handler(path,init={}){
     pr.plannerMode='llm-constrained';pr.why=out.reply.slice(0,350);pr.note+=' 本次理由已经由 DeepSeek 模型实际生成。';
    }catch(e){pr.fallbackReason='MODEL_REQUEST_FAILED';pr.note+=' AI请求失败，已退回浏览器规则方案。'}
   }else if(data.mode==='llm'){pr.fallbackReason='MODEL_NOT_CONNECTED'}
-  plans.set(id,{runId:data.runId,proposal:pr,created:Date.now(),used:false});
+  plans.set(id,{runId:data.runId,proposal:pr,created:Date.now(),used:false});saveSnapshot('proposed-for-approval',{planId:id,runId:data.runId,mode:pr.plannerMode});
   return result({planId:id,expiresAt:new Date(Date.now()+15*60e3).toISOString(),...pr});
  }
  if(url.pathname==='/api/agent/approve'&&method==='POST'){
@@ -126,13 +150,13 @@ async function handler(path,init={}){
   if(Date.now()-p.created>15*60e3)return error(410,'方案已过期');
   if(newPrediction.length<8)return error(400,'请填写至少8字的第二轮预测');
   const parent=getRun(p.runId);if(newPrediction===parent.prediction)return error(400,'请填写与第一轮不同的新预测');
-  p.used=true;const prop=p.proposal;
+  const prop=p.proposal;
   const out=prop.experiment==='evo-pair'
    ?await (await import('./pages-evo-pair.mjs')).runEvoPair(prop.seed)
    :experiment(prop.experiment,prop.params);
   const runId=rnd();
   const lineage={parentRunId:p.runId,changed:prop.changes,toolId:prop.toolId,plannerMode:prop.plannerMode,studyQuestion:prop.studyQuestion,goal:prop.goal,why:prop.why,limits:prop.limits,approvedAt:new Date().toISOString()};
-  runs.set(runId,{prediction:newPrediction,result:out,depth:parent.depth+1,mentored:false});
+  runs.set(runId,{prediction:newPrediction,result:out,depth:parent.depth+1,mentored:false});p.used=true;saveSnapshot('student-approved-execution',{runId,planId:data.planId,parentRunId:p.runId});
   return result({runId,...out,lineage,studentApproval:'explicit-browser-local',planConsumed:true});
  }
  if(url.pathname==='/api/evaluate'&&method==='POST'){
@@ -149,7 +173,7 @@ async function handler(path,init={}){
   const q=await import('./pages-quiz-bank.mjs');
   const id=url.searchParams.get('itemId'),item=q.getPublicQuestion(id);
   if(!item)return error(404,'题目不存在');
-  const token=rnd();attempts.set(token,{id,used:false,created:Date.now()});
+  const token=rnd();attempts.set(token,{id,used:false,created:Date.now()});saveSnapshot('question-issued',{itemId:id});
   return result({...item,attemptToken:token});
  }
  if(url.pathname==='/api/learning/grade'&&method==='POST'){
@@ -159,7 +183,7 @@ async function handler(path,init={}){
   const q=await import('./pages-quiz-bank.mjs');
   try{
    const graded=q.gradeQuestion(data.itemId,data.answer);
-   token.used=true;
+   token.used=true;saveSnapshot('question-graded',{itemId:data.itemId,result:graded.gradedResult});
    return result({...graded,suggestedReviewItem:q.recommendedReviewItem(graded.conceptIds[0]),
     provenance:'original-versioned-rubric-browser-local-not-server-enforced'});
   }catch(e){return error(400,e.message)}
@@ -168,7 +192,21 @@ async function handler(path,init={}){
   const q=await import('./pages-quiz-bank.mjs');return result({concepts:q.CONCEPTS});
  }
  if(url.pathname==='/api/agent/tools')return result({plannerMode:'browser-local',approvalRequired:true,tools:[{id:'browser-local-logistic-compare',name:'浏览器 Logistic 单变量对照实验'}]});
- if(url.pathname==='/api/evidence/summary')return result({scope:'pages-browser-local',actualStudentParticipants:0,notice:'非真实学习成效评估数据'});
+ if(url.pathname==='/api/evidence/summary'){
+  try{
+   const response=await nativeFetch(new URL('./technical-evidence-summary.json',location.href),{cache:'no-store'});
+   if(!response.ok)return error(503,'原版技术汇总文件未加载');
+   const report=await response.json();
+   if(report.scope!=='VERIFIED_SYNTHETIC_TECHNICAL_TESTS_NOT_STUDENT_LEARNING'||report.actualStudentParticipants!==0)
+    return error(503,'无法确认合成技术测试类别');
+   return result(report);
+  }catch{return error(503,'技术汇总未就绪：请检查网络或 Pages 发布');}
+ }
+ if(url.pathname==='/api/browser/session'){
+  return result({scope:'browser-tab-session-not-server',version:1,runCount:runs.size,planCount:plans.size,
+    traces:evidenceTrace,storage:'sessionStorage',apiKeyStored:false});
+ }
+
  if(url.pathname==='/api/safety/cases')return result({cases:[
  {id:'extra-field',name:'输出夹带指令',summary:'模型选择之外又附加了 shell 命令',protectedBy:'严格单字段 JSON 白名单'},
  {id:'tool-injection',name:'越权工具请求',summary:'模型尝试指定一个不存在的系统工具',protectedBy:'模型只能选择 A/B'},
@@ -196,5 +234,12 @@ window.fetch=(input,init)=>{
  }
  return orig(input,init);
 };
-window.ZHIXU_BROWSER_ADAPTER={kind:'client-science-not-server',engine:VERSION};
+window.ZHIXU_BROWSER_ADAPTER={
+ kind:'client-science-not-server',engine:VERSION,
+ exportSession:()=>({scope:'browser-tab-not-school-server',version:1,
+   exportedAt:new Date().toISOString(),runs:[...runs.entries()],plans:[...plans.entries()],
+   trace:evidenceTrace,apiKeyIncluded:false}),
+ clearSession:()=>{runs.clear();plans.clear();attempts.clear();evidenceTrace=[];try{sessionStorage.removeItem(SNAPSHOT_KEY)}catch{}},
+ sessionStatus:()=>({runs:runs.size,plans:plans.size,events:evidenceTrace.length})
+};
 })();

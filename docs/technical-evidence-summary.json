@@ -1,0 +1,25 @@
+{
+  "scope": "VERIFIED_SYNTHETIC_TECHNICAL_TESTS_NOT_STUDENT_LEARNING",
+  "offline": {
+    "situations": 60,
+    "recomputations": 120,
+    "blockedUnsafeOutputs": 20,
+    "goalAlignedRule": 32,
+    "goalAlignedDeterministicPolicy": 55,
+    "modelCalls": 0,
+    "hash": "0bab260e08a955a7387929e82d73f227d33ef6aa7243b9571ea8bad611f0a118",
+    "noSuitableDirectionCases": 5
+  },
+  "remote": {
+    "syntheticSituations": 8,
+    "goalAlignedModel": 8,
+    "goalAlignedRule": 4,
+    "remoteCalls": 1,
+    "modelName": "DeepSeek V4.1 Flash",
+    "toolCalls": 0
+  },
+  "actualStudentParticipants": 0,
+  "caution": "仅为本机历史合成技术测试汇总，不是实时 Pages DeepSeek 调用，不是学生学习效果。单次真实模型请求测试与本页用户个人 BYOK 分开统计。",
+  "source": "LOCAL_VERIFIED_TEST_AGGREGATES_IMPORTED_2026-10-23",
+  "liveFeed": false
+}

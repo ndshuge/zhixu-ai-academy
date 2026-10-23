@@ -30,13 +30,14 @@ def assemble(root,out):
    if marker not in s:raise RuntimeError('Head marker missing: '+name)
    s=s.replace(marker,'<script defer src="./pages-api-shim.js"></script></head>',1)
   p.write_text(s,encoding='utf8')
- for name in ('connect.html','admin.html','original-pages-byok.js','pages-api-shim.js','pages-evo-pair.mjs'):
+ for name in ('connect.html','admin.html','original-pages-byok.js','pages-api-shim.js','pages-evo-pair.mjs','technical-evidence-summary.json'):
   shutil.copy2(overlay/name,out/name)
  q=(root/'quiz-bank.mjs').read_text(encoding='utf8')
  (out/'pages-quiz-bank.mjs').write_text('// Browser-local grade rubric adapted from original server source; publicly inspectable.\n'+q,encoding='utf8')
  app=out/'app.js';a=app.read_text(encoding='utf8')
  a=a.replace("s.providerSource==='judge-session'","(s.providerSource==='judge-session'||s.providerSource==='browser-BYOK')")
  a=a.replace('Key 仅保存在服务端','Key 仅保存在当前网页会话内存')
+ a=a.replace('（Key 仅保留在服务端）','（Key 仅保存在本标签页内存中）')
  app.write_text(a,encoding='utf8')
  (out/'.nojekyll').write_text('',encoding='utf8')
  assert 'pages-api-shim.js' in (out/'index.html').read_text(encoding='utf8')

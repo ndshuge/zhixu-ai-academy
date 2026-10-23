@@ -23,27 +23,32 @@ modal.innerHTML=`<div id="pages-ai-card"><h2>知序 AI 学院 · DeepSeek</h2>
 <button id="pages-ai-plan" type="button">请博士规划下一轮验证</button><button id="pages-ai-ask" type="button">请博士分析</button><div id="pages-ai-reply">等待提问。</div></div>
 <small>使用浏览器直连方式。公共设备、恶意浏览器扩展或浏览器开发工具可能读取输入的密钥；避免在不信任的设备上使用。</small></div>`;
 document.body.append(launch,modal);
-const $=id=>document.getElementById(id);let key='',verified=false,busy=false;
+const $=id=>document.getElementById(id);let key='',verified=false,busy=false,requestCount=0;
+const maxRequestsPerTab=12;
+function announceStatus(){
+ window.dispatchEvent(new Event('focus'));
+ document.dispatchEvent(new CustomEvent('academy:pages-provider-updated',{detail:{verified,provider:verified?'DeepSeek':null,used:requestCount}}));
+}
 launch.onclick=()=>{modal.dataset.open='true';$('pages-ai-key').focus()};$('pages-ai-close').onclick=()=>{modal.dataset.open='false'};modal.addEventListener('click',e=>{if(e.target===modal)modal.dataset.open='false'});
 const set=(id,t)=>{$(id).textContent=t};
 async function call(messages,max_tokens=200){
- if(!key)throw Error('未填写 API Key');if(busy)throw Error('正在请求');busy=true;
+ if(!key)throw Error('未填写 API Key');if(busy)throw Error('正在请求');if(requestCount>=maxRequestsPerTab)throw Error('本标签页真实模型请求已达12次，请重新打开标签页');busy=true;
  const ctrl=new AbortController(),clock=setTimeout(()=>ctrl.abort(),25000);
- try{const r=await fetch('https://api.deepseek.com/v1/chat/completions',{method:'POST',mode:'cors',cache:'no-store',headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},signal:ctrl.signal,body:JSON.stringify({model:'deepseek-chat',messages,max_tokens,temperature:.4})});if(!r.ok)throw Error('HTTP '+r.status+'，请检查密钥、额度和网络');const j=await r.json();const reply=j.choices?.[0]?.message?.content;if(!reply)throw Error('响应中没有模型文字');return {reply,model:j.model||'deepseek-chat',usage:j.usage?.total_tokens??null}}finally{clearTimeout(clock);busy=false}
+ try{const r=await fetch('https://api.deepseek.com/v1/chat/completions',{method:'POST',mode:'cors',cache:'no-store',headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},signal:ctrl.signal,body:JSON.stringify({model:'deepseek-chat',messages,max_tokens,temperature:.4})});if(!r.ok)throw Error('HTTP '+r.status+'，请检查密钥、额度和网络');const j=await r.json();const reply=j.choices?.[0]?.message?.content;if(!reply)throw Error('响应中没有模型文字');requestCount++;return {reply,model:j.model||'deepseek-chat',usage:j.usage?.total_tokens??null}}finally{clearTimeout(clock);busy=false}
 }
 function doctor(mode,message){const art=$('doctor-art'),st=$('doctor-status'),msg=$('doctor-message'),model=$('doctor-model-name');if(art)art.src='./assets/zhixu-doctor/'+(mode==='success'?'success':mode==='thinking'?'thinking':'warning')+'.webp';if(st)st.textContent=mode==='success'?'DeepSeek 已验证':'DeepSeek 正在分析';if(msg)msg.textContent=message;if(model)model.textContent='DeepSeek / deepseek-chat'}
 $('pages-ai-test').onclick=async()=>{
  const entered=$('pages-ai-key').value.trim();if(!entered){set('pages-ai-status','请先输入 DeepSeek Key');return}
  key=entered;$('pages-ai-key').value='';verified=false;set('pages-ai-status','正在请求 DeepSeek 官方模型……');
- try{const a=await call([{role:'user',content:'请只回答：连接成功'}],32);verified=true;$('pages-ai-mentor').hidden=false;set('pages-ai-status','真实模型连接成功\n模型：'+a.model+'\n回复：'+a.reply+'\nToken：'+(a.usage??'未提供'));doctor('success','真实 DeepSeek 已连通。你可以授权发送问题让我分析。');launch.textContent='DeepSeek 已连通'}catch(e){key='';set('pages-ai-status','连接失败：'+(e.message||String(e)))}
+ try{const a=await call([{role:'user',content:'请只回答：连接成功'}],32);verified=true;announceStatus();$('pages-ai-mentor').hidden=false;set('pages-ai-status','真实模型连接成功\n模型：'+a.model+'\n回复：'+a.reply+'\nToken：'+(a.usage??'未提供'));doctor('success','真实 DeepSeek 已连通。你可以授权发送问题让我分析。');launch.textContent='DeepSeek 已连通'}catch(e){key='';announceStatus();set('pages-ai-status','连接失败：'+(e.message||String(e)))}
 };
 $('pages-ai-ask').onclick=async()=>{if(!verified)return;const q=$('pages-ai-question').value.trim();if(q.length<3){set('pages-ai-reply','请先写下问题');return}if(!$('pages-ai-consent').checked){set('pages-ai-reply','需要本次明确授权才能发送');return}
 set('pages-ai-reply','博士正在请求 DeepSeek……');doctor('thinking','正在分析你的问题');
 try{const a=await call([{role:'system',content:'你是知序 AI 学院的科学探究博士，解释简洁准确，必须区分数学事实与假说，绝不伪称已经运行实验。'}, {role:'user',content:q}],450);set('pages-ai-reply',a.reply+'\n\n真实模型：'+a.model+' · Token '+(a.usage??'未提供'));doctor('success','已完成真实 DeepSeek 在线答疑。')}catch(e){set('pages-ai-reply','请求失败：'+e.message)}finally{$('pages-ai-consent').checked=false}
 };
-$('pages-ai-clear').onclick=()=>{key='';verified=false;$('pages-ai-key').value='';$('pages-ai-mentor').hidden=true;set('pages-ai-status','密钥已从本页内存清除');launch.textContent='连接 DeepSeek API'};
+$('pages-ai-clear').onclick=()=>{key='';verified=false;announceStatus();$('pages-ai-key').value='';$('pages-ai-mentor').hidden=true;set('pages-ai-status','密钥已从本页内存清除');launch.textContent='连接 DeepSeek API'};
 document.getElementById('pages-ai-plan').onclick=async()=>{if(!verified){set('pages-ai-reply','请先完成模型连接测试');return;}const q=document.getElementById('pages-ai-question').value.trim();if(q.length<8){set('pages-ai-reply','请先输入至少八个字的验证目标');return;}if(!document.getElementById('pages-ai-consent').checked){set('pages-ai-reply','未授权发送学习问题，AI 不会运行');return;}set('pages-ai-reply','博士正在向 DeepSeek 生成科学验证方案……');doctor('thinking','正在规划下一步实验');try{const a=await call([{role:'system',content:'你是知序 AI 学院的科学博士。针对学生验证目标，仅提供候选对照实验方案，须包含目标、一个控制变量、可观测量、科学边界、学生批准要求。不能声称已执行任何实验。用中文简洁回答。'},{role:'user',content:q}],450);set('pages-ai-reply',a.reply+'\\n\\n此方案仅供审阅，未经学生批准绝不执行实验。\\n模型：'+a.model);doctor('success','已生成候选验证方案，等待学生审阅和批准。')}catch(e){set('pages-ai-reply','AI 规划失败：'+e.message)}finally{document.getElementById('pages-ai-consent').checked=false}};
 if(new URLSearchParams(location.search).get('connect')==='1'){modal.dataset.open='true';}
-window.ZHIXU_PAGES_AI={status:()=>verified,ask:async(messages,limit=320)=>{if(!verified)throw new Error('必须先验证 DeepSeek 连接');return call(messages,limit)}};
+window.ZHIXU_PAGES_AI={status:()=>verified,usage:()=>({used:requestCount,limit:maxRequestsPerTab}),ask:async(messages,limit=320)=>{if(!verified)throw new Error('必须先验证 DeepSeek 连接');return call(messages,limit)}};
 window.addEventListener('pagehide',()=>{key='';verified=false});
 })();
