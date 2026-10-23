@@ -14,7 +14,7 @@ const style=document.createElement('style');style.textContent=`
 const launch=document.createElement('button');launch.id='pages-ai-open';launch.textContent='连接 DeepSeek API';launch.type='button';
 const modal=document.createElement('div');modal.id='pages-ai-dialog';modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label','DeepSeek API 设置');
 modal.innerHTML=`<div id="pages-ai-card"><h2>知序 AI 学院 · DeepSeek</h2>
-<p>你可以在这里填入自己的官方 DeepSeek API Key，进行真实在线模型测试，并在明确授权后请求导师建议。密钥仅存放在当前页面内存，不会提交到 GitHub、保存到 localStorage 或上传给知序自己的服务器。</p>
+<p>你可以在这里填入自己的官方 DeepSeek API Key，进行真实在线模型测试，并在明确授权后请求导师建议。默认仅在当前页面内存使用；只有你主动勾选「记住 API Key」时才会以明文形式存入此浏览器 localStorage。密钥不会提交到 GitHub 或知序自己的服务器。</p>
 <label for="pages-ai-key">DeepSeek 官方 API Key</label><input id="pages-ai-key" type="password" placeholder="在这里填 Key" autocomplete="off" spellcheck="false">
 <label for="pages-ai-model">DeepSeek 模型</label>
 <select id="pages-ai-model" aria-label="选择 DeepSeek 模型"><option value="deepseek-flash">DeepSeek Flash（推荐，快速）</option><option value="deepseek-v4-pro">DeepSeek V4 Pro（更强推理）</option></select>
@@ -84,7 +84,7 @@ async function call(messages,max_tokens=200){
  if(key&&!/^sk-[A-Za-z0-9_-]{16,}$/.test(key))throw Error('密钥格式包含无效字符，请清除并粘贴正确的 sk- Key');
  if(!key)throw Error('未填写 API Key');if(busy)throw Error('正在请求');if(requestCount>=maxRequestsPerTab)throw Error('本标签页真实模型请求已达12次，请重新打开标签页');busy=true;
  const ctrl=new AbortController(),clock=setTimeout(()=>ctrl.abort(),25000);
- try{const r=await fetch('https://api.deepseek.com/chat/completions',{method:'POST',mode:'cors',cache:'no-store',headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},signal:ctrl.signal,body:JSON.stringify({model:$('pages-ai-model').value,messages,max_tokens,temperature:.4})});if(!r.ok)throw Error('HTTP '+r.status+'，请检查密钥、额度和网络');const j=await r.json();const reply=j.choices?.[0]?.message?.content;if(!reply)throw Error('响应中没有模型文字');requestCount++;return {reply,model:j.model||$('pages-ai-model').value,usage:j.usage?.total_tokens??null}}finally{clearTimeout(clock);busy=false}
+ try{const r=await fetch('https://api.deepseek.com/chat/completions',{method:'POST',mode:'cors',cache:'no-store',headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},signal:ctrl.signal,body:JSON.stringify({model:$('pages-ai-model').value,messages,max_tokens,temperature:.4})});if(!r.ok)throw Error('HTTP '+r.status+'，请检查密钥、额度和网络');const j=await r.json();const reply=j.choices?.[0]?.message?.content;if(!reply)throw Error('响应中没有模型文字');requestCount++;return {reply,model:j.model||$('pages-ai-model').value,usage:j.usage?.total_tokens??null}}catch(e){if(verified){verified=false;lastFailure=String(e.message||e);announceStatus();launch.textContent='连接 DeepSeek API';$('pages-ai-mentor').hidden=true;set('pages-ai-status','模型请求失败，已停止展示 AI 已连通。请重新验证连接：'+lastFailure);}throw e}finally{clearTimeout(clock);busy=false}
 }
 function doctor(mode,message){const art=$('doctor-art'),st=$('doctor-status'),msg=$('doctor-message'),model=$('doctor-model-name');if(art)art.src='./assets/zhixu-doctor/'+(mode==='success'?'success':mode==='thinking'?'thinking':'warning')+'.webp';if(st)st.textContent=mode==='success'?'DeepSeek 已验证':'DeepSeek 正在分析';if(msg)msg.textContent=message;if(model)model.textContent='DeepSeek / '+activeModel}
 $('pages-ai-test').onclick=async()=>{
