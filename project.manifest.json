@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "name": "ai-academy",
+  "displayName": "AI学院",
+  "type": "web",
+  "status": "active",
+  "root": "E:\\CHATGPT\\projects\\ai-academy",
+  "docs": {
+    "agents": "AGENTS.md",
+    "status": "docs/STATUS.md",
+    "roadmap": "docs/ROADMAP.md",
+    "architecture": "docs/ARCHITECTURE.md",
+    "modules": "docs/MODULES.md",
+    "testing": "docs/TESTING.md"
+  },
+  "commands": {
+    "validate": "npm test && npm run verify && npm run audit:filenames && npm run test:browser",
+    "build": ""
+  }
+}

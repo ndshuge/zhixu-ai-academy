@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>学校模型配置｜AI学院</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+.admin-shell{max-width:1100px;margin:0 auto;padding:42px 24px 75px}
+.admin-header{display:flex;justify-content:space-between;align-items:center;gap:18px}
+.admin-header .identity{color:#163f34;padding:0}
+.admin-toplink{color:#287f64;font-weight:700;font-size:13px}
+.admin-headline{margin:45px 0 22px}
+.admin-headline h1{font-size:39px}
+.admin-headline p{color:#667e73;line-height:1.8;max-width:730px;font-size:14px}
+.admin-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;align-items:start}
+.panel{border:1px solid #dce9df;background:#fff;border-radius:17px;padding:28px;box-shadow:0 8px 30px #24604b0d;margin-bottom:17px}
+.panel h2{margin:0 0 16px;font-size:19px}
+.panel p{font-size:13px;color:#6e8278;line-height:1.8}
+.admin-field{display:grid;gap:7px;margin:14px 0;font-size:12px;font-weight:700;color:#345c4e}
+.admin-field input,.admin-field select{border:1px solid #d4e4d9;border-radius:9px;padding:12px;background:#fafdfb;color:#234436;width:100%;outline:none;min-height:44px}
+.admin-field input:focus,.admin-field select:focus{border-color:#409579;box-shadow:0 0 0 3px #398e6920}
+.admin-field small{color:#81928a;line-height:1.5;font-weight:400}
+.admin-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.admin-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:19px}
+.admin-actions button{min-width:145px}
+.admin-quiet{font-size:11px;color:#688173}
+.status-value{background:#e8f4eb;border:1px solid #cce1d4;border-radius:12px;padding:17px;line-height:1.85;font-size:13px;color:#2c674d;white-space:pre-wrap;word-break:break-word}
+.status-value.error{background:#fff3e9;border-color:#efd5bb;color:#985a2d}
+.status-value.neutral{background:#f4f8f5;color:#4d6a5d}
+.preset-strip{display:flex;flex-wrap:wrap;gap:9px}
+.tag{background:#edf6ef;padding:8px 12px;border-radius:99px;font-size:11px;color:#2e7258;font-weight:700}
+.checks{display:grid;gap:14px}
+.check-line{display:flex;align-items:start;gap:12px;font-size:13px;color:#4b6559;line-height:1.7}
+.check-line .bullet{width:24px;height:24px;flex:none;background:#eaf7ee;border-radius:50%;display:grid;place-items:center;color:#298464;font-weight:700}
+.admin-bottom{margin-top:22px;color:#8a9c92;font-size:11px;line-height:1.8}
+.admin-notice{margin-top:15px;font-size:12px;color:#9a6a35;background:#fff8e9;padding:14px;border-radius:8px;line-height:1.8}
+@media(max-width:760px){.admin-grid{grid-template-columns:1fr}.admin-shell{padding:26px 15px}.admin-headline h1{font-size:29px}.panel{padding:19px}.admin-two{grid-template-columns:1fr}.admin-header .identity{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="admin-shell">
+ <div class="admin-header">
+  <div class="identity"><span class="logo">∑</span><span>AI 学院<small>学校模型管理 · 本机验证版</small></span></div>
+  <a href="/" class="admin-toplink">← 返回学生实验台</a>
+ </div>
+ <section class="admin-headline">
+  <div class="eyebrow">SCHOOL BRING YOUR OWN MODEL API</div>
+  <h1>模型由学校选择，<br><em>教学能力由 AI学院提供。</em></h1>
+  <p>学校可接入自己的 DeepSeek、GLM、千问或兼容 API。学生端只看到学校配置的模型名称，永远不获取 API Key。密钥目前仅放在服务器进程内存中，重启会清除。</p>
+  <div class="preset-strip"><span class="tag">校方自带 API</span><span class="tag">服务端转发</span><span class="tag">预算限制</span><span class="tag">学生主动授权</span><span class="tag">规则回退</span></div>
+ </section>
+ <div class="admin-grid">
+  <div>
+   <section class="panel">
+    <h2>01 · 管理员解锁</h2>
+    <p>输入 AI学院本机启动窗口显示的 <code>AI_ACADEMY_LOCAL_ADMIN_CODE</code>。这是验证版的临时管理员口令，不会保存在浏览器。</p>
+    <label class="admin-field">本次启动的管理员口令
+     <input id="admin-token" type="password" placeholder="启动终端中的管理员口令" autocomplete="off" spellcheck="false"/>
+    </label>
+    <button id="unlock" class="secondary">验证管理员身份</button>
+    <p id="unlock-state" role="status">未解锁。学生不需要此口令。</p>
+   </section>
+   <section class="panel">
+    <h2>02 · 配置学校模型接口</h2>
+    <label class="admin-field">模型提供商
+      <select id="provider">
+       <option value="deepseek">DeepSeek</option><option value="glm">智谱 GLM</option>
+       <option value="qwen">阿里云百炼 / Qwen</option><option value="custom">学校或个人自定义 API</option>
+      </select>
+    </label>
+    <div class="admin-two">
+      <label class="admin-field">学生端展示名称<input id="display-name" value="DeepSeek" maxlength="64" /></label>
+      <label class="admin-field">模型 ID<input id="model" value="deepseek-chat" maxlength="120"/></label>
+    </div>
+    <label class="admin-field">API Base URL（OpenAI兼容接口）
+      <input id="base-url" type="url" value="https://api.deepseek.com/v1" placeholder="https://example.edu/api/v1" maxlength="300" spellcheck="false"/>
+      <small>外部接口必须为 HTTPS；程序会在 Base URL 后调用 /chat/completions。</small>
+    </label>
+    <label class="admin-field">API Key
+      <input id="api-key" type="password" placeholder="仅本次配置提交；服务器不向学生返回密钥" autocomplete="new-password" spellcheck="false" maxlength="512"/>
+      <small>替换提供商或地址必须重新填写。模型配置不会写入工程目录。</small>
+    </label>
+    <div class="admin-two">
+     <label class="admin-field">每日最大模型调用次数<input id="daily-limit" type="number" min="1" max="2000" step="1" value="30" /></label>
+     <label class="admin-field">单次最大输出 Tokens<input id="max-tokens" type="number" min="16" max="1024" step="1" value="400"/></label>
+    </div>
+    <div class="admin-actions">
+      <button id="save-provider" class="primary">保存到服务端内存 →</button>
+      <button id="test-provider" class="secondary" disabled>测试真实模型连接</button>
+      <button id="clear-provider" class="secondary" disabled>停用模型</button>
+    </div>
+    <div class="admin-notice">真实连通性测试会发送一条简短测试消息，可能产生少量 API 费用。点击“保存”不会调用外部模型。</div>
+   </section>
+  </div>
+  <div>
+    <section class="panel">
+      <h2>学校接入状态</h2>
+      <div id="admin-status" class="status-value neutral" role="status">输入管理员口令查看配置。密钥永远不显示。</div>
+    </section>
+    <section class="panel">
+      <h2>交付给学校的是什么？</h2>
+      <div class="checks">
+       <div class="check-line"><span class="bullet">1</span><span><strong>自己的模型和费用账户。</strong>学校决定服务商、模型及消费限额；无需给学生分配原始 API Key。</span></div>
+       <div class="check-line"><span class="bullet">2</span><span><strong>独立的科学教学引擎。</strong>Physics Frontier Lab 与 EvoWorld 提供真实计算，不依赖模型凭空生成数值。</span></div>
+       <div class="check-line"><span class="bullet">3</span><span><strong>可审计的教学流程。</strong>学生先预测，再实验、解释、复测；模型不能直接修改科学结果。</span></div>
+       <div class="check-line"><span class="bullet">4</span><span><strong>模型失效时回退。</strong>配额用尽或服务异常，仍可进入本地规则引导，不影响原实验运行。</span></div>
+      </div>
+    </section>
+    <section class="panel">
+      <h2>部署边界</h2>
+      <p>这是<strong>Windows 本机单校验证版</strong>，尚不具备学校生产环境所需的统一身份认证、租户隔离、密钥保险库、审计日志和 TLS 反向代理。不能因为能填入 Key 就宣称已可直接服务全校。</p>
+      <p><strong>演示策略：</strong>本机使用你自己的模型账户完成一条教学流程；正式部署时由校方管理员替换为校方的 API。</p>
+    </section>
+  </div>
+ </div>
+ <div class="admin-bottom">AI学院 · V0.2 演示架构。管理员操作只绑定本机127.0.0.1，权限口令不会存入localStorage。密钥在服务端进程内存中随进程结束清除。</div>
+</div>
+<script type="module" src="/admin.js"></script>
+</body>
+</html>

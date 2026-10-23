@@ -1,0 +1,34 @@
+# Third-party dependencies and environment-based secrets
+node_modules/
+.env
+.env.*
+!.env.example
+
+# OpenCode / coding-agent private credentials: never publish
+.opencode/
+.local/
+.secrets/
+.credentials/
+secrets/
+credentials/
+**/auth.json
+**/credentials.json
+**/*-credentials.json
+**/*.secret.json
+**/*.secrets.json
+.npmrc
+*.pem
+*.p12
+*.pfx
+*.key
+*_token.txt
+*_key.txt
+
+# Temporary debugging, local execution history and snapshots
+evidence/runtime/
+*.log
+*.log.*
+debug/
+tmp/
+temp/
+

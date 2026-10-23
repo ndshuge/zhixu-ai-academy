@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-10-10T03:24:23.418Z",
+  "source": "E:/CHATGPT/projects/physics-frontier-lab",
+  "engine": "PFL v0.2 source",
+  "note": "Read-only bundled snapshot; upstream may have uncommitted changes; do not claim independent numeric validation.",
+  "bundleSha256": "88f7c1a189aeb1870ae522a6e90d0de0eb00e893ad467dae9c6743e40a6c4a92",
+  "dependencies": [
+    {
+      "path": "../physics-frontier-lab/src/catalog.ts",
+      "sha256": "4d02333f6cfc16a45db21bf5e39f780aa5b1bc933001c74d6a73e79a506b8e12"
+    },
+    {
+      "path": "../physics-frontier-lab/src/core/types.ts",
+      "sha256": "23d76aa235274a7ed2cc2abbc45c964ae45296b866a53820c8a726478d80466c"
+    },
+    {
+      "path": "../physics-frontier-lab/src/core/chaos.ts",
+      "sha256": "a3a74646aea78edcd9d1aedcd5a2915b6ada8a0742ae8b789936977996d2e4cd"
+    },
+    {
+      "path": "../physics-frontier-lab/src/core/electrostatics.ts",
+      "sha256": "bded8096ebef9848ece732d73620277d81a35e51f81edd7f700ec9e8392ef796"
+    },
+    {
+      "path": "../physics-frontier-lab/src/core/semiconductor.ts",
+      "sha256": "6732e1be4900a29f987cb2618604c09590572aba2401393a777ece7c28d22157"
+    },
+    {
+      "path": "../physics-frontier-lab/src/core/poissonBoltzmann.ts",
+      "sha256": "8a1d4c75c1b469d47508dfeb8333c07d66dade8d06610702585f385990bd8c82"
+    },
+    {
+      "path": "../physics-frontier-lab/src/core/adaptive.ts",
+      "sha256": "0a4f0604a87e89d335b3929fd84a9c37d11d334d0559bca069b1bf2b40cf383d"
+    },
+    {
+      "path": "../physics-frontier-lab/src/core/conditions.ts",
+      "sha256": "4d963228a7778619c134e83399fda0f0fae91f2499686b6412a22650b2aff4c2"
+    },
+    {
+      "path": "../physics-frontier-lab/src/core/engine.ts",
+      "sha256": "d2504c68337e73349e5172b1ba45c7dc1f11e4abb1242781c4ee15cb199a6763"
+    },
+    {
+      "path": "adapters/pfl.entry.ts",
+      "sha256": "da5348c9ba4fe18e0c4df928c303222311be8c853a800c0fb7aac97dfb14066c"
+    }
+  ]
+}

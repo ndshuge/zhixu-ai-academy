@@ -1,0 +1,35 @@
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1]
+s=(ROOT/'scripts/build-official-candidates.py').read_text(encoding='utf-8')
+s=s.replace("OUT=ROOT/'submission/rc-20261012'","OUT=ROOT/'submission/rc2-20261012'")
+s=s.replace("ROOT/'evidence/rc-20261012/forms-fidelity.json'","ROOT/'evidence/rc2-20261012/forms-fidelity.json'")
+s=s.replace("(BASE/'artifact.md')","(ROOT/'evidence/rc2-20261012/forms-artifact.md')")
+start=s.index('INTRO=');end=s.index('assert len(INTRO)',start)
+intro='关键词：科学探究、证据学习、概念迁移、AI导师。AI学院面向高校科学概念学习，将前测、预测、真实PFL/EvoWorld实验、单变量审批对照、错题与新变式复习连成证据链。V0.4物理舞台和生命生态箱同源加载，观测可保存至学习记录。已完成授权DeepSeek教学接口的本机演示，并保留规则回退、默认隐私保护和科学建议检查；真实问答不等于自主工具执行。现已通过软件回归，真人样本0，不宣称提分，作品不包含个人订阅凭据。'
+s=s[:start]+'INTRO='+repr(intro)+'\n'+s[end:]
+(ROOT/'scripts/build-official-rc2.py').write_text(s,encoding='utf-8')
+p=(ROOT/'scripts/build-rc-pdf.py').read_text(encoding='utf-8')
+p=p.replace("OUT=ROOT/'submission/rc-20261012';EV=ROOT/'evidence/rc-20261012'","OUT=ROOT/'submission/rc2-20261012';EV=ROOT/'evidence/rc2-20261012'")
+p=p.replace('AI学院-作品介绍-正式RC候选.pdf','AI学院-作品介绍-RC2审核候选.pdf').replace('RC 0.4.1','RC 0.4.1.2').replace('{n} / 7','{n} / 8')
+p=p.replace('当前是本机技术发布候选，规则模式；真实学生研究样本0。','当前是本机RC2候选；已完成授权DeepSeek教学接口演示，默认无密钥时规则模式，真人样本0。')
+p=p.replace('48/48通过，包括原46项','58/58通过，包括原49项')
+p=p.replace('新增实验室资源安全与探索记录不计成绩。','新增超时、空正文、限额、网络失败、未授权、错误建议及Float32误归因回退检查。')
+p=p.replace('完整正式演示约4分12秒','新版连续产品演示约4分钟').replace('离线合成讲解','继承Kokoro神经配音与讲解')
+p=p.replace('当前rules模式，不调用真实付费模型，不读取私人Coding Plan凭据。','授权DeepSeek教学接口此前已在本机真实成功；默认无密钥时rules模式。本轮不新增真实模型调用，也不读取私人凭据。')
+p=p.replace('真实提供商尚未验收。','已有真实教学调用证据；不等于教学语义全面正确或公开服务许可已确认。')
+p=p.replace('学校BYOK接口已有本机模拟测试','学校BYOK接口有真实演示及本机异常模拟测试')
+p=p.replace('作品介绍；','作品介绍；')
+p=p.replace('7页作品介绍','8页作品介绍')
+for n in [7,6,5]:p=p.replace(f'y=start({n},',f'y=start({n+1},')
+needle="y=start(6,'本机运行与安全边界'"
+section="""y=start(5,'真实模型与科学复核','DeepSeek成功调用与规则回退的区别')
+y=txt('既有证据显示：DeepSeek V4.1 Flash在学生勾选授权后返回了中文教学回答。截图与JSON可复核，操作由自动浏览器执行，不是真人教学研究。未再次使用个人订阅凭据。',y)
+y=figure('inherited-deepseek-detail.png',(0,0,895,425),y,'图5 2026-10-12既有真实网页截图的局部裁剪，不是连续生成录像。原截图、JSON及旧视频全部保留。')
+y=txt('<b>保留真实失败案例</b>：历史回答将“43步达到0.01”归到了Float32对照。科学源核对显示，该指标属于两组Float64初值轨道差。连接成功不能证明模型解释全部正确。',y)
+y=txt('<b>RC2可靠性增量</b>：提示明确提供指标语义；有限规则检查拦截阈值误报、Float32误归因、跳过审批、多变量建议与无依据的现实或提分主张，异常退回规则导师。此检查不是通用语义证明。',y)
+y=txt('<b>视频证据边界</b>：新片连续录制当前产品操作，模型反馈段为明确标识的本机模拟；真实DeepSeek以历史截图另列并标出上述问题。配音继承13段Kokoro，不宣称新增真实AI直播或自治工具执行。',y);finish()
+"""
+assert needle in p;p=p.replace(needle,section+needle)
+p=p.replace("print('RC_PDF_OK 7 pages')","print('RC2_PDF_OK 8 pages')")
+(ROOT/'scripts/build-rc2-pdf.py').write_text(p,encoding='utf-8')
+print('RC2_MATERIAL_BUILDERS_READY')

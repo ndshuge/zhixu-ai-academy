@@ -1,0 +1,71 @@
+import {createRequire} from 'node:module';
+import {mkdir,writeFile} from 'node:fs/promises';
+import {join} from 'node:path';
+import assert from 'node:assert/strict';
+import {createAcademyServer} from '../server.mjs';
+import {ProviderRegistry} from '../model-provider.mjs';
+const require=createRequire('E:/CHATGPT/projects/physics-frontier-lab/package.json');
+const {chromium}=require('playwright');
+const ROOT=process.cwd(),path=join(ROOT,'evidence','browser');
+// Start an isolated loopback server by default: no dependency on an already
+// running :4386 process and no chance to test a stale application by accident.
+const app=process.env.ACADEMY_BROWSER_URL?null:createAcademyServer({providerRegistry:new ProviderRegistry({env:{}})});
+if(app)await new Promise(resolve=>app.listen(0,'127.0.0.1',resolve));
+const BASE=process.env.ACADEMY_BROWSER_URL||'http://127.0.0.1:'+app.address().port+'/';
+await mkdir(path,{recursive:true});
+let browser;
+try{
+ browser=await chromium.launch({channel:'msedge',headless:true});
+ const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:1,acceptDownloads:false});
+ const failures=[],requests=[];
+ page.on('pageerror',e=>failures.push(e.message));
+ page.on('response',r=>{if(r.status()>=400)requests.push([r.status(),r.url()])});
+ await page.goto(BASE,{waitUntil:'networkidle'});
+ assert.match(await page.title(),/AI\s*学院/);
+ assert.equal(await page.locator('#run').isDisabled(),true);
+ await page.screenshot({path:join(path,'01-start-desktop.png'),fullPage:true});
+ await page.locator('#prediction-input').fill('我预测它们会在几十步后分离，但是演化规则不会变化。');
+ assert.equal(await page.locator('#run').isEnabled(),true);
+ await page.locator('#run').click();
+ await page.locator('#results').waitFor({state:'visible',timeout:10000});
+ assert.ok(await page.locator('.chart polyline').count()>=2);
+ assert.match(await page.locator('#source-label').innerText(),/Physics Frontier Lab/);
+ assert.ok((await page.locator('#raw-output').textContent()).includes('pfl-kernel-1.0.0'));
+ await page.locator('.chart').first().click({position:{x:220,y:100}});
+ assert.match(await page.locator('#point-selection').innerText(),/已选真实计算数据/);
+ await page.screenshot({path:join(path,'02-real-pfl-results.png'),fullPage:true});
+ assert.equal(await page.locator('#prediction-input').isDisabled(),true);
+ await page.locator('#reflection').fill('图上看到的变化是否也可能来自浮点误差？');
+ await page.locator('#ask').click();
+ await page.locator('#mentor-output').waitFor({state:'visible',timeout:10000});
+ assert.match(await page.locator('#mentor-output').innerText(),/规则/);
+ assert.match(await page.locator('#mentor-output').innerText(),/你选中的真实数据点/);
+ await page.locator('#transfer').waitFor({state:'visible',timeout:10000});
+ assert.equal(await page.locator('input[name="transfer-answer"]:checked').count(),0);
+ assert.equal(await page.locator('#grade').isDisabled(),true);
+ await page.locator('input[name="transfer-answer"][value="0"]').check();
+ await page.locator('#grade').click();
+ await page.locator('#quiz-feedback').waitFor({state:'visible',timeout:10000});
+ assert.match(await page.locator('#quiz-feedback').innerText(),/修正理解/);
+ await page.screenshot({path:join(path,'03-tutor-and-transfer.png'),fullPage:true});
+ await page.locator('[data-exp="evo-pair"]').click();
+ assert.equal(await page.locator('#prediction-input').isEnabled(),true);
+ await page.locator('#prediction-input').fill('合作会让两个模拟世界的平均种群存在差异，但n=2难以下结论。');
+ await page.locator('#run').click();
+ await page.locator('#results').waitFor({state:'visible',timeout:10000});
+ assert.match(await page.locator('#source-label').innerText(),/EvoWorld/);
+ assert.ok(await page.locator('#metrics .metric').count()===4);
+ await page.screenshot({path:join(path,'04-real-evo-results.png'),fullPage:true});
+ const record={status:'passed',checks:['real PFL chart','prediction lock','mentor','quiz initially unselected','wrong answer feedback','EvoWorld paired data'],
+  screenshots:['01-start-desktop.png','02-real-pfl-results.png','03-tutor-and-transfer.png','04-real-evo-results.png'],pageErrors:failures,apiErrors:requests};
+ if(failures.length||requests.length)throw Error(JSON.stringify(record));
+ await page.setViewportSize({width:390,height:844});
+ await page.goto(BASE,{waitUntil:'networkidle'});
+ const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);
+ assert.equal(overflow,false,'mobile horizontal overflow');
+ await page.screenshot({path:join(path,'05-mobile.png'),fullPage:true});
+ record.screenshots.push('05-mobile.png');
+ await writeFile(join(path,'acceptance.json'),JSON.stringify(record,null,2));
+ console.log('BROWSER_ACCEPTANCE_OK',record.checks.length,'desktop + mobile',record.screenshots.length,'screenshots');
+}catch(e){console.error('BROWSER_ACCEPTANCE_FAIL',e.stack||e);process.exitCode=1}
+finally{if(browser)await browser.close();if(app)await new Promise(resolve=>app.close(resolve))}

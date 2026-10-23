@@ -1,6 +1,6 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI学院｜V0.4 拓展探索</title><link rel="stylesheet" href="./style.css"></head><body>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI学院｜V0.4 拓展探索</title><link rel="stylesheet" href="./style.css"><script defer src="./pages-api-shim.js"></script></head><body>
 <main class="explore-layout">
- <header class="learning-header"><a class="identity" href="/">AI 学院<small>探究与证据</small></a><a class="secondary-link" id="return-lesson" href="/">返回教学工作台</a><a class="secondary-link" href="./learning.html">我的学习证据</a></header>
+ <header class="learning-header"><a class="identity" href="./index.html">AI 学院<small>探究与证据</small></a><a class="secondary-link" id="return-lesson" href="./index.html">返回教学工作台</a><a class="secondary-link" href="./learning.html">我的学习证据</a></header>
  <h1 id="lab-title">拓展探索</h1><p class="intro" id="lab-source"></p>
  <section class="explore-prediction" id="explore-gate"><h2>先留下预测，再进入实验室</h2><p id="explore-question"></p><label for="explore-prediction">你的事前判断与依据</label><textarea id="explore-prediction" maxlength="500" placeholder="请写下预期变化、要观察的对象和判断依据。"></textarea><div class="run-row"><span>只存本机，不发送至外部模型。</span><button id="open-lab" class="primary" disabled>保存预测，进入真实探索</button></div></section>
  <section id="explore-active" hidden>
@@ -9,6 +9,6 @@
   <p id="lab-loading" role="status" aria-live="polite" hidden>正在加载固定版本实验室与计算Worker…</p><button id="retry-lab" class="secondary" hidden>重新加载实验室</button>
   <iframe id="lab-frame" title="真实 V0.4 实验室" sandbox="allow-scripts allow-same-origin allow-downloads" referrerpolicy="no-referrer"></iframe>
  </section>
- <section class="explore-record"><h2>把观测变成可核验的学习证据</h2><pre id="observation-output">尚无观测。进入实验室后，运行、暂停、选择对象，再记录当前状态。</pre><label for="observation-reflection">这些观测支持预测吗？下一次只改变什么？</label><textarea id="observation-reflection" maxlength="500" placeholder="区分看到的事实、可能解释，以及仍然不能确定的部分。"></textarea><button id="save-observation" class="primary" disabled>保存观测与反思到学习记录</button><p id="explore-status" role="status" aria-live="polite"></p><a id="continue-lesson" class="learning-link" href="/">回到课程，做受控实验与迁移题 →</a></section>
+ <section class="explore-record"><h2>把观测变成可核验的学习证据</h2><pre id="observation-output">尚无观测。进入实验室后，运行、暂停、选择对象，再记录当前状态。</pre><label for="observation-reflection">这些观测支持预测吗？下一次只改变什么？</label><textarea id="observation-reflection" maxlength="500" placeholder="区分看到的事实、可能解释，以及仍然不能确定的部分。"></textarea><button id="save-observation" class="primary" disabled>保存观测与反思到学习记录</button><p id="explore-status" role="status" aria-live="polite"></p><a id="continue-lesson" class="learning-link" href="./index.html">回到课程，做受控实验与迁移题 →</a></section>
  <footer>Physics Frontier Lab 0.4.0 / EvoWorld 0.4.0 固定静态呈现。科学内核未升级。规则导师未调用真实LLM。学习记录为可编辑的本机浏览器数据。</footer>
-</main><script src="./pages-api-shim.js"></script><script type="module" src="./explore.js"></script></body></html>
+</main><script type="module" src="./explore.js"></script></body></html>

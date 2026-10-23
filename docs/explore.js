@@ -5,7 +5,7 @@ let prediction='',sessionId=crypto.randomUUID(),snapshot=null,saved=false,predic
 let loadingTimer=null;
 function loadLab(){
  clearInterval(loadingTimer);const started=Date.now();$('lab-loading').hidden=false;$('lab-loading').textContent='正在加载固定版本实验室与计算Worker…';$('retry-lab').hidden=true;$('capture-observation').disabled=true;
- $('lab-frame').src='./labs/'+lab+'/';
+ $('lab-frame').src='/labs/'+lab+'/';
  loadingTimer=setInterval(()=>{try{
   const doc=$('lab-frame').contentDocument,win=$('lab-frame').contentWindow;
   const ready=lab==='evo'?win.evoEvidence?.tick>0:!!doc?.querySelector('[data-testid="visual-stage"][data-scene]');

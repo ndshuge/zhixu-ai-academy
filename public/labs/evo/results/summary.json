@@ -1,0 +1,1158 @@
+[
+  {
+    "plan": {
+      "engine": "evoworld-0.1.1",
+      "id": "controllers",
+      "protocol": {
+        "id": "controllers",
+        "title": "规则与神经网络",
+        "hypothesis": "在相同感知、动作和前向计算额度下，神经控制器能否提高固定队列的存活积分？",
+        "independent": "控制器与初始化方式",
+        "dependent": "平均存活个体数（population AUC / ticks）",
+        "confounds": "启发式初始化包含人工先验；随机网络未经训练；预算匹配的是矩阵前向额度，规则分支额外指令与墙钟仍不同。",
+        "limits": "仅比较未训练/启发式固定拓扑策略，不代表所有神经方法；固定队列不检验跨代优化。",
+        "overrides": {
+          "reproduction": false,
+          "padControllerBudget": true,
+          "lifespanScale": 4,
+          "cooperation": false,
+          "communication": "none"
+        },
+        "contrasts": [
+          [
+            "neural-random",
+            "rule"
+          ],
+          [
+            "neural-guided",
+            "rule"
+          ]
+        ]
+      },
+      "seeds": [
+        73129,
+        177858,
+        282587,
+        387316,
+        492045,
+        596774,
+        701503,
+        806232,
+        910961,
+        1015690,
+        1120419,
+        1225148
+      ],
+      "repeats": 12,
+      "ticks": 1800,
+      "arms": [
+        {
+          "id": "rule",
+          "label": "规则",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "rule",
+            "neuralInit": "random",
+            "mutationRate": 0.04,
+            "mutationScale": 0.16,
+            "regeneration": 0.02,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": false,
+            "communication": "none",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "seasonal",
+            "seasonLength": 300,
+            "reproduction": false,
+            "lifespanScale": 4,
+            "padControllerBudget": true,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        },
+        {
+          "id": "neural-random",
+          "label": "随机网络",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "neural",
+            "neuralInit": "random",
+            "mutationRate": 0.04,
+            "mutationScale": 0.16,
+            "regeneration": 0.02,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": false,
+            "communication": "none",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "seasonal",
+            "seasonLength": 300,
+            "reproduction": false,
+            "lifespanScale": 4,
+            "padControllerBudget": true,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        },
+        {
+          "id": "neural-guided",
+          "label": "启发式网络",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "neural",
+            "neuralInit": "guided",
+            "mutationRate": 0.04,
+            "mutationScale": 0.16,
+            "regeneration": 0.02,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": false,
+            "communication": "none",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "seasonal",
+            "seasonLength": 300,
+            "reproduction": false,
+            "lifespanScale": 4,
+            "padControllerBudget": true,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        }
+      ],
+      "primaryMetric": "meanPopulation",
+      "statisticalUnit": "independent world; paired arms by seed",
+      "stoppingRule": "fixed ticks/repeats; no optional stopping or tuning after results"
+    },
+    "groups": [
+      {
+        "id": "rule",
+        "label": "规则",
+        "n": 12,
+        "mean": 48,
+        "sd": 0,
+        "min": 48,
+        "max": 48
+      },
+      {
+        "id": "neural-random",
+        "label": "随机网络",
+        "n": 12,
+        "mean": 47.995046296296294,
+        "sd": 0.017160133000913996,
+        "min": 47.940555555555555,
+        "max": 48
+      },
+      {
+        "id": "neural-guided",
+        "label": "启发式网络",
+        "n": 12,
+        "mean": 48,
+        "sd": 0,
+        "min": 48,
+        "max": 48
+      }
+    ],
+    "contrasts": [
+      {
+        "a": "neural-random",
+        "b": "rule",
+        "metric": "meanPopulation",
+        "n": 12,
+        "difference": -0.004953703703703738,
+        "ci95": [
+          -0.014861111111111214,
+          0
+        ],
+        "p": 1,
+        "method": "exact paired sign-flip + percentile paired bootstrap",
+        "bootstrapCount": 4000,
+        "signFlipDraws": 4096,
+        "pHolm": 1
+      },
+      {
+        "a": "neural-guided",
+        "b": "rule",
+        "metric": "meanPopulation",
+        "n": 12,
+        "difference": 0,
+        "ci95": [
+          0,
+          0
+        ],
+        "p": 1,
+        "method": "exact paired sign-flip + percentile paired bootstrap",
+        "bootstrapCount": 4000,
+        "signFlipDraws": 4096,
+        "pHolm": 1
+      }
+    ],
+    "interpretation": "Model-specific repeated-world comparison; CI is bootstrap uncertainty, pHolm controls planned contrasts within this experiment. Secondary metrics are descriptive.",
+    "evidence": {
+      "generatedAt": "2026-10-09T13:13:16.447Z",
+      "node": "v24.19.0",
+      "platform": "win32",
+      "cpu": "Intel(R) Core(TM) Ultra 9 290HX Plus",
+      "sourceHashes": {
+        "src/core/config.mjs": "18180401356bacfb1715a1cf8b4fb51cc3813392fe82ceb75af216256d1fda43",
+        "src/core/math.mjs": "9b7f75ddae4ca83c5875bd64585bc44f34b36acfb6aeb23bb981f8797254c262",
+        "src/core/controllers.mjs": "a643872ffdda0549aecbb97a99945288944b494d53baa4f725b0f6a2283974f9",
+        "src/core/world.mjs": "fab1ba9d59a9f0d63dc37d3ed0f066f1af28b0abf161bde3adeccf913d3401f3",
+        "src/core/statistics.mjs": "21267fc47b68a2f4676fd0049a45be74cd6bee30e9032d5e35605be6a35ddad1",
+        "src/core/experiments.mjs": "3f110975af3c885fa69a09858f10df0d19fdec145844a78f275b6122aeb4d1c8"
+      }
+    },
+    "runCount": 36
+  },
+  {
+    "plan": {
+      "engine": "evoworld-0.1.1",
+      "id": "cooperation",
+      "protocol": {
+        "id": "cooperation",
+        "title": "稀缺资源与合作",
+        "hypothesis": "在具有协作采集收益的生态中，合作开关对存活积分的影响是否随再生率改变？",
+        "independent": "合作机制 × 再生率 0.004/0.028",
+        "dependent": "平均种群、协作采集量、分享量",
+        "confounds": "协作资源要求同格两名合作个体；合作阈值与收益由模型定义，非观察到的自然定律。关闭合作会固定合作基因为零。",
+        "limits": "比较机制包的因果效应，不证明合作自发形成；需另做混合策略入侵、收益矩阵与成本扫描。",
+        "overrides": {
+          "controller": "rule",
+          "communication": "local",
+          "environment": "stable",
+          "hardResources": true,
+          "mutationRate": 0
+        },
+        "contrasts": [
+          [
+            "scarce-on",
+            "scarce-off"
+          ],
+          [
+            "renewable-on",
+            "renewable-off"
+          ]
+        ]
+      },
+      "seeds": [
+        73129,
+        177858,
+        282587,
+        387316,
+        492045,
+        596774,
+        701503,
+        806232,
+        910961,
+        1015690,
+        1120419,
+        1225148
+      ],
+      "repeats": 12,
+      "ticks": 1800,
+      "arms": [
+        {
+          "id": "scarce-off",
+          "label": "稀缺 · 无合作",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "rule",
+            "neuralInit": "guided",
+            "mutationRate": 0,
+            "mutationScale": 0.16,
+            "regeneration": 0.004,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": false,
+            "communication": "local",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "stable",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        },
+        {
+          "id": "scarce-on",
+          "label": "稀缺 · 合作",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "rule",
+            "neuralInit": "guided",
+            "mutationRate": 0,
+            "mutationScale": 0.16,
+            "regeneration": 0.004,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": true,
+            "communication": "local",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "stable",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        },
+        {
+          "id": "renewable-off",
+          "label": "再生 · 无合作",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "rule",
+            "neuralInit": "guided",
+            "mutationRate": 0,
+            "mutationScale": 0.16,
+            "regeneration": 0.028,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": false,
+            "communication": "local",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "stable",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        },
+        {
+          "id": "renewable-on",
+          "label": "再生 · 合作",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "rule",
+            "neuralInit": "guided",
+            "mutationRate": 0,
+            "mutationScale": 0.16,
+            "regeneration": 0.028,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": true,
+            "communication": "local",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "stable",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        }
+      ],
+      "primaryMetric": "meanPopulation",
+      "statisticalUnit": "independent world; paired arms by seed",
+      "stoppingRule": "fixed ticks/repeats; no optional stopping or tuning after results"
+    },
+    "groups": [
+      {
+        "id": "scarce-off",
+        "label": "稀缺 · 无合作",
+        "n": 12,
+        "mean": 27.77925925925926,
+        "sd": 1.7474950379312852,
+        "min": 25.169444444444444,
+        "max": 31.09722222222222
+      },
+      {
+        "id": "scarce-on",
+        "label": "稀缺 · 合作",
+        "n": 12,
+        "mean": 31.360694444444448,
+        "sd": 1.3194565576264814,
+        "min": 28.967222222222222,
+        "max": 33.17388888888889
+      },
+      {
+        "id": "renewable-off",
+        "label": "再生 · 无合作",
+        "n": 12,
+        "mean": 98.04148148148148,
+        "sd": 2.8437690992521842,
+        "min": 93.24722222222222,
+        "max": 102.635
+      },
+      {
+        "id": "renewable-on",
+        "label": "再生 · 合作",
+        "n": 12,
+        "mean": 101.43685185185184,
+        "sd": 2.8847863287190587,
+        "min": 96.98555555555555,
+        "max": 105.715
+      }
+    ],
+    "contrasts": [
+      {
+        "a": "scarce-on",
+        "b": "scarce-off",
+        "metric": "meanPopulation",
+        "n": 12,
+        "difference": 3.5814351851851853,
+        "ci95": [
+          2.6633796296296297,
+          4.336805555555556
+        ],
+        "p": 0.0009765625,
+        "method": "exact paired sign-flip + percentile paired bootstrap",
+        "bootstrapCount": 4000,
+        "signFlipDraws": 4096,
+        "pHolm": 0.001953125
+      },
+      {
+        "a": "renewable-on",
+        "b": "renewable-off",
+        "metric": "meanPopulation",
+        "n": 12,
+        "difference": 3.395370370370369,
+        "ci95": [
+          1.7931944444444443,
+          4.935370370370365
+        ],
+        "p": 0.0048828125,
+        "method": "exact paired sign-flip + percentile paired bootstrap",
+        "bootstrapCount": 4000,
+        "signFlipDraws": 4096,
+        "pHolm": 0.0048828125
+      }
+    ],
+    "interpretation": "Model-specific repeated-world comparison; CI is bootstrap uncertainty, pHolm controls planned contrasts within this experiment. Secondary metrics are descriptive.",
+    "evidence": {
+      "generatedAt": "2026-10-09T13:14:05.408Z",
+      "node": "v24.19.0",
+      "platform": "win32",
+      "cpu": "Intel(R) Core(TM) Ultra 9 290HX Plus",
+      "sourceHashes": {
+        "src/core/config.mjs": "18180401356bacfb1715a1cf8b4fb51cc3813392fe82ceb75af216256d1fda43",
+        "src/core/math.mjs": "9b7f75ddae4ca83c5875bd64585bc44f34b36acfb6aeb23bb981f8797254c262",
+        "src/core/controllers.mjs": "a643872ffdda0549aecbb97a99945288944b494d53baa4f725b0f6a2283974f9",
+        "src/core/world.mjs": "fab1ba9d59a9f0d63dc37d3ed0f066f1af28b0abf161bde3adeccf913d3401f3",
+        "src/core/statistics.mjs": "21267fc47b68a2f4676fd0049a45be74cd6bee30e9032d5e35605be6a35ddad1",
+        "src/core/experiments.mjs": "3f110975af3c885fa69a09858f10df0d19fdec145844a78f275b6122aeb4d1c8"
+      }
+    },
+    "runCount": 48
+  },
+  {
+    "plan": {
+      "engine": "evoworld-0.1.1",
+      "id": "mutation",
+      "protocol": {
+        "id": "mutation",
+        "title": "突变与跨代稳定性",
+        "hypothesis": "过高的突变率会降低适应后的稳定性吗？",
+        "independent": "每个遗传参数的突变概率 0/0.04/0.2",
+        "dependent": "平均种群；后半段种群变异系数；感知范围方差；每创始个体后代数",
+        "confounds": "只运行有限代数；固定网络拓扑；自然选择通过能量繁殖实现，不含学习；种群上限可能截断优势。",
+        "limits": "感知范围方差仅是单一性状多样性代理；零效应不等于突变率永远无影响。",
+        "overrides": {
+          "controller": "neural",
+          "neuralInit": "guided",
+          "environment": "seasonal"
+        },
+        "contrasts": [
+          [
+            "m04",
+            "m0"
+          ],
+          [
+            "m20",
+            "m0"
+          ]
+        ]
+      },
+      "seeds": [
+        73129,
+        177858,
+        282587,
+        387316,
+        492045,
+        596774,
+        701503,
+        806232,
+        910961,
+        1015690,
+        1120419,
+        1225148
+      ],
+      "repeats": 12,
+      "ticks": 1800,
+      "arms": [
+        {
+          "id": "m0",
+          "label": "μ = 0",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "neural",
+            "neuralInit": "guided",
+            "mutationRate": 0,
+            "mutationScale": 0.16,
+            "regeneration": 0.02,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": true,
+            "communication": "local",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "seasonal",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        },
+        {
+          "id": "m04",
+          "label": "μ = 0.04",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "neural",
+            "neuralInit": "guided",
+            "mutationRate": 0.04,
+            "mutationScale": 0.16,
+            "regeneration": 0.02,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": true,
+            "communication": "local",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "seasonal",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        },
+        {
+          "id": "m20",
+          "label": "μ = 0.20",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "neural",
+            "neuralInit": "guided",
+            "mutationRate": 0.2,
+            "mutationScale": 0.16,
+            "regeneration": 0.02,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": true,
+            "communication": "local",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "seasonal",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        }
+      ],
+      "primaryMetric": "meanPopulation",
+      "statisticalUnit": "independent world; paired arms by seed",
+      "stoppingRule": "fixed ticks/repeats; no optional stopping or tuning after results"
+    },
+    "groups": [
+      {
+        "id": "m0",
+        "label": "μ = 0",
+        "n": 12,
+        "mean": 62.552824074074074,
+        "sd": 1.9170879563102228,
+        "min": 59.583888888888886,
+        "max": 65.33055555555555
+      },
+      {
+        "id": "m04",
+        "label": "μ = 0.04",
+        "n": 12,
+        "mean": 63.36708333333333,
+        "sd": 2.7095002264758574,
+        "min": 58.224444444444444,
+        "max": 66.35444444444444
+      },
+      {
+        "id": "m20",
+        "label": "μ = 0.20",
+        "n": 12,
+        "mean": 63.695740740740746,
+        "sd": 3.691366161419513,
+        "min": 57.24,
+        "max": 69.7461111111111
+      }
+    ],
+    "contrasts": [
+      {
+        "a": "m04",
+        "b": "m0",
+        "metric": "meanPopulation",
+        "n": 12,
+        "difference": 0.8142592592592592,
+        "ci95": [
+          -0.2808796296296296,
+          2.1073611111111092
+        ],
+        "p": 0.2265625,
+        "method": "exact paired sign-flip + percentile paired bootstrap",
+        "bootstrapCount": 4000,
+        "signFlipDraws": 4096,
+        "pHolm": 0.2265625
+      },
+      {
+        "a": "m20",
+        "b": "m0",
+        "metric": "meanPopulation",
+        "n": 12,
+        "difference": 1.1429166666666692,
+        "ci95": [
+          -0.06712962962962561,
+          2.2848148148148186
+        ],
+        "p": 0.1044921875,
+        "method": "exact paired sign-flip + percentile paired bootstrap",
+        "bootstrapCount": 4000,
+        "signFlipDraws": 4096,
+        "pHolm": 0.208984375
+      }
+    ],
+    "interpretation": "Model-specific repeated-world comparison; CI is bootstrap uncertainty, pHolm controls planned contrasts within this experiment. Secondary metrics are descriptive.",
+    "evidence": {
+      "generatedAt": "2026-10-09T13:14:45.832Z",
+      "node": "v24.19.0",
+      "platform": "win32",
+      "cpu": "Intel(R) Core(TM) Ultra 9 290HX Plus",
+      "sourceHashes": {
+        "src/core/config.mjs": "18180401356bacfb1715a1cf8b4fb51cc3813392fe82ceb75af216256d1fda43",
+        "src/core/math.mjs": "9b7f75ddae4ca83c5875bd64585bc44f34b36acfb6aeb23bb981f8797254c262",
+        "src/core/controllers.mjs": "a643872ffdda0549aecbb97a99945288944b494d53baa4f725b0f6a2283974f9",
+        "src/core/world.mjs": "fab1ba9d59a9f0d63dc37d3ed0f066f1af28b0abf161bde3adeccf913d3401f3",
+        "src/core/statistics.mjs": "21267fc47b68a2f4676fd0049a45be74cd6bee30e9032d5e35605be6a35ddad1",
+        "src/core/experiments.mjs": "3f110975af3c885fa69a09858f10df0d19fdec145844a78f275b6122aeb4d1c8"
+      }
+    },
+    "runCount": 36
+  },
+  {
+    "plan": {
+      "engine": "evoworld-0.1.1",
+      "id": "environment",
+      "protocol": {
+        "id": "environment",
+        "title": "环境改变与策略差异",
+        "hypothesis": "资源迁移是否提高可遗传感知范围的方差？",
+        "independent": "稳定/东西迁移环境",
+        "dependent": "感知范围方差（主指标）；平均种群（次指标）",
+        "confounds": "空间资源乘数与丰度变化并非完全相同；方差不等于功能性策略多样性。",
+        "limits": "仅支持环境条件对一个性状分布的影响，不能推断复杂智能的产生。",
+        "overrides": {
+          "controller": "neural",
+          "neuralInit": "guided",
+          "mutationRate": 0.08
+        },
+        "metric": "traitDiversity",
+        "contrasts": [
+          [
+            "shifting",
+            "stable"
+          ]
+        ]
+      },
+      "seeds": [
+        73129,
+        177858,
+        282587,
+        387316,
+        492045,
+        596774,
+        701503,
+        806232,
+        910961,
+        1015690,
+        1120419,
+        1225148
+      ],
+      "repeats": 12,
+      "ticks": 1800,
+      "arms": [
+        {
+          "id": "stable",
+          "label": "稳定",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "neural",
+            "neuralInit": "guided",
+            "mutationRate": 0.08,
+            "mutationScale": 0.16,
+            "regeneration": 0.02,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": true,
+            "communication": "local",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "stable",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        },
+        {
+          "id": "shifting",
+          "label": "迁移",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "neural",
+            "neuralInit": "guided",
+            "mutationRate": 0.08,
+            "mutationScale": 0.16,
+            "regeneration": 0.02,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": true,
+            "communication": "local",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "shifting",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        }
+      ],
+      "primaryMetric": "traitDiversity",
+      "statisticalUnit": "independent world; paired arms by seed",
+      "stoppingRule": "fixed ticks/repeats; no optional stopping or tuning after results"
+    },
+    "groups": [
+      {
+        "id": "stable",
+        "label": "稳定",
+        "n": 12,
+        "mean": 0.38105171014832734,
+        "sd": 0.11154062491980865,
+        "min": 0.2007428019801255,
+        "max": 0.5732072045399086
+      },
+      {
+        "id": "shifting",
+        "label": "迁移",
+        "n": 12,
+        "mean": 0.34326552588433673,
+        "sd": 0.1002670215431265,
+        "min": 0.19600932622335196,
+        "max": 0.4994536026390098
+      }
+    ],
+    "contrasts": [
+      {
+        "a": "shifting",
+        "b": "stable",
+        "metric": "traitDiversity",
+        "n": 12,
+        "difference": -0.03778618426399057,
+        "ci95": [
+          -0.10557078135639214,
+          0.028243047143088614
+        ],
+        "p": 0.2822265625,
+        "method": "exact paired sign-flip + percentile paired bootstrap",
+        "bootstrapCount": 4000,
+        "signFlipDraws": 4096,
+        "pHolm": 0.2822265625
+      }
+    ],
+    "interpretation": "Model-specific repeated-world comparison; CI is bootstrap uncertainty, pHolm controls planned contrasts within this experiment. Secondary metrics are descriptive.",
+    "evidence": {
+      "generatedAt": "2026-10-09T13:15:16.921Z",
+      "node": "v24.19.0",
+      "platform": "win32",
+      "cpu": "Intel(R) Core(TM) Ultra 9 290HX Plus",
+      "sourceHashes": {
+        "src/core/config.mjs": "18180401356bacfb1715a1cf8b4fb51cc3813392fe82ceb75af216256d1fda43",
+        "src/core/math.mjs": "9b7f75ddae4ca83c5875bd64585bc44f34b36acfb6aeb23bb981f8797254c262",
+        "src/core/controllers.mjs": "a643872ffdda0549aecbb97a99945288944b494d53baa4f725b0f6a2283974f9",
+        "src/core/world.mjs": "fab1ba9d59a9f0d63dc37d3ed0f066f1af28b0abf161bde3adeccf913d3401f3",
+        "src/core/statistics.mjs": "21267fc47b68a2f4676fd0049a45be74cd6bee30e9032d5e35605be6a35ddad1",
+        "src/core/experiments.mjs": "3f110975af3c885fa69a09858f10df0d19fdec145844a78f275b6122aeb4d1c8"
+      }
+    },
+    "runCount": 24
+  },
+  {
+    "plan": {
+      "engine": "evoworld-0.1.1",
+      "id": "communication",
+      "protocol": {
+        "id": "communication",
+        "title": "局部通信与中心分配",
+        "hypothesis": "对相同公开观测进行通信，局部与中心架构的效率、掉线敏感性是否不同？",
+        "independent": "局部/中心 × 掉线概率 0/0.4",
+        "dependent": "平均种群；消息到达量；路由检查次数；通信能量与墙钟时间",
+        "confounds": "中心全局匹配目标，局部择近；局部按链路掉线，中心按网关整体掉线；失效相关性本就是实验条件。",
+        "limits": "中心未读取隐藏资源地图；相同发布信息与发送费不等于相同路由复杂度；不能推广到所有网络拓扑。",
+        "overrides": {
+          "controller": "rule",
+          "environment": "shifting",
+          "cooperation": true
+        },
+        "contrasts": [
+          [
+            "local",
+            "central"
+          ],
+          [
+            "local-fault",
+            "central-fault"
+          ]
+        ]
+      },
+      "seeds": [
+        73129,
+        177858,
+        282587,
+        387316,
+        492045,
+        596774,
+        701503,
+        806232,
+        910961,
+        1015690,
+        1120419,
+        1225148
+      ],
+      "repeats": 12,
+      "ticks": 1800,
+      "arms": [
+        {
+          "id": "local",
+          "label": "局部",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "rule",
+            "neuralInit": "guided",
+            "mutationRate": 0.04,
+            "mutationScale": 0.16,
+            "regeneration": 0.02,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": true,
+            "communication": "local",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "shifting",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        },
+        {
+          "id": "central",
+          "label": "中心",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "rule",
+            "neuralInit": "guided",
+            "mutationRate": 0.04,
+            "mutationScale": 0.16,
+            "regeneration": 0.02,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": true,
+            "communication": "central",
+            "communicationRadius": 6,
+            "dropout": 0,
+            "environment": "shifting",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        },
+        {
+          "id": "local-fault",
+          "label": "局部 · 掉线",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "rule",
+            "neuralInit": "guided",
+            "mutationRate": 0.04,
+            "mutationScale": 0.16,
+            "regeneration": 0.02,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": true,
+            "communication": "local",
+            "communicationRadius": 6,
+            "dropout": 0.4,
+            "environment": "shifting",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        },
+        {
+          "id": "central-fault",
+          "label": "中心 · 掉线",
+          "config": {
+            "seed": 42,
+            "width": 36,
+            "height": 24,
+            "initialPopulation": 48,
+            "maxPopulation": 160,
+            "controller": "rule",
+            "neuralInit": "guided",
+            "mutationRate": 0.04,
+            "mutationScale": 0.16,
+            "regeneration": 0.02,
+            "resourceDensity": 0.65,
+            "hardResources": true,
+            "cooperation": true,
+            "communication": "central",
+            "communicationRadius": 6,
+            "dropout": 0.4,
+            "environment": "shifting",
+            "seasonLength": 300,
+            "reproduction": true,
+            "lifespanScale": 1,
+            "padControllerBudget": false,
+            "historyLimit": 1000,
+            "lineageLimit": 20000,
+            "sampleEvery": 20,
+            "unitsPerCell": 1,
+            "secondsPerTick": 0.1
+          }
+        }
+      ],
+      "primaryMetric": "meanPopulation",
+      "statisticalUnit": "independent world; paired arms by seed",
+      "stoppingRule": "fixed ticks/repeats; no optional stopping or tuning after results"
+    },
+    "groups": [
+      {
+        "id": "local",
+        "label": "局部",
+        "n": 12,
+        "mean": 76.51555555555557,
+        "sd": 2.5911221022169304,
+        "min": 72.47,
+        "max": 79.95777777777778
+      },
+      {
+        "id": "central",
+        "label": "中心",
+        "n": 12,
+        "mean": 75.93875,
+        "sd": 2.1156423875127426,
+        "min": 72.04944444444445,
+        "max": 78.61666666666666
+      },
+      {
+        "id": "local-fault",
+        "label": "局部 · 掉线",
+        "n": 12,
+        "mean": 75.83148148148148,
+        "sd": 1.9757998328332425,
+        "min": 72.52888888888889,
+        "max": 79.50277777777778
+      },
+      {
+        "id": "central-fault",
+        "label": "中心 · 掉线",
+        "n": 12,
+        "mean": 76.05324074074075,
+        "sd": 2.779755758729406,
+        "min": 69.68666666666667,
+        "max": 80.23666666666666
+      }
+    ],
+    "contrasts": [
+      {
+        "a": "local",
+        "b": "central",
+        "metric": "meanPopulation",
+        "n": 12,
+        "difference": 0.5768055555555556,
+        "ci95": [
+          -0.44342592592592806,
+          1.4840277777777782
+        ],
+        "p": 0.2900390625,
+        "method": "exact paired sign-flip + percentile paired bootstrap",
+        "bootstrapCount": 4000,
+        "signFlipDraws": 4096,
+        "pHolm": 0.580078125
+      },
+      {
+        "a": "local-fault",
+        "b": "central-fault",
+        "metric": "meanPopulation",
+        "n": 12,
+        "difference": -0.22175925925926046,
+        "ci95": [
+          -1.7898148148148145,
+          1.3603703703703687
+        ],
+        "p": 0.79736328125,
+        "method": "exact paired sign-flip + percentile paired bootstrap",
+        "bootstrapCount": 4000,
+        "signFlipDraws": 4096,
+        "pHolm": 0.79736328125
+      }
+    ],
+    "interpretation": "Model-specific repeated-world comparison; CI is bootstrap uncertainty, pHolm controls planned contrasts within this experiment. Secondary metrics are descriptive.",
+    "evidence": {
+      "generatedAt": "2026-10-09T13:16:18.085Z",
+      "node": "v24.19.0",
+      "platform": "win32",
+      "cpu": "Intel(R) Core(TM) Ultra 9 290HX Plus",
+      "sourceHashes": {
+        "src/core/config.mjs": "18180401356bacfb1715a1cf8b4fb51cc3813392fe82ceb75af216256d1fda43",
+        "src/core/math.mjs": "9b7f75ddae4ca83c5875bd64585bc44f34b36acfb6aeb23bb981f8797254c262",
+        "src/core/controllers.mjs": "a643872ffdda0549aecbb97a99945288944b494d53baa4f725b0f6a2283974f9",
+        "src/core/world.mjs": "fab1ba9d59a9f0d63dc37d3ed0f066f1af28b0abf161bde3adeccf913d3401f3",
+        "src/core/statistics.mjs": "21267fc47b68a2f4676fd0049a45be74cd6bee30e9032d5e35605be6a35ddad1",
+        "src/core/experiments.mjs": "3f110975af3c885fa69a09858f10df0d19fdec145844a78f275b6122aeb4d1c8"
+      }
+    },
+    "runCount": 48
+  }
+]

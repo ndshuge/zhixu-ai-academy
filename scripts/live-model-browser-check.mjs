@@ -1,0 +1,34 @@
+import {createRequire} from 'node:module';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createAcademyServer} from '../server.mjs';
+import {ProviderRegistry} from '../model-provider.mjs';
+const {chromium}=createRequire('E:/CHATGPT/projects/physics-frontier-lab/package.json')('playwright');
+const p=JSON.parse(fs.readFileSync(path.join(os.homedir(),'.hanako','provider-catalog.json'),'utf8')).providers['opencode-go'];
+const registry=new ProviderRegistry({env:{...process.env,ACADEMY_LLM_API_KEY:p.api_key,ACADEMY_LLM_BASE_URL:p.base_url,ACADEMY_LLM_MODEL:'deepseek-v4.1-flash',ACADEMY_LLM_DISPLAY_NAME:'DeepSeek V4.1 Flash (local demo)',ACADEMY_LLM_DAILY_LIMIT:'5'}});
+const app=createAcademyServer({providerRegistry:registry});
+await new Promise(r=>app.listen(0,'127.0.0.1',r));
+const base='http://127.0.0.1:'+app.address().port;
+let browser;
+try{
+ browser=await chromium.launch({channel:'msedge',headless:true});
+ const page=await browser.newPage({viewport:{width:1600,height:1000},deviceScaleFactor:1});
+ await page.goto(base+'/',{waitUntil:'networkidle'});
+ await page.locator('#prediction-input').fill('测试预测：初值微小差异不会影响轨迹分离。');
+ await page.locator('#run').click();
+ await page.locator('#results').waitFor({state:'visible'});
+ await page.locator('#reflection').fill('我看到两条轨迹逐渐分离，请给出一个具体的下一步验证问题。');
+ await page.locator('#shareApproved').check();
+ await page.locator('#ask').click();
+ await page.waitForFunction(()=>{const e=document.querySelector('#mentor-output');return e&&/DeepSeek|初始|轨迹|敏感|扰动/.test(e.innerText)},{timeout:18000});
+ const mentorText=await page.locator('#mentor-output').innerText();
+ const status=await (await fetch(base+'/api/status')).json();
+ assert.equal(status.providerVerified,true);
+ assert.match(mentorText,/初始|轨迹|敏感|扰动/);
+ const dir='evidence/rc-20261012';fs.mkdirSync(dir,{recursive:true});
+ await page.screenshot({path:dir+'/live-deepseek-teaching-20261012.png',fullPage:true});
+ fs.writeFileSync(dir+'/live-deepseek-teaching-20261012.json',JSON.stringify({model:status.model,providerVerified:status.providerVerified,mentorText:mentorText.slice(0,1200),realModel:true,student:'automated synthetic demonstration',consent:true},null,2));
+ console.log('LIVE_BROWSER_PASS',JSON.stringify({model:status.model,verified:status.providerVerified,replyLength:mentorText.length,replyPreview:mentorText.slice(0,180)}));
+}finally{await browser?.close();await new Promise(r=>app.close(r));}

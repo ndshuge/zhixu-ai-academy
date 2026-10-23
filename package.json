@@ -1,0 +1,23 @@
+{
+  "name": "ai-academy-science-inquiry",
+  "private": true,
+  "version": "0.4.2-rc.4",
+  "type": "module",
+  "scripts": {
+    "build:adapter": "node scripts/build-pfl-adapter.mjs",
+    "snapshot:evo": "node scripts/snapshot-evo.mjs --refresh",
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:school-api": "node tests/browser-admin.mjs",
+    "test:browser": "node tests/browser.mjs && node tests/browser-admin.mjs && node tests/browser-agent.mjs && node tests/browser-learning.mjs && node tests/browser-study.mjs",
+    "study:analyze": "node scripts/evaluate-study.mjs",
+    "verify": "node scripts/verify.mjs",
+    "audit:filenames": "node scripts/check-private-filenames.mjs"
+    ,"test:labs": "node tests/browser-labs-rc2.mjs"
+    ,"test:rc3": "node tests/browser-rc3.mjs && node tests/browser-flagship.mjs"
+    ,"test:premedia": "node tests/browser-premedia.mjs"
+    ,"bench:rc3": "node scripts/rc3-science-benchmark.mjs"
+    ,"verify:rc3-live": "node scripts/rc3-verify-live-evidence.mjs"
+    ,"verify:labs": "node scripts/verify-lab-experiences.mjs"
+  }
+}

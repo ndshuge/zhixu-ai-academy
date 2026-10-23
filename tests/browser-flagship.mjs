@@ -1,0 +1,75 @@
+import {createRequire} from 'node:module';
+import {mkdir,writeFile} from 'node:fs/promises';
+import {join} from 'node:path';
+import assert from 'node:assert/strict';
+import {createAcademyServer} from '../server.mjs';
+import {ProviderRegistry} from '../model-provider.mjs';
+const require=createRequire('E:/CHATGPT/projects/physics-frontier-lab/package.json');
+const {chromium}=require('playwright');
+const out=join(process.cwd(),'evidence','rc3-20261012','flagship');await mkdir(out,{recursive:true});
+const app=createAcademyServer({providerRegistry:new ProviderRegistry({env:{}})});
+await new Promise(r=>app.listen(0,'127.0.0.1',r));
+let browser;
+try{
+ browser=await chromium.launch({channel:'msedge',headless:true});
+ const page=await browser.newPage({viewport:{width:1440,height:900}});
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const base='http://127.0.0.1:'+app.address().port;
+ await page.goto(base+'/?focus=1',{waitUntil:'networkidle'});
+ assert.equal(await page.locator('body.focus-course').count(),1);
+ assert.equal(await page.locator('#pre-check').isVisible(),true);
+ assert.equal(await page.locator('#results').isVisible(),false);
+ assert.equal(await page.locator('[data-focus-target="predict"]').isDisabled(),true);
+ await page.locator('#pre-check-root input[value="0"]').check();
+ await page.locator('#pre-check-root .check-form').first().locator('button').first().click();
+ await page.locator('#pre-check-root .feedback').first().waitFor({state:'visible'});
+ assert.doesNotMatch(await page.locator('#pre-check-root .feedback').first().innerText(),/演化规则和 r 均未变化/);
+ await page.locator('#pre-check-root .feedback button').first().click();
+ await page.locator('#pre-check-root .check-form').nth(1).waitFor({state:'visible'});
+ await page.locator('#pre-check-root .check-form').nth(1).locator('input[value="0"]').check();
+ await page.locator('#pre-check-root .check-form').nth(1).locator('button').first().click();
+ await page.locator('#pre-check-root .check-form').nth(1).locator('.feedback').waitFor({state:'visible'});
+ await page.waitForFunction(()=>!document.getElementById('focus-next').disabled,{timeout:10000});
+ await page.locator('#focus-next').click();
+ assert.equal(await page.locator('body').getAttribute('data-focus-stage'),'predict');
+ await page.locator('#prediction-input').fill('同一方程且初值略微不同，我预测后期两条轨迹仍然接近');
+ await page.locator('#run').click();
+ await page.waitForFunction(()=>document.body.dataset.focusStage==='observe',{timeout:12000});
+ assert.match(await page.locator('#lens-evidence').innerText(),/Physics Frontier Lab/);
+ await page.locator('#reflection').fill('我现在看到初值扰动的曲线产生了差异');
+ await page.locator('#ask').click();
+ await page.waitForFunction(()=>!document.getElementById('post-check').classList.contains('hidden'),{timeout:10000});
+ await page.waitForFunction(()=>!document.getElementById('focus-next').disabled,{timeout:10000});
+ await page.screenshot({path:join(out,'flagship-science-evidence-desktop.png'),fullPage:true});
+ await page.locator('#focus-next').click();
+ assert.equal(await page.locator('body').getAttribute('data-focus-stage'),'transfer');
+ await page.locator('#post-check-root input[value="2"]').first().check();
+ await page.locator('#post-check-root .check-form').first().locator('button').first().click();
+ await page.locator('#post-check-root .feedback').first().waitFor({state:'visible'});
+ await page.locator('#post-check-root .feedback button').click();
+ await page.locator('#post-check-root .check-form').nth(1).waitFor({state:'visible'});
+ await page.locator('#post-check-root .check-form').nth(1).locator('input[value="0"]').check();
+ await page.locator('#post-check-root .check-form').nth(1).locator('button').first().click();
+ await page.locator('#post-check-root .check-form').nth(1).locator('.feedback').waitFor({state:'visible'});
+ await page.waitForFunction(()=>!document.getElementById('focus-next').disabled,{timeout:10000});
+ await page.locator('#focus-next').click();
+ await page.waitForURL('**/learning');
+ assert.equal((await page.locator('#stat-answered').innerText()).trim(),'4');
+ await page.goto(base+'/study',{waitUntil:'networkidle'});
+ await page.locator('#study-condition').selectOption('academy');
+ await page.locator('#study-link-evidence').click();
+ assert.match(await page.locator('#study-link-status').innerText(),/已根据同一会话/);
+ assert.match(await page.locator('#study-records').innerText(),/尚无真实参与者/);
+ await page.setViewportSize({width:390,height:844});
+ await page.goto(base+'/?focus=1',{waitUntil:'networkidle'});
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);
+ await page.screenshot({path:join(out,'flagship-mobile-start-390.png'),fullPage:true});
+ assert.deepEqual(errors,[]);
+ const report={status:'PASS',name:'RC3 Focused Classroom Full Workflow',
+  checks:15,realLLMCalls:0,realParticipants:0,syntheticBrowser:true,
+  evidence:['pre2 locked','PFL actual engine','rule mentor','transfer2 graded','crosscheck local evidence'],
+  screenshots:['flagship-science-evidence-desktop.png','flagship-mobile-start-390.png']};
+ await writeFile(join(out,'acceptance.json'),JSON.stringify(report,null,2)+'\n');
+ console.log('RC3_FLAGSHIP_BROWSER_PASS',report.checks,'checks; 2 pre + 2 transfer; 390px');
+}catch(e){console.error('RC3_FLAGSHIP_BROWSER_FAIL',e.stack||e);process.exitCode=1}
+finally{await browser?.close();await new Promise(r=>app.close(r))}

@@ -1,0 +1,399 @@
+{
+  "createdAt": "2026-10-12T01:46:19.433Z",
+  "scope": "Local fixed presentation copies; scientific adapters unchanged",
+  "labs": [
+    {
+      "id": "pfl",
+      "upstream": "E:\\CHATGPT\\projects\\physics-frontier-lab",
+      "head": "6b7174ef69269b4e42fa74cc2ffb609d2a1cda1d",
+      "productVersion": "0.4.0",
+      "kernel": "pfl-kernel-1.0.0",
+      "files": [
+        {
+          "path": "assets/index-Cq4lWnC8.css",
+          "sourceSha256": "690e3cbb1b167712f1f370fbf49a39052e70279217ba7106e0bb14de120fcce7",
+          "sha256": "c71f58744e9daf889180a85334072c6955773dacba878d31c4b14b7b117c6e1c",
+          "bytes": 49082,
+          "relocated": true
+        },
+        {
+          "path": "assets/index-DpZ6db4b.js",
+          "sourceSha256": "7c9005fae4361e37bff78e48ae28a19b4d507f8fc659c7e544c265c3c3c39d35",
+          "sha256": "f740b62be53b3898ff29737124b57774e8eb5452a574ec4aeaab60edf1d929b4",
+          "bytes": 450599,
+          "relocated": true
+        },
+        {
+          "path": "assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2",
+          "sourceSha256": "ca157063339ac4ad418f214f3abfed119b0798ab4d377386ce5c9e5a7a435ebd",
+          "sha256": "ca157063339ac4ad418f214f3abfed119b0798ab4d377386ce5c9e5a7a435ebd",
+          "bytes": 25960,
+          "relocated": false
+        },
+        {
+          "path": "assets/inter-cyrillic-wght-normal-DqGufNeO.woff2",
+          "sourceSha256": "71d5ee93cc1e9f1d520a3a8b66456de18c7879d8df09d57fcd2eaff75fef0075",
+          "sha256": "71d5ee93cc1e9f1d520a3a8b66456de18c7879d8df09d57fcd2eaff75fef0075",
+          "bytes": 18748,
+          "relocated": false
+        },
+        {
+          "path": "assets/inter-greek-ext-wght-normal-DlzME5K_.woff2",
+          "sourceSha256": "6e9e020a25f9b56d418f2c085b1d3c09725a4da23fe693a5b463064606732190",
+          "sha256": "6e9e020a25f9b56d418f2c085b1d3c09725a4da23fe693a5b463064606732190",
+          "bytes": 11232,
+          "relocated": false
+        },
+        {
+          "path": "assets/inter-greek-wght-normal-CkhJZR-_.woff2",
+          "sourceSha256": "1be3448e292fbf05ffe176fe1e43f135013d50b1e7d324ad1a558f623d3bb6f6",
+          "sha256": "1be3448e292fbf05ffe176fe1e43f135013d50b1e7d324ad1a558f623d3bb6f6",
+          "bytes": 18996,
+          "relocated": false
+        },
+        {
+          "path": "assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2",
+          "sourceSha256": "34b9c504cab7a73e37b746343a449132e56cf7b5481af2cb81dc74dcff25c956",
+          "sha256": "34b9c504cab7a73e37b746343a449132e56cf7b5481af2cb81dc74dcff25c956",
+          "bytes": 85068,
+          "relocated": false
+        },
+        {
+          "path": "assets/inter-latin-wght-normal-Dx4kXJAl.woff2",
+          "sourceSha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62",
+          "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62",
+          "bytes": 48256,
+          "relocated": false
+        },
+        {
+          "path": "assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2",
+          "sourceSha256": "5c66f9e07e90c6d4ac4922cc68d60de26c17b1858e677fb5e603fce3952b3ff2",
+          "sha256": "5c66f9e07e90c6d4ac4922cc68d60de26c17b1858e677fb5e603fce3952b3ff2",
+          "bytes": 10252,
+          "relocated": false
+        },
+        {
+          "path": "assets/simulation.worker-DriqWesA.js",
+          "sourceSha256": "1a7790ed7f19736ca44cd40e9371a84b7343f186831ee617b861420cc5b7222c",
+          "sha256": "1a7790ed7f19736ca44cd40e9371a84b7343f186831ee617b861420cc5b7222c",
+          "bytes": 74636,
+          "relocated": false
+        },
+        {
+          "path": "index.html",
+          "sourceSha256": "aa8b3093458bac8526c5c7d62980297e7bc33483b3414cd1a8a862c3eb807b11",
+          "sha256": "fb426a502b533e66a15a0f4c0621ea583cfd4af5c922c9c02788ad7d8bcaab65",
+          "bytes": 572,
+          "relocated": true
+        },
+        {
+          "path": "validation.json",
+          "sourceSha256": "22be5ba223809ad8f9ca70efe913ddbc7b2f0bfa7403f486dceb0cd7bceda2ff",
+          "sha256": "22be5ba223809ad8f9ca70efe913ddbc7b2f0bfa7403f486dceb0cd7bceda2ff",
+          "bytes": 1820,
+          "relocated": false
+        }
+      ],
+      "sourceDigest": "1cbadbfaf8d5e97292718fa83db20cb36e381a81f58935a4c393daaa1812000c",
+      "installedDigest": "bf4e0cb38422461f42d627ad1d00e1b50341d35e6ce5e847193dea1b37bf29a6"
+    },
+    {
+      "id": "evo",
+      "upstream": "E:\\CHATGPT\\projects\\evo-world",
+      "head": "45abe82615df54cd189c400e0a5ad52764b47c58",
+      "productVersion": "0.4.0",
+      "kernel": "evoworld-0.1.1",
+      "files": [
+        {
+          "path": "build-manifest.json",
+          "sourceSha256": "030dc747b502dda584ec007420d7d85381ee905761f9d89ad84ffe8476de6087",
+          "sha256": "030dc747b502dda584ec007420d7d85381ee905761f9d89ad84ffe8476de6087",
+          "bytes": 4030,
+          "relocated": false
+        },
+        {
+          "path": "index.html",
+          "sourceSha256": "d9d63de353ca78e3bcc9b8361df90709a0574e028ce9fa6d556f760076cf3684",
+          "sha256": "c6663db3f0b5236c1a3a1c8f1a186b725f6429c2981d77a18190b94053492039",
+          "bytes": 18180,
+          "relocated": true
+        },
+        {
+          "path": "results/REPORT.md",
+          "sourceSha256": "09f65e288fb09e2bca62798ed4c1b0ec0019a4af847fb3ff38bd13b726c8a4eb",
+          "sha256": "09f65e288fb09e2bca62798ed4c1b0ec0019a4af847fb3ff38bd13b726c8a4eb",
+          "bytes": 4578,
+          "relocated": false
+        },
+        {
+          "path": "results/communication.csv",
+          "sourceSha256": "c29ec2c1ab93b583f5c39b0c92fe7701222014353ce545d6089e95a9852f75c2",
+          "sha256": "c29ec2c1ab93b583f5c39b0c92fe7701222014353ce545d6089e95a9852f75c2",
+          "bytes": 41698,
+          "relocated": false
+        },
+        {
+          "path": "results/communication.json",
+          "sourceSha256": "ac36cbab1f55356bf4fd34600d08fb2825381afc50422a2cf9a786997435aaf6",
+          "sha256": "ac36cbab1f55356bf4fd34600d08fb2825381afc50422a2cf9a786997435aaf6",
+          "bytes": 90766,
+          "relocated": false
+        },
+        {
+          "path": "results/controllers.csv",
+          "sourceSha256": "e72cb60f333125f0d6efc381ef6a11dd76e60db492dfbbaf55cd063918f51caf",
+          "sha256": "e72cb60f333125f0d6efc381ef6a11dd76e60db492dfbbaf55cd063918f51caf",
+          "bytes": 28085,
+          "relocated": false
+        },
+        {
+          "path": "results/controllers.json",
+          "sourceSha256": "c558087a729f8ad18d583d1e0e5a1635689b3ea5f63b14a7681a166f4cbb7d93",
+          "sha256": "c558087a729f8ad18d583d1e0e5a1635689b3ea5f63b14a7681a166f4cbb7d93",
+          "bytes": 65429,
+          "relocated": false
+        },
+        {
+          "path": "results/cooperation.csv",
+          "sourceSha256": "ebb3def0ecbd37d2f968dc4b8ea327933a7fd648e8f0b26fa4902448e0b4d90a",
+          "sha256": "ebb3def0ecbd37d2f968dc4b8ea327933a7fd648e8f0b26fa4902448e0b4d90a",
+          "bytes": 40284,
+          "relocated": false
+        },
+        {
+          "path": "results/cooperation.json",
+          "sourceSha256": "bddd138348c3919b4f1e7eda8e16e1cdcd79fc1a6fad799c90dfbcc71e25076c",
+          "sha256": "bddd138348c3919b4f1e7eda8e16e1cdcd79fc1a6fad799c90dfbcc71e25076c",
+          "bytes": 89439,
+          "relocated": false
+        },
+        {
+          "path": "results/environment.csv",
+          "sourceSha256": "53fad13fdc6d45d23acdb30cda2c657de7f99da4f06c1b33542f3a0bbe4e4b0b",
+          "sha256": "53fad13fdc6d45d23acdb30cda2c657de7f99da4f06c1b33542f3a0bbe4e4b0b",
+          "bytes": 21062,
+          "relocated": false
+        },
+        {
+          "path": "results/environment.json",
+          "sourceSha256": "c216dca766973ce03cb95ce53f212d141d2bfcfb8dfb30dba3ef5c97614fdbd0",
+          "sha256": "c216dca766973ce03cb95ce53f212d141d2bfcfb8dfb30dba3ef5c97614fdbd0",
+          "bytes": 46484,
+          "relocated": false
+        },
+        {
+          "path": "results/mutation.csv",
+          "sourceSha256": "ed70a4bb903346f3af19c437a146ee5ad27b5dd4e2231f05e63276a1da5f327d",
+          "sha256": "ed70a4bb903346f3af19c437a146ee5ad27b5dd4e2231f05e63276a1da5f327d",
+          "bytes": 31106,
+          "relocated": false
+        },
+        {
+          "path": "results/mutation.json",
+          "sourceSha256": "a7d3493ab742437d21bf83fc58dfddb78e47255ccb5a9cc147a7c69ec0a3e7fe",
+          "sha256": "a7d3493ab742437d21bf83fc58dfddb78e47255ccb5a9cc147a7c69ec0a3e7fe",
+          "bytes": 68472,
+          "relocated": false
+        },
+        {
+          "path": "results/summary.json",
+          "sourceSha256": "c99f93815c1434b8945ff237f63cb2742da075d7b85e6c508a2d879825edff16",
+          "sha256": "c99f93815c1434b8945ff237f63cb2742da075d7b85e6c508a2d879825edff16",
+          "bytes": 36344,
+          "relocated": false
+        },
+        {
+          "path": "src/assets/fonts/OFL.txt",
+          "sourceSha256": "5e0da210fb04058a8c0087985d2d456b931c2579811a49655721d3cf0c36b6d6",
+          "sha256": "5e0da210fb04058a8c0087985d2d456b931c2579811a49655721d3cf0c36b6d6",
+          "bytes": 4350,
+          "relocated": false
+        },
+        {
+          "path": "src/assets/fonts/noto-serif-sc-heading.woff2",
+          "sourceSha256": "d10e43d73c1bd82aa2419d3e70572d365b43fff7aa58b818768d679577f2c2a5",
+          "sha256": "d10e43d73c1bd82aa2419d3e70572d365b43fff7aa58b818768d679577f2c2a5",
+          "bytes": 112108,
+          "relocated": false
+        },
+        {
+          "path": "src/assets/fonts/provenance.json",
+          "sourceSha256": "741dd98acc8943c7aeef43e3aea086a6ea994adc75adcc3695faba0447978cdf",
+          "sha256": "741dd98acc8943c7aeef43e3aea086a6ea994adc75adcc3695faba0447978cdf",
+          "bytes": 8044,
+          "relocated": false
+        },
+        {
+          "path": "src/core/config.mjs",
+          "sourceSha256": "18180401356bacfb1715a1cf8b4fb51cc3813392fe82ceb75af216256d1fda43",
+          "sha256": "18180401356bacfb1715a1cf8b4fb51cc3813392fe82ceb75af216256d1fda43",
+          "bytes": 3339,
+          "relocated": false
+        },
+        {
+          "path": "src/core/controllers.mjs",
+          "sourceSha256": "a643872ffdda0549aecbb97a99945288944b494d53baa4f725b0f6a2283974f9",
+          "sha256": "a643872ffdda0549aecbb97a99945288944b494d53baa4f725b0f6a2283974f9",
+          "bytes": 3222,
+          "relocated": false
+        },
+        {
+          "path": "src/core/experiments.mjs",
+          "sourceSha256": "3f110975af3c885fa69a09858f10df0d19fdec145844a78f275b6122aeb4d1c8",
+          "sha256": "3f110975af3c885fa69a09858f10df0d19fdec145844a78f275b6122aeb4d1c8",
+          "bytes": 8786,
+          "relocated": false
+        },
+        {
+          "path": "src/core/math.mjs",
+          "sourceSha256": "9b7f75ddae4ca83c5875bd64585bc44f34b36acfb6aeb23bb981f8797254c262",
+          "sha256": "9b7f75ddae4ca83c5875bd64585bc44f34b36acfb6aeb23bb981f8797254c262",
+          "bytes": 864,
+          "relocated": false
+        },
+        {
+          "path": "src/core/statistics.mjs",
+          "sourceSha256": "21267fc47b68a2f4676fd0049a45be74cd6bee30e9032d5e35605be6a35ddad1",
+          "sha256": "21267fc47b68a2f4676fd0049a45be74cd6bee30e9032d5e35605be6a35ddad1",
+          "bytes": 2396,
+          "relocated": false
+        },
+        {
+          "path": "src/core/world.mjs",
+          "sourceSha256": "fab1ba9d59a9f0d63dc37d3ed0f066f1af28b0abf161bde3adeccf913d3401f3",
+          "sha256": "fab1ba9d59a9f0d63dc37d3ed0f066f1af28b0abf161bde3adeccf913d3401f3",
+          "bytes": 21999,
+          "relocated": false
+        },
+        {
+          "path": "src/science/experience.mjs",
+          "sourceSha256": "5d75888fdebe3e6a6e1809f04e7c0778eaa03c92fe78effdad7d28ae4bfc1bf1",
+          "sha256": "5d75888fdebe3e6a6e1809f04e7c0778eaa03c92fe78effdad7d28ae4bfc1bf1",
+          "bytes": 11637,
+          "relocated": false
+        },
+        {
+          "path": "src/science/indexed-world.mjs",
+          "sourceSha256": "f3ec27bbe358ed49c922d82d64f27d257e7c13572b325f44cd38406b9ca7d16f",
+          "sha256": "f3ec27bbe358ed49c922d82d64f27d257e7c13572b325f44cd38406b9ca7d16f",
+          "bytes": 1281,
+          "relocated": false
+        },
+        {
+          "path": "src/science/observer.mjs",
+          "sourceSha256": "624cfd8c3356338c2c920ffb55db8a04a9d08fdbfaca233585bf50215d78d939",
+          "sha256": "624cfd8c3356338c2c920ffb55db8a04a9d08fdbfaca233585bf50215d78d939",
+          "bytes": 7080,
+          "relocated": false
+        },
+        {
+          "path": "src/science/parameters.mjs",
+          "sourceSha256": "538d46e75bcd68444f28c3e401cf02a52880e2492d7af6b4f5524d211ed42008",
+          "sha256": "538d46e75bcd68444f28c3e401cf02a52880e2492d7af6b4f5524d211ed42008",
+          "bytes": 15418,
+          "relocated": false
+        },
+        {
+          "path": "src/science/report.mjs",
+          "sourceSha256": "c46ad147175eabc368fb9bea9c4462b3d845b8fdcb0a410a1e773e6136c6f297",
+          "sha256": "c46ad147175eabc368fb9bea9c4462b3d845b8fdcb0a410a1e773e6136c6f297",
+          "bytes": 8684,
+          "relocated": false
+        },
+        {
+          "path": "src/science/tasks.mjs",
+          "sourceSha256": "8fbafe927bf23eb6d4f77869e5f748101307abb6e56a4a07fb49ec6f71ec71c7",
+          "sha256": "8fbafe927bf23eb6d4f77869e5f748101307abb6e56a4a07fb49ec6f71ec71c7",
+          "bytes": 1673,
+          "relocated": false
+        },
+        {
+          "path": "src/web/app.mjs",
+          "sourceSha256": "fa8857508a987bd136b5dab53d4d48595c69892c9144317c450dc7601e2dd226",
+          "sha256": "46667a78534d11f19b2bd13480a80b552f93b83d2b20615d00cdd76e84c5acd4",
+          "bytes": 26186,
+          "relocated": true
+        },
+        {
+          "path": "src/web/charts.mjs",
+          "sourceSha256": "e01384892a4f35a3075cbf71dd0337d3bcdbb2a7dad16e77ad3bf09c054e8dd1",
+          "sha256": "e01384892a4f35a3075cbf71dd0337d3bcdbb2a7dad16e77ad3bf09c054e8dd1",
+          "bytes": 2668,
+          "relocated": false
+        },
+        {
+          "path": "src/web/ecology.mjs",
+          "sourceSha256": "aadab75e3aee829a414f906a706d5e335b64712cf7ca37690d5bd0bfd40b81f7",
+          "sha256": "aadab75e3aee829a414f906a706d5e335b64712cf7ca37690d5bd0bfd40b81f7",
+          "bytes": 140,
+          "relocated": false
+        },
+        {
+          "path": "src/web/experience-ui.mjs",
+          "sourceSha256": "d3fadd38ab9e58a7ec7f543c92aedb4a925d2168bcf89730bacbbdefbae7f6db",
+          "sha256": "d3fadd38ab9e58a7ec7f543c92aedb4a925d2168bcf89730bacbbdefbae7f6db",
+          "bytes": 17209,
+          "relocated": false
+        },
+        {
+          "path": "src/web/experiment-worker.mjs",
+          "sourceSha256": "022c8d045ca7cd91e6638bef3fe14d8eb8a1c5fb10771a82f347c93551e76f1c",
+          "sha256": "022c8d045ca7cd91e6638bef3fe14d8eb8a1c5fb10771a82f347c93551e76f1c",
+          "bytes": 1559,
+          "relocated": false
+        },
+        {
+          "path": "src/web/index.html",
+          "sourceSha256": "d9d63de353ca78e3bcc9b8361df90709a0574e028ce9fa6d556f760076cf3684",
+          "sha256": "c6663db3f0b5236c1a3a1c8f1a186b725f6429c2981d77a18190b94053492039",
+          "bytes": 18180,
+          "relocated": true
+        },
+        {
+          "path": "src/web/science-ui.mjs",
+          "sourceSha256": "bf94b0c9243589fd084f2f1bbad88b08b3421633546cce38792215e5936efc4b",
+          "sha256": "bf94b0c9243589fd084f2f1bbad88b08b3421633546cce38792215e5936efc4b",
+          "bytes": 18713,
+          "relocated": false
+        },
+        {
+          "path": "src/web/style.css",
+          "sourceSha256": "651cfdbe8c1f7dac3f1c5dbfb474c1a14816a1e16c91b2fc0f8f87523bf3dec8",
+          "sha256": "efee50671412c1c1a862a83b5f80167e046f8e0e577ec98ed3540bef3e03715a",
+          "bytes": 35945,
+          "relocated": true
+        },
+        {
+          "path": "src/web/terrarium.mjs",
+          "sourceSha256": "d07ae0c38d16a0d88a8cfe94f2f1e3bb08fdb069569f043504f706da3bc96fef",
+          "sha256": "d07ae0c38d16a0d88a8cfe94f2f1e3bb08fdb069569f043504f706da3bc96fef",
+          "bytes": 14677,
+          "relocated": false
+        },
+        {
+          "path": "src/web/visual-model.mjs",
+          "sourceSha256": "d98e838329d78a385798e5cbb404915e916b22ede9ba91486bea7419686086b5",
+          "sha256": "d98e838329d78a385798e5cbb404915e916b22ede9ba91486bea7419686086b5",
+          "bytes": 3182,
+          "relocated": false
+        },
+        {
+          "path": "src/web/worker.mjs",
+          "sourceSha256": "de35c62e18a3b128590fb060c54cb5bb224076f1a262f29497e66dad239a79f5",
+          "sha256": "de35c62e18a3b128590fb060c54cb5bb224076f1a262f29497e66dad239a79f5",
+          "bytes": 4358,
+          "relocated": false
+        },
+        {
+          "path": "src/web/world-interaction.mjs",
+          "sourceSha256": "799bf8341cd6bf1cfc3d1c7b5ab2e0b87f955537274db3927b8d8a1691eca133",
+          "sha256": "799bf8341cd6bf1cfc3d1c7b5ab2e0b87f955537274db3927b8d8a1691eca133",
+          "bytes": 10851,
+          "relocated": false
+        }
+      ],
+      "sourceDigest": "1c6eb5287fbd45f845f3f47471dd17c1437b1d2c6545daf5f503ddbc3d9c50cf",
+      "installedDigest": "ae76356afaa707d4e63df3ffb3722b514cb110824348670679375e49d5a5c7ba"
+    }
+  ]
+}

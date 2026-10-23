@@ -1,0 +1,83 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>学习效果试测｜AI学院</title><link rel="stylesheet" href="/style.css"/>
+</head><body style="background:#f8fbf9"><div class="study-layout">
+<header class="learning-header">
+ <a class="identity" href="/"><span class="logo">∑</span><span>AI 学院<small>STUDENT RESEARCH · CONSENT</small></span></a>
+ <nav class="learning-nav"><a href="/">科学实验</a><a href="/learning">我的学习</a><a href="/study" class="active">学习试测</a></nav>
+</header>
+<div class="learning-eyebrow">FIELD STUDY · EVIDENCE FIRST</div>
+<h1>教育效果，<br/><em>必须来自真实学生。</em></h1>
+<p class="learning-lead">这不是“提分演示”生成器，而是供真实志愿者自愿参与的匿名试测记录工具。尚未收集任何真实学生样本，因此不会显示虚构的提升率。</p>
+<div class="study-notice" id="study-empty-status"><strong>当前研究状态：暂无经核验的真人学习效果结论。</strong>软件自动测试和模拟浏览器走查不能替代真人学生表现。完成试测后由参与者主动导出数据，再按公开评分口径汇总。</div>
+<section class="study-steps" aria-label="试测步骤" style="margin:22px 0">
+ <div class="study-step"><b>01 · 自愿知情与匿名</b>不收集姓名、学号、手机号或个人API账号。个人可拒绝，退出可清空本机记录。</div>
+ <div class="study-step"><b>02 · 独立前测—学习—新题</b>两组采用相近知识任务与时间；记录实际答案、完成率与协助情况。</div>
+ <div class="study-step"><b>03 · 导出原始记录与边界</b>每份记录附匿名编号、任务条件及填报来源；汇总时说明样本量和可比性局限。</div>
+</section>
+<div class="learning-grid">
+ <section class="learning-card wide">
+  <h2>记录一位真实参与者的试测</h2>
+  <p>填写者应是实际参与或获授权的观察者。各条件组必须使用可比的同一题组（当前题组A）；数据采用自报、待核验口径。若是软件调试，请勿用测试输入生成正式研究记录。</p>
+  <div class="learning-callout" id="study-evidence-bridge"><strong>从本机真实学习记录核对成绩</strong><p>当一节旗舰课完成两道独立前测、一次PFL真实实验和两道不同迁移题时，可以直接读取这四次确定性评分，减少人工录入错误。这只证明本浏览器记录内部一致，不证明参与者身份或真人同意。</p><div class="record-actions"><button type="button" id="study-link-evidence">核对并填充最近一节完整课程 →</button></div><p id="study-link-status" role="status">尚未链接任何学习记录；普通AI与原模拟器组仍使用人工核验的成绩。</p></div>
+  <form id="study-form" class="study-form">
+   <label class="consent-checkbox"><input type="checkbox" id="study-consent" required/>我已阅读试测说明，并确认该记录获得参与者自愿同意；明确其可拒绝、可删除，不会无授权上传个人信息。</label>
+   <div class="study-step"><strong>匿名编号</strong><span id="study-code">尚未建立试测记录</span><div class="record-actions"><button type="button" id="make-code">生成新的匿名试测编号</button></div></div>
+   <label>实际使用的学习方式
+    <select id="study-condition" required><option value="">请选择真实使用方式（不预选）</option>
+     <option value="academy">AI学院：实验＋错因诊断＋复习</option>
+     <option value="chat-ai">普通聊天AI：相同概念和可比时长</option>
+     <option value="raw-simulator">仅科学模拟器：无AI学院学习档案</option>
+    </select>
+   </label>
+   <label>本次采用的独立题组版本
+    <select id="study-question-set" required><option value="">请选择实际使用的题组</option><option value="chaos-form-a-v1">Logistic 初值/控制变量概念题组 A（前测与迁移题不同）</option></select>
+   </label>
+   <label>是否实际完成整段任务
+    <select id="study-completed" required><option value="">请选择实际结果</option><option value="yes">是，按协议完成</option><option value="no">否，中途未完成</option></select>
+   </label>
+   <div class="learning-grid">
+    <label>前测正确题数（0–2）
+     <input id="study-pre-correct" type="number" min="0" max="2" step="1" required placeholder="必须由真实作答核对"/>
+    </label>
+    <label>前测实际题数（0–2）
+     <input id="study-pre-total" type="number" min="0" max="2" step="1" required placeholder="实际已完成数"/>
+    </label>
+    <label>不同迁移题正确题数（0–2）
+     <input id="study-transfer-correct" type="number" min="0" max="2" step="1" required placeholder="必须由独立题目判分"/>
+    </label>
+    <label>不同迁移题实际题数（0–2）
+     <input id="study-transfer-total" type="number" min="0" max="2" step="1" required placeholder="不得原题重复"/>
+    </label>
+   </div>
+   <div class="learning-grid">
+    <label>真实任务时长（分钟）
+     <input id="study-minutes" type="number" min="1" max="240" step="1" required placeholder="例如18"/>
+    </label>
+    <label>是否需要他人实质协助
+     <select id="study-help" required><option value="">请选择</option><option value="yes">是</option><option value="no">否</option></select>
+    </label>
+   </div>
+   <label>真实试测观察与困难（最多400字；禁止输入任何身份信息）
+    <textarea id="study-notes" maxlength="400" placeholder="例如：学生一开始把方程改变和初值差异混淆；需要提醒一次才能找到实验按钮……"></textarea>
+   </label>
+   <label class="consent-checkbox"><input type="checkbox" id="study-real" required/>确认本次是真实发生的试测，而非演示、模拟、自动脚本或编造的作答。</label>
+   <div class="record-actions"><button class="primary" type="submit" id="study-save">保存本机试测记录</button>
+    <button type="button" id="study-export">导出真实试测记录 JSON</button></div>
+   <p id="study-form-result" class="learning-hint" role="status"></p>
+  </form>
+ </section>
+ <section class="learning-card">
+  <h2>已在本机记录的真实试测</h2>
+  <p>以下仅汇总本浏览器内由人工填写的记录，不代表学校全体学生，也不能证明因果提升。</p>
+  <div id="study-records"></div>
+ </section>
+ <section class="learning-card">
+  <h2>真正应该比较什么？</h2>
+  <p>两组是否在不同的新题上减少概念误区？谁可以独立完成教学流程？答题反馈是不是有证据、能否被学生否认？</p>
+  <div class="learning-callout"><strong>不是</strong>比较谁的UI更好看，也不是只统计对话次数。若没有公平对照，报告必须写“单组可用性试点”，不得宣称AI学院优于普通AI。</div>
+  <p><a href="/learning" class="learning-link">返回错题集与个人学习证据 →</a></p>
+ </section>
+</div>
+<p class="learning-foot">研究设计依据 docs/LEARNING_EVALUATION_PROTOCOL.md。正式校园数据采集应遵守学校伦理与隐私规范；本机仅做自愿试测记录与导出，不自动连接学校服务器。</p>
+</div><script type="module" src="/study.js"></script></body></html>

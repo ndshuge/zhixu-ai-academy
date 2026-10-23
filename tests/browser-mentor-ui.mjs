@@ -1,0 +1,52 @@
+import {createRequire} from 'node:module';
+import {createAcademyServer} from '../server.mjs';
+import {ProviderRegistry} from '../model-provider.mjs';
+import assert from 'node:assert/strict';
+const require=createRequire('E:/CHATGPT/projects/physics-frontier-lab/package.json');
+const {chromium}=require('playwright');
+const app=createAcademyServer({providerRegistry:new ProviderRegistry({env:{}})});
+await new Promise(r=>app.listen(0,'127.0.0.1',r));
+let browser;
+try{
+ browser=await chromium.launch({channel:'msedge',headless:true});
+ const page=await browser.newPage({viewport:{width:1440,height:900}});
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('http://127.0.0.1:'+app.address().port+'/',{waitUntil:'networkidle'});
+ await page.locator('.zhixu-doctor').waitFor();
+ assert.match(await page.locator('#doctor-status').textContent(),/尚未连接/);
+ assert.match(await page.locator('.institution-banner a').textContent(),/配置我的 AI/);
+ await page.evaluate(()=>document.dispatchEvent(new CustomEvent('academy:model-status',{detail:{
+  mentorMode:'llm-configured',provider:'DeepSeek',model:'deepseek-chat',providerVerified:true
+ }})));
+ assert.match(await page.locator('#doctor-status').textContent(),/已连接/);
+ assert.match(await page.locator('#doctor-model-name').textContent(),/deepseek-chat/);
+ assert.match(await page.locator('.institution-banner a').textContent(),/管理当前 AI/);
+ await page.evaluate(()=>document.dispatchEvent(new CustomEvent('academy:ai-start',{detail:{kind:'mentor',ai:true}})));
+ assert.equal(await page.locator('.zhixu-doctor').getAttribute('data-expression'),'thinking');
+ await page.waitForTimeout(400);
+ assert.equal(await page.locator('#doctor-timer').isVisible(),true);
+ assert.match(await page.locator('#doctor-timer-text').textContent(),/AI 思考中 · 0\.[1-9] 秒/);
+ await page.evaluate(()=>document.dispatchEvent(new CustomEvent('academy:ai-end',{detail:{kind:'mentor',ai:true}})));
+ assert.equal(await page.locator('#doctor-timer').isVisible(),false);
+ assert.match(await page.locator('#doctor-message').textContent(),/用时/);
+ await page.evaluate(()=>document.dispatchEvent(new CustomEvent('academy:ai-start',{detail:{kind:'plan'}})));
+ await page.evaluate(()=>document.dispatchEvent(new CustomEvent('academy:ai-end',{detail:{kind:'plan',fallback:true}})));
+ assert.match(await page.locator('#doctor-status').textContent(),/备用引导/);
+ await page.evaluate(()=>document.dispatchEvent(new CustomEvent('academy:model-status',{detail:{mentorMode:'rules',provider:null}})));
+ assert.match(await page.locator('#doctor-status').textContent(),/尚未连接/);
+ await page.evaluate(()=>document.dispatchEvent(new CustomEvent('academy:model-status',{detail:{mentorMode:'unavailable'}})));
+ assert.match(await page.locator('#doctor-status').textContent(),/连接状态暂不可用/);
+ assert.match(await page.locator('.institution-banner strong').textContent(),/模型状态待确认/);
+ await page.setViewportSize({width:390,height:844});
+ await page.locator('#doctor-toggle').click();
+ assert.equal(await page.locator('.zhixu-doctor').getAttribute('data-collapsed'),'true');
+ assert.equal(await page.locator('#doctor-toggle').getAttribute('aria-expanded'),'false');
+ await page.locator('#doctor-toggle').click();
+ assert.equal(await page.locator('.zhixu-doctor').getAttribute('data-collapsed'),'false');
+ const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);
+ assert.equal(overflow,false,'mobile overflows horizontally');
+ await page.reload({waitUntil:'networkidle'});
+ assert.equal(await page.locator('.zhixu-doctor').getAttribute('data-collapsed'),'true','mobile loads compact by default');
+ assert.deepEqual(errors,[]);
+ console.log('ZHIXU_DOCTOR_BROWSER_PASS 9 state/timer/mobile checks');
+}finally{if(browser)await browser.close();await new Promise(r=>app.close(r))}

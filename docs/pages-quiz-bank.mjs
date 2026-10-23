@@ -1,4 +1,4 @@
-// Browser-local adaptation of the original academy question bank. Public answer keys are inspectable; not server-grade grading integrity.
+// Browser-local grade rubric adapted from original server source; publicly inspectable.
 /**
  * Fixed, versioned concept checks. Correct options live server-side only.
  * Distinct pre, transfer and review forms: no answer key in public GET.

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-10T04:35:46.393Z",
+  "sourcePath": "E:/CHATGPT/projects/evo-world/src",
+  "rule": "Only core/science .mjs files; bundled scientific snapshot; original EvoWorld files unchanged",
+  "files": [
+    {
+      "relative": "core/config.mjs",
+      "bytes": 3339,
+      "sha256": "18180401356bacfb1715a1cf8b4fb51cc3813392fe82ceb75af216256d1fda43"
+    },
+    {
+      "relative": "core/controllers.mjs",
+      "bytes": 3222,
+      "sha256": "a643872ffdda0549aecbb97a99945288944b494d53baa4f725b0f6a2283974f9"
+    },
+    {
+      "relative": "core/experiments.mjs",
+      "bytes": 8786,
+      "sha256": "3f110975af3c885fa69a09858f10df0d19fdec145844a78f275b6122aeb4d1c8"
+    },
+    {
+      "relative": "core/math.mjs",
+      "bytes": 864,
+      "sha256": "9b7f75ddae4ca83c5875bd64585bc44f34b36acfb6aeb23bb981f8797254c262"
+    },
+    {
+      "relative": "core/statistics.mjs",
+      "bytes": 2396,
+      "sha256": "21267fc47b68a2f4676fd0049a45be74cd6bee30e9032d5e35605be6a35ddad1"
+    },
+    {
+      "relative": "core/world.mjs",
+      "bytes": 21999,
+      "sha256": "fab1ba9d59a9f0d63dc37d3ed0f066f1af28b0abf161bde3adeccf913d3401f3"
+    },
+    {
+      "relative": "science/indexed-world.mjs",
+      "bytes": 1281,
+      "sha256": "f3ec27bbe358ed49c922d82d64f27d257e7c13572b325f44cd38406b9ca7d16f"
+    },
+    {
+      "relative": "science/observer.mjs",
+      "bytes": 7080,
+      "sha256": "624cfd8c3356338c2c920ffb55db8a04a9d08fdbfaca233585bf50215d78d939"
+    },
+    {
+      "relative": "science/parameters.mjs",
+      "bytes": 15418,
+      "sha256": "538d46e75bcd68444f28c3e401cf02a52880e2492d7af6b4f5524d211ed42008"
+    },
+    {
+      "relative": "science/report.mjs",
+      "bytes": 8684,
+      "sha256": "c46ad147175eabc368fb9bea9c4462b3d845b8fdcb0a410a1e773e6136c6f297"
+    },
+    {
+      "relative": "science/tasks.mjs",
+      "bytes": 1673,
+      "sha256": "8fbafe927bf23eb6d4f77869e5f748101307abb6e56a4a07fb49ec6f71ec71c7"
+    }
+  ],
+  "snapshotHash": "45466224cc6ce12510cb301ccfffbef653a9704bb6e18cf4e2937521162e1263"
+}

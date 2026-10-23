@@ -1,0 +1,55 @@
+{
+  "schema": 2,
+  "release": "0.4.0",
+  "modelVersion": "pfl-kernel-1.0.0",
+  "algorithms": [
+    "pfl-pb-1.0.0",
+    "pfl-dp54-1.0.0",
+    "pfl-rules-1.0.0",
+    "pfl-change-rules-1.0.0"
+  ],
+  "generatedAt": "2026-10-11T09:11:39.207Z",
+  "sourceHash": "85fd26bd379e086a43bde89da224d1da31a4c7f34bcc768c67d4277574141dc3",
+  "parameterCoverage": 83,
+  "unitPassed": 159,
+  "unitTotal": 159,
+  "referencePassed": 68,
+  "referenceTotal": 68,
+  "browserPassed": 110,
+  "browserTotal": 110,
+  "serverPassed": 6,
+  "serverTotal": 6,
+  "performancePassed": 16,
+  "performanceTotal": 16,
+  "maximumDefaultKernelMilliseconds": 14.268700000000024,
+  "environment": {
+    "node": "v24.19.0",
+    "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "cpu": "Intel(R) Core(TM) Ultra 9 290HX Plus"
+  },
+  "scope": "Declared teaching / equilibrium numerical models; no industrial TCAD. Biased DD research prototype fails net-current conservation and is excluded. Finite-time chaos statistics are diagnostics, not proofs.",
+  "evidence": [
+    {
+      "path": "evidence/unit-tests.json",
+      "sha256": "e19646f157c9097583269924493fd98f22d6210de55e02f2816a743d170119de"
+    },
+    {
+      "path": "evidence/python-reference.json",
+      "sha256": "1bc732e10746b13ac2832176096725a0f64237e20808a1ac535505bef9d91e47"
+    },
+    {
+      "path": "evidence/server-tests.tap",
+      "sha256": "d611d41952bcbb894a5250cdd09a5eb9d7bac052678aaa42821d5988c603ff1c"
+    },
+    {
+      "path": "evidence/performance.json",
+      "sha256": "3ffec270ab6bd07adfab26cef055a25ca8bb5a46d496578080947f7ce84ac121"
+    },
+    {
+      "path": "evidence/browser-tests.json",
+      "sha256": "a1d4c69cbfeace26a5429b94a46db26a42f8013c9691d6a5d0b244468d49bdb2"
+    }
+  ]
+}

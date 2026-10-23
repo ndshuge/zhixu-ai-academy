@@ -1,0 +1,37 @@
+name: Deploy Zhixu Academy from original source
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build frontend from canonical public source
+        run: python scripts/build_pages_from_source.py --root . --out "$RUNNER_TEMP/zhixu-pages"
+      - name: Validate core assets and authentication separation
+        run: |
+          test -f "$RUNNER_TEMP/zhixu-pages/index.html"
+          test -f "$RUNNER_TEMP/zhixu-pages/pages-api-shim.js"
+          test -f "$RUNNER_TEMP/zhixu-pages/assets/zhixu-doctor/welcome.webp"
+          test ! -e "$RUNNER_TEMP/zhixu-pages/server.mjs"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/zhixu-pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
