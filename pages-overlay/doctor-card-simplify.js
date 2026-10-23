@@ -72,7 +72,7 @@ document.addEventListener('academy:doctor-expression',e=>{
 });
 
 
-function setStatus(root,detail){const ai=window.ZHIXU_PAGES_AI;let connected=ai?.status?.()===true,brand=detail?.provider||'DeepSeek';if(typeof detail==='object'&&detail){connected=detail.mentorMode==='llm-configured'&&!!detail.providerVerified;brand=detail.provider||'DeepSeek'}const label=root.querySelector('#doctor-status'),light=root.querySelector('#doctor-light'),pending=ai?.state?.()==='saved-unverified';if(label)label.textContent=connected?'AI 已连接 · '+brand:pending?'AI 待验证 · '+brand:'AI 未连接（'+brand+'）';if(light)light.classList.toggle('live',connected);root.dataset.connected=String(connected);root.dataset.provider=brand}
+function setStatus(root,detail){const ai=window.ZHIXU_PAGES_AI;let connected=ai?.status?.()===true,brand=detail?.provider||'DeepSeek';if(typeof detail==='object'&&detail){connected=detail.mentorMode==='llm-configured'&&!!detail.providerVerified;brand=detail.provider||'DeepSeek'}const label=root.querySelector('#doctor-status'),light=root.querySelector('#doctor-light'),pending=ai?.state?.()==='saved-unverified',next=connected?'AI 已连接 · '+brand:pending?'AI 待验证 · '+brand:'AI 未连接（'+brand+'）';if(label&&label.textContent!==next)label.textContent=next;if(light)light.classList.toggle('live',connected);root.dataset.connected=String(connected);root.dataset.provider=brand}
 function bind(root){
  if(root.dataset.simpleDoctorBound==='true') return;
  root.dataset.simpleDoctorBound='true';
@@ -112,9 +112,9 @@ function bind(root){
   const observer=new MutationObserver(()=>{
    const ai=window.ZHIXU_PAGES_AI;
    if(ai && typeof ai.status==='function' && ai.status()===true){
-    if(label.textContent!=='AI 已连接') setStatus(root);
+    if(label.textContent!=='AI 已连接 · '+(root.dataset.provider||'DeepSeek')) setStatus(root);
    } else {
-    const expected=ai && typeof ai.state==='function' && ai.state()==='saved-unverified'?'AI 待验证':'AI 未连接';
+    const brand=root.dataset.provider||'DeepSeek';const expected=ai && typeof ai.state==='function' && ai.state()==='saved-unverified'?'AI 待验证 · '+brand:'AI 未连接（'+brand+'）';
     if(label.textContent!==expected) setStatus(root);
    }
   });
