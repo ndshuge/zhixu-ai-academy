@@ -122,7 +122,7 @@ async function handler(path,init={}){
   const run=getRun(data.runId);if(!run)return error(404,'找不到本次实验');
   run.mentored=true;saveSnapshot('mentor-reviewed',{runId:data.runId,authorized:data.shareApproved===true&&model()?.status?.()===true});const fallback=baseMentor(run);
   if(data.shareApproved===true&&model()?.status?.()===true){
-   try{const reply=await model().ask([{role:'system',content:'你是知序 AI 学院博士。仅根据实验数值给出事实观察、一个追问和一个单变量验证建议，不虚构实验，不夸大学习效果。中文150字以内。'},{role:'user',content:JSON.stringify({prediction:run.prediction,reflection:clip(data.note),experiment:run.result.experiment,condition:run.result.condition,metrics:run.result.metrics,selectedPoint:data.selection})}],320);
+   try{const reply=await model().ask([{role:'system',content:'你是知序 AI 学院博士。仅根据实验数值给出事实观察、一个追问和一个单变量验证建议，不虚构实验，不夸大学习效果。中文150字以内。'},{role:'user',content:JSON.stringify({prediction:run.prediction,reflection:clip(data.note),experiment:run.result.experiment,condition:run.result.condition,metrics:run.result.metrics,selectedPoint:data.selection})}],1300);
     return result({...fallback,mode:'llm',reply:reply.reply,provider:'DeepSeek',model:reply.model,usage:reply.usage,availability:'本次授权后实际调用 DeepSeek 官方模型，科学结果由浏览器计算',qualityCheck:{scope:'browser-local-real-science',issues:[]}});
    }catch(e){return result({...fallback,fallbackReason:'LIVE_DEEPSEEK_FAILED',availability:'真实 DeepSeek 连接失败：'+clip(e.message,110)+'；已保留浏览器本地科学数据'})}
   }
@@ -135,7 +135,7 @@ async function handler(path,init={}){
   if(data.mode==='llm'&&data.shareApproved!==true)return error(403,'没有本次 AI 规划授权');
   if(data.mode==='llm'&&data.shareApproved&&model()?.status?.()===true){
    try{
-    const out=await model().ask([{role:'system',content:'你是科学实验规划导师。对给出的确定性单变量方案写80字以内解释，不能改动参数，不能声称已经运行。'},{role:'user',content:JSON.stringify({goal,changes:pr.changes,conditions:run.result.condition})}],180);
+    const out=await model().ask([{role:'system',content:'你是科学实验规划导师。对给出的确定性单变量方案写80字以内解释，不能改动参数，不能声称已经运行。'},{role:'user',content:JSON.stringify({goal,changes:pr.changes,conditions:run.result.condition})}],850);
     pr.plannerMode='llm-constrained';pr.why=out.reply.slice(0,350);pr.note+=' 本次理由已经由 DeepSeek 模型实际生成。';
    }catch(e){pr.fallbackReason='MODEL_REQUEST_FAILED';pr.note+=' AI请求失败，已退回浏览器规则方案。'}
   }else if(data.mode==='llm'){pr.fallbackReason='MODEL_NOT_CONNECTED'}
