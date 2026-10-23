@@ -23,4 +23,26 @@ $('zx-free').onclick=()=>{$('zx-lab-chooser').hidden=false;$('zx-lab-chooser').s
 $('zx-home-settings').onclick=()=>{settings.hidden=false;$('zx-settings-close').focus()};$('zx-settings-close').onclick=()=>settings.hidden=true;settings.onclick=e=>{if(e.target===settings)settings.hidden=true};document.addEventListener('keydown',e=>{if(e.key==='Escape')settings.hidden=true});document.addEventListener('click',()=>setTimeout(updateProgress,100));document.addEventListener('input',updateProgress);
 if(new URLSearchParams(location.search).has('focus'))learningMode();
 window.__ZHIXU_HOME_API={showHome:homeMode,showGuide:learningMode};
+
+ // zx-ai-status-config-click-v1: the existing AI status pill is the configuration entry.
+const aiStatus=$('model-state');
+if(aiStatus){
+  const statusStyle=document.createElement('style');
+  statusStyle.textContent='#model-state{cursor:pointer;user-select:none;transition:box-shadow .16s,border-color .16s}#model-state:hover{border-color:#8bc7ab;box-shadow:0 0 0 3px #dff3e7}#model-state:focus-visible{outline:3px solid #2c8c68;outline-offset:3px}';
+  document.head.appendChild(statusStyle);
+  aiStatus.setAttribute('role','button');
+  aiStatus.setAttribute('tabindex','0');
+  aiStatus.setAttribute('aria-label','点击配置 AI 模型连接');
+  aiStatus.title='点击配置 AI 模型连接';
+  const openAiConfig=()=>{
+    const dialog=$('pages-ai-dialog');
+    if(dialog){dialog.dataset.open='true';const keyInput=$('pages-ai-key');if(keyInput)keyInput.focus();return;}
+    const launcher=$('pages-ai-open');
+    if(launcher){launcher.click();return;}
+    const settings=$('zx-settings-modal');
+    if(settings){settings.hidden=false;const link=$('zx-settings-links')?.querySelector('a[href*="connect.html"]');if(link)link.focus();}
+  };
+  aiStatus.addEventListener('click',openAiConfig);
+  aiStatus.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openAiConfig();}});
+}
 })();
