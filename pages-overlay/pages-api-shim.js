@@ -234,6 +234,7 @@ window.fetch=(input,init)=>{
  }
  return orig(input,init);
 };
+document.addEventListener('academy:pages-provider-updated',()=>{window.dispatchEvent(new Event('focus'));});
 window.ZHIXU_BROWSER_ADAPTER={
  kind:'client-science-not-server',engine:VERSION,
  exportSession:()=>({scope:'browser-tab-not-school-server',version:1,
