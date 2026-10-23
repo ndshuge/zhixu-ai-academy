@@ -2,7 +2,7 @@
 const css=document.createElement('style');css.textContent=
 "#pages-ai-open{display:none!important}"+
 ".zhixu-doctor .doctor-toggle,.zhixu-doctor .doctor-heading small,.zhixu-doctor .doctor-heading span,.zhixu-doctor #doctor-message,.zhixu-doctor #doctor-timer,.zhixu-doctor .doctor-model,.zhixu-doctor #doctor-connect{display:none!important}"+
-".zhixu-doctor{width:226px!important;padding:14px!important;gap:0}"+
+".zhixu-doctor{top:auto!important;bottom:18px!important;width:226px!important;padding:14px!important;gap:0}"+
 ".zhixu-doctor .doctor-heading{display:grid!important;gap:0!important;text-align:center!important}"+
 ".zhixu-doctor .doctor-heading strong{font-size:20px!important;color:#173f38!important}"+
 ".zhixu-doctor .doctor-state{display:flex!important;justify-content:center!important;align-items:center!important;margin:8px 0 12px!important;font-size:12px!important;color:#24694e!important}"+
