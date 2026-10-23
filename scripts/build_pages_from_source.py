@@ -70,6 +70,13 @@ def assemble(root,out):
    if marker not in s:raise RuntimeError('Head marker missing: '+name)
    s=s.replace(marker,'<script defer src="./pages-api-shim.js"></script></head>',1)
   p.write_text(s,encoding='utf8')
+ # Static GitHub Pages requires no administrator password: remove the legacy
+ # admin navigation entirely, while preserving server-side admin protections.
+ for page in ('index.html','learning.html','study.html','explore.html'):
+  f=out/page
+  html=f.read_text(encoding='utf8')
+  html=re.sub(r'<a\b[^>]*\bhref=["\x27](?:\./)?admin(?:\.html)?["\x27][^>]*>.*?</a>','',html,flags=re.I|re.S)
+  f.write_text(html,encoding='utf8')
  for name in ('connect.html','admin.html','original-pages-byok.js','pages-api-shim.js','pages-evo-pair.mjs','technical-evidence-summary.json'):
   shutil.copy2(overlay/name,out/name)
  q=(root/'quiz-bank.mjs').read_text(encoding='utf8')
