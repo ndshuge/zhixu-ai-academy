@@ -3,17 +3,13 @@ const $=id=>document.getElementById(id);
 const pickers=[...document.querySelectorAll('[data-exp]')];
 const state={experiment:'sensitivity',runId:null,result:null,prediction:null,mentor:null,answer:null,selection:null,modelActive:false,modelLabel:'',pendingPlan:null,records:readRecords()};
 function refreshAIChoice(){
- const mentor=state.modelActive;
- $('mentor-request-mode').textContent=mentor?
-  ($('shareApproved').checked?'本次使用 '+state.modelLabel+' 生成 AI 导师反馈；提交后会取消本次授权。':'本次未授权 AI 调用：点击分析将使用本地学习指导，不会发送学习数据。'):
-  '当前科学实验可以正常运行；导师反馈使用本地学习指导。';
- $('mentor-request-mode').dataset.mode=mentor&&$('shareApproved').checked?'ai':'local';
- $('plan-request-mode').textContent=mentor?
-  ($('plan-model-consent').checked?'本次使用 '+state.modelLabel+' 选择经验证的实验方案；执行前仍需你批准。':'本次未授权 AI 规划：将使用本地单变量方案，不向模型发送数据。'):
-  '可使用本地科学对照方案，预测和批准后才会执行实验。';
- $('plan-request-mode').dataset.mode=mentor&&$('plan-model-consent').checked?'ai':'local';
-}
-$('shareApproved').addEventListener('change',refreshAIChoice);
+  const on=state.modelActive;
+  $('mentor-request-mode').textContent=on?'点击「请导师点评」才会把本次反思发送给 DeepSeek，不会发送 GitHub。':'未启用 AI，使用本地导师反馈。';
+  $('mentor-request-mode').dataset.mode=on?'ai':'local';
+  $('plan-request-mode').textContent=on?'点击「生成对照方案」才会把验证目标发送给 DeepSeek；执行仍需你批准。':'未启用 AI，使用本地科学对照建议。';
+  $('plan-request-mode').dataset.mode=on?'ai':'local';
+ }
+ $('shareApproved').addEventListener('change',refreshAIChoice);
 $('plan-model-consent').addEventListener('change',refreshAIChoice);
 function setLens(id,message,mode='ready'){
  const card=$(id);if(!card)return;
@@ -236,7 +232,7 @@ $('ask').addEventListener('click',async()=>{
  let started=false,finished=false;
  try{
   await refreshModelStatus();
-  const authorized=state.modelActive&&$('shareApproved').checked;
+  const authorized=state.modelActive;
   const runId=state.runId,note=$('reflection').value.trim(),selection=state.selection;
   button.textContent=authorized?'AI 导师正在分析…':'正在整理学习反馈…';
   document.dispatchEvent(new CustomEvent('academy:ai-start',{detail:{kind:'mentor',ai:authorized}}));
@@ -288,7 +284,7 @@ $('request-plan').addEventListener('click',async()=>{
  const button=$('request-plan');
  button.disabled=true;
  await refreshModelStatus();
- const plannedAI=state.modelActive&&$('plan-model-consent').checked;
+ const plannedAI=state.modelActive;
  button.textContent=plannedAI?'AI 正在规划…':'正在生成对照方案…';
  document.dispatchEvent(new CustomEvent('academy:ai-start',{detail:{kind:'plan',ai:plannedAI}}));
  $('plan-hint').textContent='正在核对工具范围和科学变量…';
@@ -485,8 +481,8 @@ async function refreshModelStatus(){
   $('model-state').textContent=state.modelActive?(codingPlanDemo?'研发演示 AI：':(s.providerSource==='judge-session'||s.providerSource==='browser-BYOK')?'我的 AI：':'学校 AI：')+s.provider+(s.providerVerified?' ✓':'（待验证）'):'AI 尚未连接';
   $('institution-provider').textContent=state.modelActive?'当前模型：'+s.provider+' · '+s.model+'（Key 仅保存在本标签页内存中）':'选择 DeepSeek 官方 API，连接你的 AI 导师';
   $('mentor-connection-note').textContent=state.modelActive?'已配置 '+s.provider+'，勾选授权后才会使用 AI。':'尚未连接 AI；点击首页“配置我的 AI”即可启用';
-  $('privacy-consent').hidden=!state.modelActive;
-  $('plan-model-consent-wrap').hidden=!state.modelActive;
+  $('privacy-consent').hidden=true;
+  $('plan-model-consent-wrap').hidden=true;
   if(!state.modelActive){$('shareApproved').checked=false;$('plan-model-consent').checked=false;}
   refreshAIChoice();
  }catch{

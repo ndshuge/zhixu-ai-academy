@@ -78,6 +78,29 @@ def assemble(root,out):
  a=a.replace("s.providerSource==='judge-session'","(s.providerSource==='judge-session'||s.providerSource==='browser-BYOK')")
  a=a.replace('Key 仅保存在服务端','Key 仅保存在当前网页会话内存')
  a=a.replace('（Key 仅保留在服务端）','（Key 仅保存在本标签页内存中）')
+ # Pages AI is opt-in through the explicit "connect and enable" action,
+ # followed by a user-initiated mentor/plan click. Avoid repeated agreement checkboxes.
+ start=a.index('function refreshAIChoice(){')
+ end=a.index("$('shareApproved').addEventListener('change',refreshAIChoice);",start)
+ a=a[:start]+'''function refreshAIChoice(){
+  const on=state.modelActive;
+  $('mentor-request-mode').textContent=on?'点击「请导师点评」才会把本次反思发送给 DeepSeek，不会发送 GitHub。':'未启用 AI，使用本地导师反馈。';
+  $('mentor-request-mode').dataset.mode=on?'ai':'local';
+  $('plan-request-mode').textContent=on?'点击「生成对照方案」才会把验证目标发送给 DeepSeek；执行仍需你批准。':'未启用 AI，使用本地科学对照建议。';
+  $('plan-request-mode').dataset.mode=on?'ai':'local';
+ }
+ '''+a[end:]
+ old="const authorized=state.modelActive&&$('shareApproved').checked;"
+ assert old in a
+ a=a.replace(old,'const authorized=state.modelActive;',1)
+ old="const plannedAI=state.modelActive&&$('plan-model-consent').checked;"
+ assert old in a
+ a=a.replace(old,'const plannedAI=state.modelActive;',1)
+ # Hide old consent controls so screenshots show only the short inline privacy notice.
+ a=a.replace("$('privacy-consent').hidden=!state.modelActive;","$('privacy-consent').hidden=true;")
+ a=a.replace("$('plan-model-consent-wrap').hidden=!state.modelActive;","$('plan-model-consent-wrap').hidden=true;")
+ a=a.replace('Key 仅保留在服务端','Key 由你管理，可选择保存在此浏览器')
+ a=a.replace('请逐次授权后才会使用 AI','点击 AI 按钮会发送对应内容给 DeepSeek')
  app.write_text(a,encoding='utf8')
  (out/'.nojekyll').write_text('',encoding='utf8')
  assert 'pages-api-shim.js' in (out/'index.html').read_text(encoding='utf8')

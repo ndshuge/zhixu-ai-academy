@@ -20,10 +20,10 @@ modal.innerHTML=`<div id="pages-ai-card"><h2>知序 AI 学院 · DeepSeek</h2>
 <select id="pages-ai-model" aria-label="选择 DeepSeek 模型"><option value="deepseek-flash">DeepSeek Flash（推荐，快速）</option><option value="deepseek-v4-pro">DeepSeek V4 Pro（更强推理）</option></select>
 <label id="pages-ai-save-row"><input id="pages-ai-save" type="checkbox"> 在此浏览器记住 API Key（仅在个人受信任的设备勾选）</label>
 <small id="pages-ai-save-warning">保存后密钥会以可读取形式留在此站点的浏览器本地存储（localStorage），关闭浏览器后仍存在。浏览器扩展、同源脚本及能使用此浏览器的人可能访问它；不要在公共电脑勾选。下次进入仍需点击“测试真实连接”才能启用 AI，不会自动产生费用。</small>
-<button id="pages-ai-test" type="button">测试真实连接</button><button id="pages-ai-clear" type="button">清除密钥及浏览器保存</button><button id="pages-ai-close" type="button">关闭</button>
+<button id="pages-ai-test" type="button">连接并启用 AI</button><button id="pages-ai-clear" type="button">清除密钥及浏览器保存</button><button id="pages-ai-close" type="button">关闭</button>
 <div id="pages-ai-status" role="status">尚未接入 · 本页保留原版 UI 和知序博士。GitHub Pages 不运行原版 Node API，原版后台功能需单独部署。</div>
 <div id="pages-ai-mentor" hidden><h3>真实 DeepSeek 导师答疑</h3><textarea id="pages-ai-question" placeholder="输入你要问博士的科学问题；建议先完成页面上的科学实验。"></textarea>
-<label><input id="pages-ai-consent" type="checkbox"> 我授权将以上问题发送至 DeepSeek 官方 API</label>
+<p id="pages-ai-data-note">点「请博士解答」或「规划验证」时，才会将本次输入直接发送给 DeepSeek；不会发给 GitHub。关闭 AI 连接后不再调用模型。</p>
 <button id="pages-ai-plan" type="button">请博士规划下一轮验证</button><button id="pages-ai-ask" type="button">请博士分析</button><div id="pages-ai-reply">等待提问。</div></div>
 <small>使用浏览器直连方式。公共设备、恶意浏览器扩展或浏览器开发工具可能读取输入的密钥；避免在不信任的设备上使用。</small></div>`;
 document.body.append(launch,modal);
@@ -89,13 +89,13 @@ $('pages-ai-test').onclick=async()=>{
  key=entered;$('pages-ai-key').value='';verified=false;set('pages-ai-status','正在请求 DeepSeek 官方模型……');
  try{const a=await call([{role:'user',content:'请只回答：连接成功'}],32);verified=true;activeModel=a.model;persistChoice();announceStatus();$('pages-ai-mentor').hidden=false;set('pages-ai-status','真实模型连接成功\n模型：'+a.model+'\n回复：'+a.reply+'\nToken：'+(a.usage??'未提供'));doctor('success','真实 DeepSeek 已连通。你可以授权发送问题让我分析。');launch.textContent='DeepSeek 已连通'}catch(e){verified=false;announceStatus();set('pages-ai-status','连接失败：'+(e.message||String(e))+'。密钥没有发送到 GitHub，可重试或清除本地保存。')}
 };
-$('pages-ai-ask').onclick=async()=>{if(!verified)return;const q=$('pages-ai-question').value.trim();if(q.length<3){set('pages-ai-reply','请先写下问题');return}if(!$('pages-ai-consent').checked){set('pages-ai-reply','需要本次明确授权才能发送');return}
+$('pages-ai-ask').onclick=async()=>{if(!verified)return;const q=$('pages-ai-question').value.trim();if(q.length<3){set('pages-ai-reply','请先写下问题');return}
 set('pages-ai-reply','博士正在请求 DeepSeek……');doctor('thinking','正在分析你的问题');
-try{const a=await call([{role:'system',content:'你是知序 AI 学院的科学探究博士，解释简洁准确，必须区分数学事实与假说，绝不伪称已经运行实验。'}, {role:'user',content:q}],450);set('pages-ai-reply',a.reply+'\n\n真实模型：'+a.model+' · Token '+(a.usage??'未提供'));doctor('success','已完成真实 DeepSeek 在线答疑。')}catch(e){set('pages-ai-reply','请求失败：'+e.message)}finally{$('pages-ai-consent').checked=false}
+try{const a=await call([{role:'system',content:'你是知序 AI 学院的科学探究博士，解释简洁准确，必须区分数学事实与假说，绝不伪称已经运行实验。'}, {role:'user',content:q}],450);set('pages-ai-reply',a.reply+'\n\n真实模型：'+a.model+' · Token '+(a.usage??'未提供'));doctor('success','已完成真实 DeepSeek 在线答疑。')}catch(e){set('pages-ai-reply','请求失败：'+e.message)}finally{}
 };
 $('pages-ai-clear').onclick=()=>{key='';verified=false;try{localStorage.removeItem(STORE_KEY)}catch{}
  $('pages-ai-save').checked=false;announceStatus();$('pages-ai-key').value='';$('pages-ai-mentor').hidden=true;set('pages-ai-status','本标签页内存与此站点浏览器保存的 DeepSeek Key 均已清除。');launch.textContent='连接 DeepSeek API'};
-document.getElementById('pages-ai-plan').onclick=async()=>{if(!verified){set('pages-ai-reply','请先完成模型连接测试');return;}const q=document.getElementById('pages-ai-question').value.trim();if(q.length<8){set('pages-ai-reply','请先输入至少八个字的验证目标');return;}if(!document.getElementById('pages-ai-consent').checked){set('pages-ai-reply','未授权发送学习问题，AI 不会运行');return;}set('pages-ai-reply','博士正在向 DeepSeek 生成科学验证方案……');doctor('thinking','正在规划下一步实验');try{const a=await call([{role:'system',content:'你是知序 AI 学院的科学博士。针对学生验证目标，仅提供候选对照实验方案，须包含目标、一个控制变量、可观测量、科学边界、学生批准要求。不能声称已执行任何实验。用中文简洁回答。'},{role:'user',content:q}],450);set('pages-ai-reply',a.reply+'\\n\\n此方案仅供审阅，未经学生批准绝不执行实验。\\n模型：'+a.model);doctor('success','已生成候选验证方案，等待学生审阅和批准。')}catch(e){set('pages-ai-reply','AI 规划失败：'+e.message)}finally{document.getElementById('pages-ai-consent').checked=false}};
+document.getElementById('pages-ai-plan').onclick=async()=>{if(!verified){set('pages-ai-reply','请先完成模型连接测试');return;}const q=document.getElementById('pages-ai-question').value.trim();if(q.length<8){set('pages-ai-reply','请先输入至少八个字的验证目标');return;}set('pages-ai-reply','博士正在向 DeepSeek 生成科学验证方案……');doctor('thinking','正在规划下一步实验');try{const a=await call([{role:'system',content:'你是知序 AI 学院的科学博士。针对学生验证目标，仅提供候选对照实验方案，须包含目标、一个控制变量、可观测量、科学边界、学生批准要求。不能声称已执行任何实验。用中文简洁回答。'},{role:'user',content:q}],450);set('pages-ai-reply',a.reply+'\\n\\n此方案仅供审阅，未经学生批准绝不执行实验。\\n模型：'+a.model);doctor('success','已生成候选验证方案，等待学生审阅和批准。')}catch(e){set('pages-ai-reply','AI 规划失败：'+e.message)}finally{}};
 if(new URLSearchParams(location.search).get('connect')==='1'){modal.dataset.open='true';}
 window.ZHIXU_PAGES_AI={status:()=>verified,model:()=>activeModel,usage:()=>({used:requestCount,limit:maxRequestsPerTab}),ask:async(messages,limit=320)=>{if(!verified)throw new Error('必须先验证 DeepSeek 连接');return call(messages,limit)}};
 window.addEventListener('pagehide',()=>{key='';verified=false});
