@@ -501,7 +501,7 @@ async function refreshModelStatus(){
 }
 initializeLearningChecks();
 refreshModelStatus();
-window.addEventListener('focus',refreshModelStatus);
+window.addEventListener('focus',refreshModelStatus);document.addEventListener('academy:pages-provider-updated',()=>{void refreshModelStatus()});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshModelStatus()});
 
 // ZHIXU_DOCTOR_WIDGET_HOT_RC4
