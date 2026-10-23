@@ -64,7 +64,8 @@ def assemble(root,out):
    marker='<script type="module" src="./app.js"></script>'
    if marker not in s:raise RuntimeError('Main app script marker missing')
    s=s.replace(marker,'<script src="./pages-api-shim.js"></script>'+marker,1)
-   s=s.replace('</body>','<script defer src="./original-pages-byok.js"></script><script defer src="./doctor-chat-ux.js"></script><script defer src="./doctor-card-simplify.js"></script><link rel="stylesheet" href="./homepage-simplify.css"><script defer src="./homepage-simplify.js"></script></body>',1)
+   s=s.replace('</head>','<link rel="stylesheet" href="./homepage-simplify.css"></head>',1)
+   s=s.replace('</body>','<script defer src="./original-pages-byok.js"></script><script defer src="./doctor-chat-ux.js"></script><script defer src="./doctor-card-simplify.js"></script><script defer src="./homepage-simplify.js"></script></body>',1)
   else:
    marker='</head>'
    if marker not in s:raise RuntimeError('Head marker missing: '+name)
