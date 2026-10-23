@@ -56,7 +56,7 @@ toggle.addEventListener('click',()=>{
 buttons.forEach(button=>button.addEventListener('click',()=>goto(button.dataset.focusTarget)));
 next.addEventListener('click',()=>{
  if(!isDone(active))return;
- if(active==='transfer'){location.assign('/learning');return}
+ if(active==='transfer'){location.assign('./learning.html');return}
  goto(stageOrder[stageOrder.indexOf(active)+1]);
 });
 const observer=new MutationObserver(()=>{

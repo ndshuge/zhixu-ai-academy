@@ -72,7 +72,7 @@ async function mountCheck(stage,experiment,runId,index=0){
       feedback.append(p('teacher-next-step','根据你选的这一项，下一步建议：'+graded.nextStep),
        p('tiny-evidence','针对本题错误选项的规则引导；不等于已确认学生的长期概念误区。'));
      }
-     const link=document.createElement('a');link.href='/learning';link.className='learning-link';
+     const link=document.createElement('a');link.href='./learning.html';link.className='learning-link';
      link.textContent='查看错题档案与个人学习分析 →';feedback.append(link);
     }
     if(index+1<items.length){

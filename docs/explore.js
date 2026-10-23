@@ -1,11 +1,11 @@
-import {loadLearning,appendLearningEvent} from '/learning-store.js';
+import {loadLearning,appendLearningEvent} from './learning-store.js';
 const $=id=>document.getElementById(id),lab=new URLSearchParams(location.search).get('lab')==='evo'?'evo':'pfl';
 const info=lab==='evo'?{name:'EvoWorld · 一座正在生活的生态箱',kernel:'evoworld-0.1.1',question:'固定环境中，同一只生命的能量、行动与种群会怎样变化？一次世界观察能够证明普遍规律吗？',experiment:'evo-pair'}:{name:'Physics Frontier Lab · 物理前沿实验室',kernel:'pfl-kernel-1.0.0',question:'同一个 Logistic 映射，改变初值后会看到什么？先观察，再回到学院做单变量对照。',experiment:'sensitivity'};
 let prediction='',sessionId=crypto.randomUUID(),snapshot=null,saved=false,predictionEvent=null;
 let loadingTimer=null;
 function loadLab(){
  clearInterval(loadingTimer);const started=Date.now();$('lab-loading').hidden=false;$('lab-loading').textContent='正在加载固定版本实验室与计算Worker…';$('retry-lab').hidden=true;$('capture-observation').disabled=true;
- $('lab-frame').src='/labs/'+lab+'/';
+ $('lab-frame').src='./labs/'+lab+'/';
  loadingTimer=setInterval(()=>{try{
   const doc=$('lab-frame').contentDocument,win=$('lab-frame').contentWindow;
   const ready=lab==='evo'?win.evoEvidence?.tick>0:!!doc?.querySelector('[data-testid="visual-stage"][data-scene]');
@@ -17,7 +17,7 @@ $('retry-lab').addEventListener('click',loadLab);
 $('lab-title').textContent=info.name;
 $('lab-source').textContent='产品 V0.4.0 · 科学内核 '+info.kernel+' · 本机固定呈现，不需要另外启动上游服务。';
 $('explore-question').textContent=info.question;
-for(const id of ['return-lesson','continue-lesson'])$(id).href='/?experiment='+info.experiment;
+for(const id of ['return-lesson','continue-lesson'])$(id).href='./index.html?experiment='+info.experiment;
 $('explore-prediction').addEventListener('input',()=>{$('open-lab').disabled=$('explore-prediction').value.trim().length<8});
 $('open-lab').addEventListener('click',()=>{
  try{

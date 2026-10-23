@@ -1,7 +1,7 @@
 from pathlib import Path
-import argparse,re,shutil,json,hashlib
+import argparse,re,shutil,json,hashlib,posixpath
 BASE=Path(__file__).resolve().parents[1]
-def patch_html(t):
+def patch_html(t,path):
  def repl(m):
   attr,quote,url=m.group(1),m.group(2),m.group(3)
   if url.startswith('//'): return m.group()
@@ -9,7 +9,13 @@ def patch_html(t):
   route=tail.split('?')[0].split('#')[0]
   routes={'':'index.html','connect':'connect.html','learning':'learning.html','study':'study.html','explore':'explore.html','admin':'admin.html'}
   if route in routes:tail=routes[route]+tail[len(route):]
-  return attr+'='+quote+'./'+tail+quote
+  target=tail.split('?')[0].split('#')[0]
+  if not target:target='index.html'
+  if target.endswith('/'):target+='index.html'
+  rel=posixpath.relpath(target,path.parent.as_posix() or '.')
+  if not rel.startswith('.'):rel='./'+rel
+  suffix=tail[len(tail.split('?')[0].split('#')[0]):]
+  return attr+'='+quote+rel+suffix+quote
  return re.sub(r'(src|href)=(["\x27])(/[^"\x27]*)\2',repl,t)
 def assemble(root,out):
  source=root/'public'; overlay=root/'pages-overlay'
@@ -17,7 +23,41 @@ def assemble(root,out):
  shutil.copytree(source,out)
  for f in out.rglob('*.html'):
   orig=f.read_text(encoding='utf-8-sig')
-  f.write_text(patch_html(orig),encoding='utf8')
+  f.write_text(patch_html(orig,f.relative_to(out)),encoding='utf8')
+ # CSS /labs/* absolute resource references break under /zhixu-ai-academy/ subpath.
+ for css in out.rglob('*.css'):
+  text=css.read_text(encoding='utf-8-sig')
+  def patch_asset(m):
+   target=m.group(2).lstrip('/')
+   rel=posixpath.relpath(target,css.relative_to(out).parent.as_posix() or '.')
+   if not rel.startswith('.'):rel='./'+rel
+   return 'url('+m.group(1)+rel+m.group(1)+')'
+  patched=re.sub(r'url\(\s*(["\x27]?)(/[^)"\x27]+)\1\s*\)',patch_asset,text)
+  if patched!=text:css.write_text(patched,encoding='utf8')
+ # Root-level JavaScript is authored for the original Node server root.
+ # Only rewrite static navigation and imports; NEVER rewrite /api/* calls.
+ for js in out.glob('*.js'):
+  text=js.read_text(encoding='utf-8-sig')
+  before=text
+  for route in ('connect','admin','learning','study','explore'):
+   for quote in ("'",'"'):
+    text=text.replace(quote+'/'+route+quote,quote+'./'+route+'.html'+quote)
+    text=text.replace(quote+'/'+route+'?',quote+'./'+route+'.html?')
+    text=text.replace('href='+quote+'/'+route,'href='+quote+'./'+route+'.html')
+  text=text.replace("from '/learning-store.js'","from './learning-store.js'")
+  text=text.replace('from "/learning-store.js"','from "./learning-store.js"')
+  text=text.replace("='/labs/'","='./labs/'")
+  text=text.replace('="/labs/"','="./labs/"')
+  text=text.replace("='/?experiment=","='./index.html?experiment=")
+  text=text.replace('="/?experiment=','="./index.html?experiment=')
+  if text!=before:js.write_text(text,encoding='utf8')
+ # Bundled PFL module starts Web Workers using the old root-absolute /labs URL.
+ # Its JS is in assets/, so ./simulation.worker-* resolves correctly under Pages.
+ for chunk in (out/'labs/pfl/assets').glob('*.js'):
+  original=chunk.read_text(encoding='utf8')
+  fixed=original.replace('/labs/pfl/assets/simulation.worker-', './simulation.worker-')
+  if fixed!=original:chunk.write_text(fixed,encoding='utf8')
+
  for name in ('index.html','learning.html','study.html','explore.html'):
   p=out/name;s=p.read_text(encoding='utf8')
   if name=='index.html':

@@ -103,7 +103,7 @@ async function handler(path,init={}){
  const data=method==='POST'?JSON.parse(init.body||'{}'):{};
  if(url.pathname==='/api/status'){
   const active=model()?.status?.()===true;
-  return result({ok:true,app:'知序 AI 学院 Pages',version:'0.4.2-pages-adapter',pflVersion:VERSION,evoVersion:'evoworld-0.1.1-browser',mentorMode:active?'llm-configured':'rules',provider:active?'DeepSeek':null,model:active?'deepseek-chat':null,providerVerified:active,providerSource:'browser-BYOK',usage:{today:0,limit:12,tokensToday:0},
+  return result({ok:true,app:'知序 AI 学院 Pages',version:'0.4.2-pages-adapter',pflVersion:VERSION,evoVersion:'evoworld-0.1.1-browser',mentorMode:active?'llm-configured':'rules',provider:active?'DeepSeek':null,model:active?model()?.model?.()||'deepseek-flash':null,providerVerified:active,providerSource:'browser-BYOK',usage:{today:0,limit:12,tokensToday:0},
     experiments:['sensitivity','logistic','evo-pair'],experimentPlanner:{mode:'browser-rules-and-optional-LLM',approvalRequired:true,maxRounds:3,scope:'one-variable',constrainedLLMSelectionAvailable:active}});
  }
  if(url.pathname==='/api/transfer'){
