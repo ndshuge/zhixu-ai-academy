@@ -64,7 +64,22 @@ def assemble(root,out):
    marker='<script type="module" src="./app.js"></script>'
    if marker not in s:raise RuntimeError('Main app script marker missing')
    s=s.replace(marker,'<script src="./pages-api-shim.js"></script>'+marker,1)
-   s=s.replace('</head>','<link rel="stylesheet" href="./homepage-simplify.css"></head>',1)
+# Hide only the OLD workspace before first paint. A branded loading state remains
+   # visible until homepage-simplify.js has inserted the real home screen.
+   first_paint=(
+    '<style id="zx-first-paint">'
+    'html.zx-first-paint body{background:#f2f8f5!important}'
+    'html.zx-first-paint body .shell{visibility:hidden!important}'
+    'html.zx-first-paint body:before{content:"知序 AI 学院 · 正在进入学习空间";'
+    'position:fixed;inset:0;display:grid;place-items:center;'
+    'font:600 18px system-ui,sans-serif;color:#174638;background:#f2f8f5;z-index:999999}'
+    '</style>'
+    '<script>document.documentElement.classList.add("zx-first-paint");'
+    'setTimeout(()=>document.documentElement.classList.remove("zx-first-paint"),8000)</script>'
+    '<noscript><style>html.zx-first-paint body .shell{visibility:visible!important}'
+    'html.zx-first-paint body:before{display:none}</style></noscript>'
+   )
+   s=s.replace('</head>','<link rel="stylesheet" href="./homepage-simplify.css">'+first_paint+'</head>',1)
    s=s.replace('</body>','<script defer src="./original-pages-byok.js"></script><script defer src="./doctor-chat-ux.js"></script><script defer src="./doctor-card-simplify.js"></script><script defer src="./homepage-simplify.js"></script></body>',1)
   else:
    marker='</head>'

@@ -45,4 +45,5 @@ if(aiStatus){
   aiStatus.addEventListener('click',openAiConfig);
   aiStatus.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openAiConfig();}});
 }
+document.documentElement.classList.remove('zx-first-paint');
 })();
