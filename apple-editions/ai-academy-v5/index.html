@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN" data-native-v4>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f6f8"><meta name="description" content="知序 AI 学院：从判断到实验、从证据到理解。">
+<title>知序 AI 学院 · 学习工作室 V5</title>
+<link rel="stylesheet" href="./v4.css">
+<link rel="stylesheet" href="./v4-kinetic.css?v=kinetic-20261029e">
+<link rel="stylesheet" href="./v4-avatar.css?v=portrait-20261029a">
+<link rel="stylesheet" href="./v5-workshop.css?v=1">
+<link rel="modulepreload" href="../ai-academy-apple/assets/motion.bundle.js">
+<link rel="preload" href="../ai-academy-apple/assets/zhixu-doctor/idle.webp" as="image">
+</head>
+<body>
+<svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.2 12 3l9 8.2V21h-7v-7h-4v7H3z"/></symbol>
+<symbol id="i-books" viewBox="0 0 24 24"><path d="M3 5.2c3-1.5 6-1.2 9 .4 3-1.6 6-1.9 9-.4V20c-3-1.3-6-1-9 .5-3-1.5-6-1.8-9-.5zM12 5.6v14.8"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="M11.7 3.2c-2.5-1.7-6 1-5.2 4C2.5 8 2.5 13 6 14.3c-1.1 3.2 2.5 6 5.7 4.4 3.2 1.6 6.8-1.2 5.7-4.4 3.5-1.3 3.5-6.3-.5-7.1.8-3-2.7-5.7-5.2-4zM11.7 3.2v15.5"/></symbol>
+<symbol id="i-note" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18M6.5 16l4-5 4 3 5-8"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="m9.7 2.5-.6 2.2-2 1.1-2.1-.8-2 3.5 1.7 1.5v2.5L3 14l2 3.5 2.2-.8 2 1.1.5 2.3h4.6l.5-2.3 2-1.1 2.2.8 2-3.5-1.7-1.5V10L21 8.5 19 5l-2.2.8-2-1.1-.5-2.2z"/></symbol>
+<symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+<symbol id="i-collapse" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="16" rx="3"/><path d="M9 4v16"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.7" cy="10.7" r="6.4"/><path d="m15.5 15.5 5 5"/></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="4" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="20" cy="12" r="1"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5 11-11"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></symbol>
+<symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 2h6M10 2v8L4 20h16l-6-10V2M7 16h10"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+</svg>
+<div class="app">
+  <aside class="master-sidebar" aria-label="主导航">
+    <div class="brand" aria-label="知序 AI 学院"><div class="brand-mark">Σ</div><div><strong>知序</strong><span>AI 学院</span></div></div>
+    <div class="nav-caption">学习空间</div>
+    <nav class="primary-menu" aria-label="学习导航">
+      <button data-route="today" class="menu-item is-active"><svg><use href="#i-home"/></svg><span>今天</span></button>
+      <button data-route="courses" class="menu-item"><svg><use href="#i-books"/></svg><span>课程</span></button>
+      <button data-route="learn" class="menu-item"><svg><use href="#i-spark"/></svg><span>私人教师</span></button>
+      <button data-route="library" class="menu-item"><svg><use href="#i-note"/></svg><span>资料与错题</span></button>
+      <button data-route="growth" class="menu-item"><svg><use href="#i-chart"/></svg><span>学习进度</span></button>
+    </nav>
+    <div class="sidebar-bottom"><button data-route="settings" class="menu-item"><svg><use href="#i-gear"/></svg><span>设置</span></button><span class="engine-caption" id="engine-caption">连接科学引擎…</span></div>
+  </aside>
+  <aside class="outline-sidebar" aria-label="当前内容目录">
+    <div class="outline-toolbar"><strong id="outline-name">今天</strong><button class="icon-button" id="outline-toggle" aria-label="收起目录" title="收起目录"><svg><use href="#i-collapse"/></svg></button></div>
+    <div id="outline-content" class="outline-content"></div>
+  </aside>
+  <div class="reading-column">
+    <header class="toolbar" aria-label="页面工具栏">
+      <div class="toolbar-leading"><button class="icon-button outline-reveal" id="outline-reveal" aria-label="显示目录"><svg><use href="#i-collapse"/></svg></button><span class="toolbar-title" id="toolbar-title">今天</span></div>
+      <div class="toolbar-trailing"><span class="connected-dot" id="connected-dot" title="科学引擎连接状态"></span><button class="doctor-launch" id="doctor-launch" aria-label="打开知序博士" aria-expanded="false"><span class="doctor-avatar__media"><img src="./assets/doctor-avatar.webp" alt="" width="320" height="320" decoding="async"></span></button><button class="icon-button" data-route="settings" aria-label="设置"><svg><use href="#i-gear"/></svg></button></div>
+    </header>
+    <main id="screen" data-content data-page="today" tabindex="-1" aria-live="off">
+ <div class="workshop-intro"><span class="workshop-breadcrumb">知序 · PERSONAL LEARNING STUDIO</span><h1>把好奇心，变成自己的理解。</h1><p>从一次独立判断开始，用真实科学计算和知序博士的追问亲自验证答案。</p></div>
+ <section class="workshop-hero" aria-label="准备进入学习工作室">
+  <div class="workshop-hero-copy">
+   <div class="workshop-eyebrow"><span class="signal-dot"></span>科学探究 · 开放实验</div>
+   <h2>只差十万分之一，<br>结果会有多不同？</h2>
+   <p>学习工作室与科学实验室，马上就绪。</p>
+   <div class="workshop-actions"><a class="primary" href="#learn">从独立判断开始 ↗</a></div>
+  </div>
+  <div class="workshop-preview"><span class="workshop-overline">LIVE MATH PREVIEW</span><p>正在连接可交互的科学预览…</p></div>
+ </section>
+</main>
+  </div>
+</div>
+<nav class="mobile-tabbar mobile-native-tabs" id="mobile-tabs" aria-label="主要页面">
+ <span class="nav-optics" aria-hidden="true"></span>
+ <span class="tab-lens" aria-hidden="true"></span>
+ <button data-route="today" class="tab-item is-active"><svg><use href="#i-home"/></svg><span>今天</span></button>
+ <button data-route="courses" class="tab-item"><svg><use href="#i-books"/></svg><span>课程</span></button>
+ <button data-route="learn" class="tab-item"><svg><use href="#i-spark"/></svg><span>学习</span></button>
+ <button data-route="library" class="tab-item"><svg><use href="#i-note"/></svg><span>资料</span></button>
+ <button data-route="growth" class="tab-item"><svg><use href="#i-chart"/></svg><span>进度</span></button>
+</nav>
+<section id="doctor-panel" class="doctor-panel" role="dialog" aria-label="知序博士对话" hidden>
+  <header><img src="../ai-academy-apple/assets/zhixu-doctor/welcome.webp" alt=""><div><strong>知序博士</strong><span id="doctor-status">规则导师已就绪</span></div><button class="icon-button" id="doctor-close" aria-label="关闭知序博士"><svg><use href="#i-close"/></svg></button></header>
+  <div class="chat-log" id="doctor-log" role="log" aria-live="polite"><p class="chat-bubble">学习遇到的问题，可以在这里问我。使用真实 AI 前需要先在设置中验证 DeepSeek。</p></div>
+  <form id="doctor-form"><label for="doctor-question" class="visually-hidden">向知序博士提问</label><textarea id="doctor-question" placeholder="向博士提问…" rows="2" minlength="3" maxlength="1200" required></textarea><button class="cta" type="submit" id="doctor-send">发送</button></form>
+  <button type="button" class="doctor-setup" id="doctor-setup">在设置中启用真实 AI <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+  <p class="chat-privacy">AI 未验证时不生成伪造回复；消息只在本页内存保存。</p>
+</section>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="dialog-layer"></div>
+<!-- V5 UI copied from immutable V4, unchanged Original scientific runtime (same origin) -->
+<iframe id="original-engine" title="原版科学引擎（后台）" aria-hidden="true" tabindex="-1" src="/zhixu-ai-academy/learning.html"></iframe>
+<script>
+/* Before module hydration, match the requested route rather than flashing Today.
+   Fixed, trusted strings only: URL hashes never flow into HTML directly. */
+(() => {
+ const routes={
+  courses:['科学探究','课程','选择一个科学世界，从真实问题开始。','课程正在准备'],
+  learn:['知序私人教师 · 科学探究','从判断开始，亲自验证','每次只完成一个学习阶段。真实计算，真实记录。','私人教师正在准备'],
+  library:['学习档案','资料与错题','复习计划由真实作答生成；未经核实的误解需要你确认。','学习档案正在准备'],
+  growth:['个人进度','学习进度','只统计本浏览器中有证据支持的学习行为。','进度记录正在准备'],
+  settings:['个人中心','设置','把学习空间调整为适合你自己的节奏。','设置正在准备']
+ };
+ const route=location.hash.slice(1),meta=routes[route];
+ if(!meta)return;
+ const page=document.getElementById('screen');
+ page.dataset.page=route;
+ page.innerHTML='<header class="page-intro"><div class="eyebrow">'+meta[0]+'</div><h1>'+meta[1]+'</h1><p>'+meta[2]+'</p></header><div class="section-bar first-section"><h2>'+meta[3]+'</h2></div><div class="empty-state">正在载入对应页面内容…</div>';
+ const toolbar=document.getElementById('toolbar-title');
+ if(toolbar)toolbar.textContent=route==='learn'?'私人教师':meta[1];
+ const nav=document.getElementById('mobile-tabs');
+ document.querySelectorAll('.menu-item[data-route],.tab-item[data-route]').forEach(button=>{
+  const selected=button.dataset.route===route;
+  button.classList.toggle('is-active',selected);
+  button.classList.toggle('selected',selected);
+  if(selected)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
+ });
+ const active=nav&&nav.querySelector('button[data-route="'+route+'"]');
+ const lens=nav&&nav.querySelector('.tab-lens');
+ if(active&&lens){lens.style.width=active.offsetWidth+'px';lens.style.transform='translate3d('+active.offsetLeft+'px,0,0)';}
+})();
+</script>
+<script type="module" src="./v4.js?v=v5-workshop"></script>
+</body></html>

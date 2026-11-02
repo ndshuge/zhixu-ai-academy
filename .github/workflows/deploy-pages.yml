@@ -29,6 +29,8 @@ jobs:
           cp docs/index.html "$RUNNER_TEMP/zhixu-pages/index.html"
           cp -R apple-editions "$RUNNER_TEMP/zhixu-pages/apple-editions"
           test -s "$RUNNER_TEMP/zhixu-pages/apple-editions/ai-academy-v4/index.html"
+          test -s "$RUNNER_TEMP/zhixu-pages/apple-editions/ai-academy-v5/index.html"
+          test -s "$RUNNER_TEMP/zhixu-pages/apple-editions/ai-academy-v5/v5-workshop.css"
           test -s "$RUNNER_TEMP/zhixu-pages/apple-editions/ai-academy-apple/index.html"
           test -s "$RUNNER_TEMP/zhixu-pages/apple-editions/ai-academy-apple/assets/LICENSE-liquidglass.txt"
           grep -q 'location.replace(next.href)' "$RUNNER_TEMP/zhixu-pages/index.html"

@@ -25,7 +25,8 @@ function route(pathname) {
   return redirect;
 }
 
-const apple = 'https://ndshuge.github.io/zhixu-ai-academy/apple-editions/ai-academy-v4/';
+const apple = 'https://ndshuge.github.io/zhixu-ai-academy/apple-editions/ai-academy-v5/';
+const v4 = 'https://ndshuge.github.io/zhixu-ai-academy/apple-editions/ai-academy-v4/';
 const original = 'https://ndshuge.github.io/zhixu-ai-academy/original.html';
 
 test('contest root opens the latest Apple Edition', () => {
@@ -37,6 +38,11 @@ test('judge links open the Apple Edition instead of the old experience', () => {
 });
 test('existing competition QR links preserve their query and hash', () => {
   assert.equal(route('/zhixu-ai-academy/?utm_source=competition#learn'), apple + '?utm_source=competition#learn');
+});
+
+test('explicit prior V4 edition stays stable after promotion', () => {
+  assert.equal(route('/zhixu-ai-academy/?edition=v4'), v4);
+  assert.equal(route('/zhixu-ai-academy/?edition=v4&judge=1#learn'), v4+'?judge=1#learn');
 });
 test('explicit Original Edition opt-in keeps the original accessible', () => {
   assert.equal(route('/zhixu-ai-academy/?edition=original'), original);

@@ -16,8 +16,8 @@ function resolve(path){
   return destination;
 }
 const base='https://ndshuge.github.io/zhixu-ai-academy/';
-test('official judge homepage stays in original repo and opens Apple V4',()=>{
-  assert.equal(resolve('/zhixu-ai-academy/?judge=1#learn'),base+'apple-editions/ai-academy-v4/?judge=1#learn');
+test('official judge homepage stays in original repo and opens Apple V5',()=>{
+  assert.equal(resolve('/zhixu-ai-academy/?judge=1#learn'),base+'apple-editions/ai-academy-v5/?judge=1#learn');
 });
 test('R3 and Original remain independently addressable',()=>{
   assert.equal(resolve('/zhixu-ai-academy/?edition=r3'),base+'apple-editions/ai-academy-apple/');
@@ -25,6 +25,7 @@ test('R3 and Original remain independently addressable',()=>{
 });
 test('both Apple frontends are part of the official source repo',()=>{
   assert.ok(existsSync(join(root,'apple-editions/ai-academy-v4/index.html')));
+  assert.ok(existsSync(join(root,'apple-editions/ai-academy-v5/index.html')));
   assert.ok(existsSync(join(root,'apple-editions/ai-academy-v4/bridge.js')));
   assert.ok(existsSync(join(root,'apple-editions/ai-academy-apple/index.html')));
   assert.ok(existsSync(join(root,'apple-editions/ai-academy-apple/assets/LICENSE-liquidglass.txt')));

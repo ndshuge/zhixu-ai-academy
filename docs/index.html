@@ -18,14 +18,14 @@
     return;
   }
   var edition=query.get('edition');
-  if(edition==='r3'||edition==='v4')query.delete('edition');
-  var target=edition==='r3'?'./apple-editions/ai-academy-apple/':'./apple-editions/ai-academy-v4/';
+  if(edition==='r3'||edition==='v4'||edition==='v5')query.delete('edition');
+  var target=edition==='r3'?'./apple-editions/ai-academy-apple/':edition==='v4'?'./apple-editions/ai-academy-v4/':'./apple-editions/ai-academy-v5/';
   var next=new URL(target,location.href);
   next.search=query.toString();next.hash=location.hash;
   location.replace(next.href);
 })();
 </script>
-<noscript><meta http-equiv="refresh" content="0;url=./apple-editions/ai-academy-v4/"></noscript>
+<noscript><meta http-equiv="refresh" content="0;url=./apple-editions/ai-academy-v5/"></noscript>
 </head>
-<body><main role="status">正在进入 Apple Edition…<br><a href="./apple-editions/ai-academy-v4/">直接打开 Apple V4 版</a></main></body>
+<body><main role="status">正在进入 Apple Edition…<br><a href="./apple-editions/ai-academy-v5/">直接打开 Apple V5 版</a></main></body>
 </html>

@@ -1,0 +1,113 @@
+/* Zhixu V5 · Reading studio meets scientific interaction.
+ * Preserve the V4 UI, scientific bridge, and navigation engine.
+ * The control layer gets glass; educational content stays legible. */
+:root{--v5-deep:#103e44;--v5-mint:#d4efe8;--v5-rust:#d49a65}
+body:has(#screen[data-page="today"]) .outline-sidebar{display:none}
+@media(min-width:1121px){body:has(#screen[data-page="today"]) .app{grid-template-columns:230px minmax(0,1fr)}body:has(#screen[data-page="today"]) .reading-column{min-width:0}}
+#screen[data-page="today"]{max-width:1160px;padding-top:46px;padding-bottom:92px}
+.workshop-intro{margin-bottom:27px}
+.workshop-breadcrumb,.workshop-overline{font-size:11px;letter-spacing:.14em;font-weight:760;color:#176e69}
+.workshop-intro h1{font-size:clamp(28px,3vw,41px);line-height:1.24;letter-spacing:-.05em;margin:11px 0}
+.workshop-intro p{max-width:670px;margin:0;color:#657475;font-size:14px;line-height:1.8}
+.workshop-hero{display:grid;grid-template-columns:1.06fr .94fr;align-items:stretch;gap:0;background:linear-gradient(120deg,#103e44,#164e55 65%,#276567);border:1px solid #246367;border-radius:28px;min-height:410px;overflow:hidden;color:#f3f9f5;box-shadow:0 15px 38px rgba(19,64,65,.12);position:relative}
+.workshop-hero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 92% 10%,rgba(194,245,220,.12),transparent 48%);pointer-events:none}
+.workshop-hero-copy{padding:48px 39px 35px;min-width:0;position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start}
+.workshop-eyebrow{display:flex;align-items:center;gap:9px;text-transform:uppercase;font-size:11px;letter-spacing:.12em;color:#b5e0d4;font-weight:680}
+.signal-dot{height:7px;width:7px;border-radius:50%;background:#a8e1b7;box-shadow:0 0 0 4px #a8e1b71b}
+.workshop-hero h2{font-size:clamp(28px,3.1vw,44px);font-weight:690;letter-spacing:-.065em;line-height:1.3;margin:26px 0 15px;color:#fff}
+.workshop-hero-copy>p{max-width:455px;color:#cadee0;font-size:14px;line-height:1.85;margin:0 0 28px}
+.workshop-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.workshop-actions .primary,.workshop-actions .quiet-button{min-height:46px;border-radius:999px;padding:11px 18px;border:1px solid transparent;white-space:nowrap;font-size:13px;font-weight:690;display:inline-flex;align-items:center;gap:8px}
+.workshop-actions .primary{background:#eaf4eb;color:#125851}
+.workshop-actions .primary:hover{background:#fff}
+.workshop-actions .quiet-button{background:transparent;border-color:#81b8b4a0;color:#f2fcf6}
+.workshop-actions .quiet-button:hover{background:#fff1}
+.workshop-actions svg{width:16px;height:16px}
+.workshop-hero-foot{font-size:11px;color:#afd0ce;margin-top:auto;padding-top:27px}
+.workshop-preview{display:flex;flex-direction:column;min-width:0;position:relative;z-index:1;padding:38px 31px 28px;background:linear-gradient(165deg,#f5f7f3,#e8efec);color:#244149;border-left:1px solid #ffffff30}
+.preview-top{display:flex;justify-content:space-between;gap:15px;align-items:center;font-size:10px;color:#5a7679;letter-spacing:.025em}
+.preview-top span:first-child{font-size:10px;font-weight:800;letter-spacing:.14em;color:#26766b}
+#v5-preview-plot{width:100%;height:auto;flex:1;min-height:170px;overflow:visible}
+#v5-preview-plot .v5-grid{fill:none;stroke:#b8c9c4;stroke-width:1;opacity:.75}
+#v5-preview-plot .v5-curve{fill:none;stroke-width:2.35;stroke-linejoin:round;stroke-linecap:round}
+#v5-preview-plot .v5-curve.a{stroke:#227b7a}
+#v5-preview-plot .v5-curve.b{stroke:#d18e57}
+.preview-legend{display:flex;gap:18px;align-items:center;flex-wrap:wrap;font-size:11px;color:#48635f;padding-bottom:10px}
+.preview-legend span{display:flex;align-items:center;gap:7px}
+.preview-legend i{display:inline-block;width:16px;height:3px;border-radius:9px}
+.preview-legend i.a{background:#227b7a}.preview-legend i.b{background:#d18e57}
+.preview-slider{display:flex;justify-content:space-between;font-size:12px;color:#2f5556;font-weight:650;margin:10px 0 3px}
+.preview-slider output{font-variant-numeric:tabular-nums;font-size:13px}
+#v5-r-control{width:100%;accent-color:#16776a;cursor:pointer;min-height:31px}
+.preview-note{margin:6px 0 0;font-size:10px;line-height:1.7;color:#728786}
+.workshop-method,.workshop-paths,.workshop-evidence{margin-top:39px}
+.workshop-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:18px}
+.workshop-section-head h2{font-size:21px;letter-spacing:-.045em;line-height:1.35;margin:5px 0 0;font-weight:730}
+.workshop-section-head>span,.workshop-section-head>.quiet-button{color:#758082;font-size:12px}
+.method-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:#fff;border:1px solid #e2e9e7;border-radius:20px;overflow:hidden}
+.method-steps>div{padding:22px 20px;display:flex;flex-direction:column;gap:4px;position:relative;min-height:120px}
+.method-steps>div+div:before{content:"";position:absolute;top:22px;bottom:22px;left:0;border-left:1px solid #e6ebe9}
+.method-steps b{font-size:11px;color:#287970;letter-spacing:.07em}
+.method-steps strong{font-size:15px;letter-spacing:-.03em}
+.method-steps span{font-size:11px;color:#708082}
+.world-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.world-card{border:1px solid #dee7e5;border-radius:20px;background:#fff;min-height:180px;padding:24px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;position:relative;overflow:hidden;cursor:pointer;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.world-card:hover{transform:translateY(-4px);box-shadow:0 16px 29px #24474415;border-color:#91bcb1}
+.world-type{font-size:10px;letter-spacing:.15em;font-weight:720;color:#328179}
+.world-card strong{font-size:20px;letter-spacing:-.045em;margin-top:22px;position:relative}
+.world-card>span:not(.world-type):not(.world-shape){font-size:12px;color:#6a7878;position:relative}
+.world-card em{font-style:normal;font-weight:700;color:#21756a;font-size:12px;margin-top:auto;padding-top:15px;position:relative}
+.world-shape{position:absolute;top:-55px;right:-35px;width:190px;height:190px;border:1px solid #2878792b;border-radius:50%;transform:rotate(-26deg) scaleX(.64)}
+.world-shape:after{content:"";position:absolute;inset:30px;border:1px solid #28787944;border-radius:50%;transform:rotate(42deg) scaleX(.7)}
+.world-card.evo .world-type,.world-card.evo em{color:#6a7860}
+.world-card.evo .world-shape{border-color:#7f997e62}
+.workshop-facts{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #e0e8e6;border-radius:20px;background:#fff;overflow:hidden}
+.workshop-facts .metric{padding:20px;display:flex;align-items:flex-start;gap:3px;flex-direction:column}
+.workshop-facts .metric+.metric{border-left:1px solid #edf0ef}
+.workshop-facts .metric strong{font-size:29px;color:#1d6761}
+.workshop-facts .metric span{font-size:12px;color:#687c7a}
+.workshop-trust{font-size:11px;color:#82908d;margin:12px 0 0}
+#screen[data-page="learn"] .learning-header,#screen[data-page="learn"] .progress-strip{scroll-margin-top:30px}
+#screen[data-page="learn"] .learning-paper{background:#fff;box-shadow:0 8px 26px #243e480b;border:1px solid #e5ebea}
+#screen[data-page="learn"] .experiment-tabs button{transition:background .21s,color .21s,box-shadow .21s}
+#screen[data-page="learn"] .experiment-tabs button.is-active{box-shadow:0 3px 11px #246e6e1b}
+#screen[data-page="today"] .workshop-hero,#screen[data-page="today"] .workshop-method,#screen[data-page="today"] .workshop-paths{animation:v5-content-in .42s cubic-bezier(.2,.7,.2,1) both}
+#screen[data-page="today"] .workshop-method{animation-delay:.055s}
+#screen[data-page="today"] .workshop-paths{animation-delay:.09s}
+@keyframes v5-content-in{from{opacity:1;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@media(min-width:701px) and (max-width:1120px){#screen[data-page="today"]{padding-inline:34px}.workshop-hero-copy{padding:34px 25px}.workshop-preview{padding:30px 22px}}
+@media(max-width:700px){
+ #screen[data-page="today"]{padding:21px 17px calc(155px + env(safe-area-inset-bottom,0px))}
+ .workshop-intro{margin-bottom:22px}
+ .workshop-breadcrumb{font-size:10px;letter-spacing:.08em}
+ .workshop-intro h1{font-size:28px;margin:9px 0}
+ .workshop-intro p{font-size:12px;line-height:1.68}
+ .workshop-hero{display:flex;flex-direction:column;border-radius:22px;min-height:0}
+ .workshop-hero-copy{padding:26px 24px 24px}
+ .workshop-hero h2{font-size:28px;margin:18px 0 10px}
+ .workshop-hero-copy>p{font-size:12.5px;line-height:1.72;margin-bottom:19px}
+ .workshop-actions{width:100%;gap:9px}
+ .workshop-actions .primary,.workshop-actions .quiet-button{font-size:12px;padding:10px 12px;min-height:45px}
+ .workshop-actions .quiet-button{white-space:normal}
+ .workshop-hero-foot{padding-top:16px;font-size:10px}
+ .workshop-preview{padding:20px 23px 19px;border-left:0;border-top:1px solid #fff2}
+ #v5-preview-plot{min-height:155px}
+ .preview-top{font-size:9px}
+ .workshop-method,.workshop-paths,.workshop-evidence{margin-top:28px}
+ .workshop-section-head h2{font-size:19px}
+ .workshop-section-head>span{display:none}
+ .method-steps{grid-template-columns:repeat(2,minmax(0,1fr));border-radius:16px}
+ .method-steps>div{min-height:112px;padding:17px}
+ .method-steps>div+div:before{display:none}
+ .method-steps>div:nth-child(even){border-left:1px solid #e6ebe9}
+ .method-steps>div:nth-child(n+3){border-top:1px solid #e6ebe9}
+ .world-grid{grid-template-columns:1fr;gap:11px}
+ .world-card{min-height:148px;padding:18px;border-radius:16px}
+ .world-card strong{margin-top:13px}
+ .workshop-facts .metric{padding:15px 12px}
+ .workshop-facts .metric strong{font-size:24px}
+ .workshop-facts .metric span{font-size:10px}
+ .mobile-native-tabs button[data-route="learn"]{font-weight:700!important}
+}
+@media(prefers-reduced-motion:reduce){#screen[data-page="today"] .workshop-hero,#screen[data-page="today"] .workshop-method,#screen[data-page="today"] .workshop-paths{animation:none!important}.world-card{transition:none!important}.world-card:hover{transform:none!important}}
+html[data-reduced="true"] #screen[data-page="today"] .workshop-hero,html[data-reduced="true"] #screen[data-page="today"] .workshop-method,html[data-reduced="true"] #screen[data-page="today"] .workshop-paths{animation:none!important}
