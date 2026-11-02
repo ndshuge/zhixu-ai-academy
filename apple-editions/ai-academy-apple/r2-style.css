@@ -1,0 +1,54 @@
+/* Zhixu R2 · research-led learning studio; scoped visual layer */
+:root{--r2-ink:#172b31;--r2-mist:#eef5f3;--r2-teal:#136c69;--r2-line:#dce7e4}
+body{background:#f7f8f5;color:var(--r2-ink)}
+.stage{background:linear-gradient(180deg,#f7faf8,#fbfbf9 40%,#f6f7f5)}
+.page{max-width:1260px;margin:auto}
+.page>.eyebrow:first-child{letter-spacing:.07em;text-transform:uppercase;color:#627b78;font-weight:650}
+.page>.large-title{max-width:850px;font-weight:750;letter-spacing:-.047em;line-height:1.12}
+.reading-hero{position:relative;overflow:hidden;border:0;box-shadow:none;background:#142e36;color:#fff;min-height:400px;border-radius:30px;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.82fr)}
+.reading-inner{position:relative;z-index:2;padding:clamp(25px,4.1vw,62px);background:linear-gradient(90deg,#142e36 0%,#142e36 70%,transparent)}
+.reading-hero .eyebrow{color:#a0dcd0}
+.reading-hero h2{font-size:clamp(31px,3.8vw,57px);font-weight:730;line-height:1.14;letter-spacing:-.055em;margin:.4em 0}
+.reading-hero p{max-width:40ch;color:#d0e6e2}
+.reading-hero .subline{color:#c8e2dc}
+.reading-cover{position:relative;display:grid;place-items:center;background:radial-gradient(circle at 40% 46%,#326e70,#173f4e 58%,#102d38 85%);min-height:360px;overflow:hidden}
+.reading-cover::before{content:"";position:absolute;inset:-3%;opacity:.17;background-image:linear-gradient(#b6dad6 1px,transparent 1px),linear-gradient(90deg,#b6dad6 1px,transparent 1px);background-size:30px 30px;mask-image:radial-gradient(ellipse,#000 30%,transparent 72%)}
+.reading-cover .reading-formula{position:absolute;bottom:14px;right:24px;font-size:13px;opacity:.65;font-family:ui-monospace,monospace}
+.r2-science{width:100%;height:100%;min-height:340px;display:grid;place-items:center}
+.r2-science svg{width:min(100%,440px);height:auto;overflow:visible}
+.r2-science-label{position:absolute;top:22px;left:24px;color:#d1ece6;font-size:11px;letter-spacing:.1em}
+.section-head{margin-top:38px}
+.section-title{font-weight:720;letter-spacing:-.035em}
+.course-grid{gap:16px}
+.course-world{background:#eff5f2;border:0;border-radius:23px;overflow:hidden;box-shadow:none}
+.course-world:first-child{background:#e4eeeb}
+.course-world:nth-child(2){background:#eff0f6}
+.course-world .big-symbol{display:grid;place-items:center;overflow:hidden;border-radius:17px;background:#153d42;color:#c4e7de;min-height:150px}
+.course-world .big-symbol:has(svg){padding:0}
+.course-world .big-symbol svg{display:block;max-width:100%;width:100%;height:100%}
+.course-world h3{letter-spacing:-.027em}
+.unified{background:transparent;border:0}
+.unified .list-row{background:transparent;border-bottom:1px solid var(--r2-line)}
+.study-layout{align-items:start;gap:30px}
+.lesson-paper{background:#fff;border:1px solid #e4ebe8;box-shadow:0 15px 50px #102b2810;border-radius:24px;padding:clamp(25px,4vw,58px)}
+.lesson-paper p,.lesson-paper .lead{max-width:69ch;line-height:1.86}
+.lesson-paper h2{line-height:1.26;letter-spacing:-.04em;font-weight:730}
+.study-rail{background:#eef4f0;border:0;box-shadow:none;border-radius:22px}
+.inline-progress{margin-bottom:30px}
+lg-navbar.mobile-dock{--glass-refraction:8}
+.mobile-dock{filter:drop-shadow(0 8px 17px #122f2520)}
+.nav-link.selected,.dock-link.selected{color:#145f5b}
+@media(max-width:760px){
+ .page>.large-title{font-size:clamp(32px,9vw,44px)}
+ .reading-hero{display:flex;flex-direction:column-reverse;min-height:0;border-radius:26px}
+ .reading-cover{min-height:235px;height:235px}
+ .r2-science{min-height:235px}
+ .r2-science svg{width:94%;max-height:235px}
+ .reading-inner{padding:24px 24px 30px;background:#142e36}
+ .reading-hero h2{font-size:clamp(28px,8.2vw,36px);margin:8px 0}
+ .reading-hero p{font-size:14px;line-height:1.55}
+ .course-world .big-symbol{min-height:125px}
+ .lesson-paper{padding:24px 20px}
+ .section-head{margin-top:30px}
+}
+@media(prefers-reduced-motion:reduce){.r2-science svg *{animation:none!important}}

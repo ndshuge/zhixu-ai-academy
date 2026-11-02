@@ -1,0 +1,54 @@
+
+/* R2.1 · fidelity pass 2026-10-28: first-frame hierarchy, actual science, study navigation */
+.reading-cover::before{content:none!important}
+.reading-cover::after{content:none!important}
+.reading-hero{isolation:isolate}
+.reading-inner{justify-content:center}
+.reading-hero .reading-cover{background:radial-gradient(ellipse at 35% 35%,#255861 0%,#103744 65%,#0b2934 100%)}
+.reading-hero .reading-cover::before{content:""!important;inset:0;position:absolute;width:auto;height:auto;border:0;transform:none;box-shadow:none;border-radius:0;opacity:.11;background-image:linear-gradient(#bddad6 1px,transparent 1px),linear-gradient(90deg,#bddad6 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(90deg,transparent,#000 20%,#000 80%,transparent)}
+.reading-hero .reading-cover::after{display:none!important}
+.r2-science{position:relative;z-index:1;align-content:center;justify-items:stretch}
+.r2-science-label{top:19px;left:24px;color:#d3eee9;letter-spacing:.055em;font-weight:650}
+.r2-science-note{position:absolute;bottom:12px;left:24px;right:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;color:#d6eae5;font-size:11px;z-index:1}
+.r2-science-note span{display:inline-flex;align-items:center;gap:6px}
+.r2-science-note i{width:16px;height:3px;border-radius:3px;display:inline-block;background:#f3d49e}
+.r2-science-note span:nth-child(2) i{background:#8de2d4}
+.page:has(> .reading-hero)>.large-title{font-size:clamp(24px,2.5vw,32px);line-height:1.14;letter-spacing:-.035em;margin:4px 0 23px}
+.page:has(> .reading-hero)>.eyebrow{font-size:12px}
+.page:has(.study-layout)>.large-title{font-size:clamp(27px,3vw,40px);line-height:1.17;letter-spacing:-.045em;margin:5px 0 18px}
+.page:has(.study-layout)>.eyebrow{font-size:12px}
+.reading-hero .reading-inner>p{line-height:1.72;margin-bottom:27px}
+.reading-hero .primary{background:#e0f6e9;color:#133b37;box-shadow:0 1px 2px #052a301f}
+.reading-hero .primary:hover{background:#fff}
+.course-world .big-symbol{position:relative}
+.course-world .big-symbol svg{max-height:160px}
+.course-world .big-symbol svg path{vector-effect:non-scaling-stroke}
+.lesson-paper{line-height:1.7}
+.lesson-paper .math{color:#173d45;background:#f0f5f3;border-radius:16px}
+.lesson-paper .lead{color:#596b6a}
+.lesson-paper h2{font-size:clamp(25px,2.2vw,35px)}
+.study-stage:focus-visible,.dock-link:focus-visible{outline:3px solid #5fb6b0;outline-offset:3px}
+@media(max-width:760px){
+ .page:has(>.reading-hero)>.large-title{font-size:26px;margin:4px 0 17px}
+ .reading-hero{border-radius:24px}
+ .reading-cover{height:257px;min-height:257px}
+ .r2-science{height:257px;min-height:257px}
+ .r2-science svg{width:100%;max-height:220px}
+ .reading-hero .reading-inner{padding:23px 24px 27px}
+ .reading-hero .reading-inner h2{font-size:clamp(26px,7.5vw,32px);letter-spacing:-.048em;line-height:1.15}
+ .reading-hero .reading-inner p{line-height:1.55;font-size:13.5px;margin-bottom:23px}
+ .page:has(.study-layout)>.large-title{font-size:28px;margin:4px 0 13px}
+ .experiment-picker{margin-bottom:12px}
+ .study-rail{position:relative;display:flex;flex-direction:row;gap:3px;padding:7px;border:1px solid #e2ebe7;border-radius:18px;background:#edf4f1;overflow:visible;margin-bottom:17px}
+ .study-rail h3{display:none}
+ .study-rail .study-stage{flex:1 1 25%;min-width:0;width:auto;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0;min-height:59px;font-size:11px;line-height:1.25;white-space:nowrap;padding:6px 1px;text-align:center;border-radius:12px}
+ .study-rail .stage-num{font-size:11px;margin:0 auto 5px}
+ .study-stage[data-current=true]{background:#fff;box-shadow:0 2px 9px #16484014}
+ .study-layout{gap:0}
+ .lesson-paper{padding:22px 19px 26px;border-radius:21px}
+ .lesson-paper .inline-progress{margin-bottom:24px}
+ .lesson-paper h2{font-size:25px}
+ .course-world .big-symbol{min-height:112px}
+ .course-world .big-symbol svg{max-height:130px}
+}
+@media (prefers-reduced-transparency:reduce){.reading-hero,.reading-cover{background:#153a40!important}.mobile-dock{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}}

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f7"><link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<title>知序 AI 学院｜Original × Apple Edition</title>
+<style>
+:root{color-scheme:light;--ink:#1d1d1f;--sub:#747579;--line:#e5e5ea;--teal:#087f90}
+*{box-sizing:border-box}html{background:#f5f5f7}body{margin:0;color:var(--ink);font:15px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--teal);text-decoration:none}a:focus-visible,button:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+header{min-height:84px;padding:20px clamp(18px,4vw,58px);display:flex;gap:25px;justify-content:space-between;align-items:center;background:#fff;border-bottom:1px solid var(--line)}
+h1{font-size:clamp(20px,2vw,27px);letter-spacing:-.048em;line-height:1.32;margin:0}p{font-size:13px;color:var(--sub);margin:7px 0 0}
+.toplinks{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.pill{border:1px solid var(--line);background:#f9f9fa;border-radius:999px;padding:10px 15px;font-size:13px;font-weight:620;white-space:nowrap;min-height:44px;display:inline-grid;place-items:center}
+.pill:hover{background:#e9f3f2}.pill.primary{background:var(--teal);color:#fff;border-color:var(--teal)}.pill.primary:hover{filter:brightness(.95)}
+main{max-width:1700px;margin:auto;padding:27px clamp(16px,2.3vw,38px) 42px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:0 0 20px;flex-wrap:wrap}
+.toolbar h2{font-size:17px;letter-spacing:-.03em;margin:0}.seg{display:flex;background:#e6e7e9;border-radius:14px;padding:4px;gap:3px}.seg button{border:0;border-radius:11px;min-height:35px;padding:0 16px;background:transparent;color:#505055;font:600 13px inherit;cursor:pointer}.seg button[aria-pressed=true]{background:#fff;color:var(--teal);box-shadow:0 1px 5px #0001}
+.comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.panel{border-radius:22px;min-width:0;background:#fff;border:1px solid #e1e4e8;overflow:hidden;box-shadow:0 6px 27px rgba(23,43,60,.04)}
+.panel-title{min-height:58px;display:flex;align-items:center;gap:8px;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #e6e7e9;background:#fff}
+.panel-title strong{font-size:14px;font-weight:700}.badge{font-size:11px;color:#7a7d81;white-space:nowrap}
+.viewer{position:relative;height:min(760px,calc(100dvh - 220px));min-height:520px;overflow:hidden;background:#f5f5f7}
+.viewer iframe{width:100%;height:100%;border:0;background:#fff;display:block}
+.placeholder{position:absolute;inset:0;z-index:2;overflow:hidden;display:flex;align-items:stretch;justify-content:center;background:#f5f5f7;opacity:1;transition:opacity .33s ease}
+.placeholder img{position:absolute;width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.placeholder:after{content:"";position:absolute;inset:60% 0 0;background:linear-gradient(transparent,rgba(21,30,35,.30));pointer-events:none}
+.loading-note{position:absolute;bottom:19px;left:50%;transform:translateX(-50%);z-index:3;width:max-content;max-width:calc(100% - 20px);background:#fffffff2;color:#2a464d;border:1px solid #ffffffd9;backdrop-filter:blur(15px);padding:9px 17px;border-radius:24px;font-weight:620;font-size:12px;box-shadow:0 5px 24px #0002}
+.panel.ready .placeholder{opacity:0;pointer-events:none}
+.panel.ready .badge{color:#23816d}.panel.loaded .placeholder{display:none}
+.panel.noload .loading-note{background:#fff}.hint{font-size:12px;color:#777;line-height:1.8;margin:20px 0 0}.foot a{font-size:12px}.foot{margin:25px 0 0}
+.comparison.phone{grid-template-columns:repeat(2,minmax(0,1fr))}.comparison.phone .panel{max-width:390px;justify-self:center;width:100%}.comparison.phone .viewer{height:720px}
+@media(max-width:900px){header{align-items:flex-start;flex-direction:column;gap:14px}.comparison,.comparison.phone{grid-template-columns:1fr}.comparison .viewer{height:700px}.comparison.phone .panel{max-width:390px}.toolbar{margin-bottom:15px}}
+@media(max-width:390px){.toplinks{gap:6px}.pill{padding:8px 12px;font-size:12px}.viewer{min-height:580px}.panel-title strong{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.placeholder{transition:none}}
+@media(prefers-reduced-transparency:reduce){.loading-note{backdrop-filter:none;background:#fff}}
+</style>
+</head>
+<body>
+<header><div><h1>∑ 知序 AI 学院 · 双版本对照</h1><p>Original Edition 完整保留。Apple Edition 是同一个产品的独立学习界面。</p></div>
+<nav class="toplinks" aria-label="独立版本入口">
+<a class="pill" href="https://ndshuge.github.io/zhixu-ai-academy/original.html" target="_blank" rel="noopener noreferrer">单独打开原版 ↗</a>
+<a class="pill primary" href="./" target="_blank" rel="noopener noreferrer">进入 Apple Edition ↗</a>
+</nav></header>
+<main>
+<div class="toolbar"><h2>同一科学课程，两种学习体验</h2><div class="seg" role="group" aria-label="对照视图">
+<button id="view-wide" aria-pressed="true">桌面</button><button id="view-phone" aria-pressed="false">手机</button></div></div>
+<div class="comparison" id="compare">
+<section class="panel" data-kind="original"><div class="panel-title"><strong>Original Edition · 比赛原版</strong><span class="badge" role="status">正在载入完整产品</span></div>
+<div class="viewer">
+<iframe title="原版知序 AI 学院互动页面" src="https://ndshuge.github.io/zhixu-ai-academy/original.html" tabindex="-1" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+<div class="placeholder" aria-label="原版已验收界面截图，互动页面正在加载">
+<img src="./compare-original-preview.png" alt="Original Edition 真实网页静态预览" width="680" height="720">
+<div class="loading-note">真实原版正在载入 · 预览可先查看</div></div></div></section>
+<section class="panel" data-kind="apple"><div class="panel-title"><strong>Apple Edition · 阅读优先</strong><span class="badge" role="status">正在载入完整产品</span></div>
+<div class="viewer">
+<iframe title="Apple Edition 互动学习页面" src="./" tabindex="-1" loading="eager"></iframe>
+<div class="placeholder" aria-label="Apple 版已验收界面截图，互动页面正在加载">
+<img src="./compare-apple-preview.png" alt="Apple Edition 真实网页静态预览" width="680" height="720">
+<div class="loading-note">Apple 学习空间正在载入 · 预览可先查看</div></div></div></section>
+</div>
+<p class="hint">预览图来自真实网页浏览器截图。两侧界面加载完成后将自动切换为可直接操作的产品；科学计算与学习记录仍共用原版真实业务能力，没有静态模拟替代。</p>
+<p class="foot"><a href="../">返回「小东西」 ↗</a></p>
+</main>
+<script>
+const compare=document.getElementById('compare'),wide=document.getElementById('view-wide'),phone=document.getElementById('view-phone');
+function setLayout(v){compare.classList.toggle('phone',v==='phone');wide.setAttribute('aria-pressed',String(v==='wide'));phone.setAttribute('aria-pressed',String(v==='phone'));}
+wide.addEventListener('click',()=>setLayout('wide'));phone.addEventListener('click',()=>setLayout('phone'));
+document.querySelectorAll('.panel').forEach(panel=>{
+ const iframe=panel.querySelector('iframe'),badge=panel.querySelector('.badge');
+ const kind=panel.dataset.kind;let done=false,n=0;
+ function check(){
+  if(done)return;let ready=false;
+  try{
+   const d=iframe.contentDocument;
+   if(d&&kind==='original')ready=!d.documentElement.classList.contains('zx-first-paint')&&d.body?.innerText?.includes('先预测，再验证');
+   if(d&&kind==='apple')ready=!!d.querySelector('#main .reading-hero');
+  }catch{}
+  if(ready){
+   done=true;panel.classList.add('ready');iframe.removeAttribute('tabindex');badge.textContent='可交互';
+   setTimeout(()=>panel.classList.add('loaded'),370);return;
+  }
+  if(++n>90){badge.textContent='可单独打开';panel.classList.add('noload');return;}
+  setTimeout(check,400);
+ }
+ check();
+});
+</script>
+</body>
+</html>

@@ -25,7 +25,7 @@ function route(pathname) {
   return redirect;
 }
 
-const apple = 'https://ndshuge.github.io/ndshuge-galaxy/little-works/ai-academy-apple/';
+const apple = 'https://ndshuge.github.io/zhixu-ai-academy/apple-editions/ai-academy-v4/';
 const original = 'https://ndshuge.github.io/zhixu-ai-academy/original.html';
 
 test('contest root opens the latest Apple Edition', () => {

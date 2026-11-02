@@ -1,0 +1,9 @@
+
+/* First meaningful paint and chart annotation separation */
+.reading-cover .r2-first-plot{display:block;position:relative;z-index:1;width:94%;max-height:85%;height:auto;object-fit:contain}
+.reading-cover:has(.r2-first-plot) .reading-formula{display:none}
+.r2-science svg text:last-child{display:none}
+/* Keep the active label above the refractive lens copy, including its white selected surface. */
+#experiment-segment > button.lg-seg__option[aria-checked="true"]{position:relative;z-index:4!important;color:#14545a!important;font-weight:700}
+#experiment-segment > .lg-refract{z-index:1!important;pointer-events:none}
+#experiment-segment > .lg-lens-shadow{pointer-events:none}

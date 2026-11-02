@@ -15,6 +15,17 @@
 
 </div>
 
+## 版本与源码管理
+
+本仓库是知序 AI 学院的**正式完整源码仓库**，同时包含 Original 科学教学工程、Apple R3、Apple V4。GitHub Pages 仍使用最初参赛 URL：`https://ndshuge.github.io/zhixu-ai-academy/`，默认载入本仓库的 Apple V4。
+
+- [Apple V4（新版正式入口）](https://ndshuge.github.io/zhixu-ai-academy/apple-editions/ai-academy-v4/)
+- [Apple R3（历史版）](https://ndshuge.github.io/zhixu-ai-academy/apple-editions/ai-academy-apple/)
+- [Original（原版科学教学）](https://ndshuge.github.io/zhixu-ai-academy/original.html)
+- [小作品版本选择](https://ndshuge.github.io/ndshuge-galaxy/little-works/zhixu-versions/)
+
+首页支持 `?edition=original` / `?edition=r3` / `?edition=v4`；旧评委链接、二维码、查询参数与锚点保持兼容。Apple 版沿用原版 Pages 的科学 API 和本地学习记录，不将前端重建解释为新增云端账户或真实学习效果研究。V4 真机 iPhone Safari 视觉与触感仍需人工复核。
+
 ## 竞赛公开材料
 
 **[观看或下载最新完整演示视频（V07 · 1080p60）](https://github.com/ndshuge/zhixu-ai-academy/releases/tag/showcase-20261024)** · [下载最新作品介绍 PDF](https://github.com/ndshuge/zhixu-ai-academy/releases/tag/showcase-20261024)

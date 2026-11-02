@@ -1,0 +1,279 @@
+/* SHUGE native V4: single-layer liquid navigation and interruption-safe tactile motion.
+   The MIT refractive engine is attached to .nav-optics by v4.js. Safari falls
+   back to native frosted backdrop; it cannot perform arbitrary DOM refraction. */
+
+.mobile-native-tabs .nav-optics,
+.mobile-native-tabs .tab-lens {
+  display: none;
+}
+
+@media (max-width:700px) {
+  .mobile-tabbar.mobile-native-tabs {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    justify-items: stretch !important;
+    column-gap: 0 !important;
+    isolation: isolate !important;
+    position: fixed !important;
+    left: 14px !important;
+    right: 14px !important;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+    width: calc(100% - 28px) !important;
+    max-width: 470px !important;
+    height: 66px !important;
+    padding: 6px 7px !important;
+    border-radius: 26px !important;
+    background: transparent !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    border: 1px solid rgba(255,255,255,.43);
+    box-shadow:
+      0 11px 34px rgba(32,43,53,.12),
+      0 3px 9px rgba(35,52,63,.045),
+      inset 0 1px 0 rgba(255,255,255,.63) !important;
+    overflow: visible;
+    z-index: 71 !important;
+    contain: layout style;
+    transform: translateZ(0);
+  }
+  /* Apple-style scroll-edge diffusion: text passes beneath glass but does not
+     turn into hard black smears around the icons. */
+  body::after {
+    content: '';
+    position: fixed;
+    pointer-events: none;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(110px + env(safe-area-inset-bottom,0px));
+    z-index: 69;
+    background: linear-gradient(to bottom, rgba(246,246,248,0) 0%, rgba(246,246,248,.76) 55%, rgba(246,246,248,.98) 100%);
+  }
+  body.keyboard-visible::after {opacity:0}
+  .mobile-native-tabs .nav-optics {
+    display: block;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: -1;
+    background: linear-gradient(155deg,rgba(252,254,255,.34),rgba(235,242,244,.18) 58%,rgba(235,241,244,.3));
+    /* fallback is active until the original optical engine initializes. */
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    backdrop-filter: blur(20px) saturate(1.4);
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,.62),
+      inset 0 -1px 1px rgba(255,255,255,.2);
+    will-change: backdrop-filter;
+  }
+  .mobile-native-tabs .tab-lens {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 6px;
+    height: 53px;
+    width: calc((100% - 14px) / 5);
+    border-radius: 20px;
+    background: linear-gradient(150deg, rgba(255,255,255,.77),rgba(238,248,248,.43));
+    box-shadow:
+      0 2px 10px rgba(12,67,71,.085),
+      inset 0 1px 0 rgba(255,255,255,.82),
+      inset 0 -1px 0 rgba(236,255,255,.34);
+    border: 1px solid rgba(255,255,255,.42);
+    z-index: 0;
+    pointer-events: none;
+    transform-origin: 50% 50%;
+    will-change: transform;
+    contain: paint;
+  }
+  .mobile-native-tabs button.tab-item {
+    position: relative !important;
+    z-index: 1 !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    min-height: 52px !important;
+    height: 52px !important;
+    margin: 0 !important;
+    padding: 5px 0 4px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 2px !important;
+    border: 0 !important;
+    border-radius: 17px !important;
+    background: transparent !important;
+    color: #515e64 !important;
+    box-shadow: none !important;
+    line-height: 1.22 !important;
+    font-size: 10.5px !important;
+    font-weight: 560 !important;
+    white-space: nowrap !important;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+    transition: color .22s ease;
+  }
+  .mobile-native-tabs button.tab-item[aria-current="page"] {
+    color: #087b75 !important;
+    font-weight: 690 !important;
+  }
+  .mobile-native-tabs button.tab-item svg {
+    display: block !important;
+    flex: 0 0 23px !important;
+    width: 23px !important;
+    height: 23px !important;
+    min-width: 23px !important;
+    min-height: 23px !important;
+    stroke: currentColor !important;
+    fill: none !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+    stroke-width: 1.75 !important;
+    overflow: visible !important;
+  }
+  .mobile-native-tabs button.tab-item span {
+    display: block !important;
+    font-size: 10.5px !important;
+    font-weight: inherit !important;
+    color: inherit !important;
+    white-space: nowrap !important;
+    transform: none !important;
+  }
+  .mobile-native-tabs button.tab-item:focus-visible {
+    outline: 2px solid #1875db;
+    outline-offset: -2px;
+  }
+
+  /* A lightweight native-like material belongs to the control layer, not cards. */
+  .doctor-panel {
+    position: fixed !important;
+    top: 67px !important;
+    bottom: auto !important;
+    right: 12px !important;
+    left: auto !important;
+    width: min(385px,calc(100vw - 24px)) !important;
+    height: min(345px,calc(100dvh - 178px)) !important;
+    max-height: calc(100dvh - 178px) !important;
+    min-height: 0 !important;
+    transform-origin: 90% 5%;
+    border-radius: 24px !important;
+    border: 1px solid rgba(255,255,255,.68) !important;
+    background: #fff !important;
+    box-shadow: 0 18px 58px rgba(42,65,68,.16),0 4px 14px rgba(32,48,53,.045) !important;
+    overflow: hidden !important;
+    will-change: transform,opacity;
+  }
+  .doctor-panel header {
+    padding: 8px 12px !important;
+    min-height: 57px;
+  }
+  .doctor-panel header img {
+    width: 42px;
+    height: 45px;
+  }
+  .doctor-panel .chat-log {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .doctor-panel #doctor-form {
+    flex: 0 0 auto;
+  }
+  .doctor-panel #doctor-form textarea:disabled {
+    background: #f1f3f2;
+    color: #7b8582;
+    opacity: 1;
+    cursor: not-allowed;
+  }
+  .doctor-panel .chat-privacy {
+    padding-bottom: 11px;
+  }
+
+  body.keyboard-visible .mobile-tabbar {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translate3d(0,90px,0) !important;
+    transition: opacity .18s ease,transform .24s cubic-bezier(.2,.65,.2,1);
+  }
+  body.keyboard-visible .doctor-panel {
+    top: calc(var(--visible-top,0px) + 12px) !important;
+    height: max(220px,calc(var(--visible-height,490px) - 46px)) !important;
+    max-height: calc(var(--visible-height,490px) - 46px) !important;
+    width: calc(100vw - 18px) !important;
+    right: 9px !important;
+    border-radius: 22px !important;
+  }
+}
+@media (min-width:701px){
+  .doctor-panel {
+    transform-origin: 90% 0;
+    will-change: transform,opacity;
+  }
+}
+@media (prefers-reduced-transparency:reduce),(prefers-contrast:more) {
+  .mobile-native-tabs .nav-optics {
+    background: rgba(248,249,251,.98) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .mobile-native-tabs .tab-lens {
+    background: #e9f2f0 !important;
+    border-color: rgba(17,86,80,.23) !important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+ .mobile-native-tabs .tab-lens,.mobile-native-tabs button.tab-item{
+   transition:none!important;
+ }
+ .doctor-panel{will-change:auto}
+}
+html[data-reduced="true"] .mobile-native-tabs .tab-lens,
+html[data-reduced="true"] .mobile-native-tabs button.tab-item {
+ transition:none!important;
+}
+
+
+/* iPhone Safari auto-zooms focused editables smaller than 16 CSS px. */
+@media(max-width:700px){
+  textarea,input[type="text"],input[type="number"],input[type="email"],input[type="search"],select{
+    font-size:16px!important;
+  }
+  #doctor-form textarea{font-size:16px!important;line-height:1.35!important}
+}
+
+/* An unverified model is an actionable compact info popover, not an empty chat. */
+.doctor-panel:not(.ai-ready){height:auto!important;max-height:min(295px,calc(100dvh - 155px))!important}
+.doctor-panel:not(.ai-ready) .chat-log{flex:0 1 auto;max-height:155px}
+.doctor-panel:not(.ai-ready) #doctor-form{display:none!important}
+.doctor-setup{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:12px 16px;margin:2px 14px 12px;border:1px solid rgba(16,111,99,.14);border-radius:13px;background:rgba(221,242,235,.7);color:#116c61;font-size:13px;font-weight:650}
+.doctor-setup svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.7;fill:none}
+.doctor-panel.ai-ready .doctor-setup{display:none!important}
+@media(max-width:700px){
+  body.keyboard-visible .doctor-panel.ai-ready{height:max(220px,calc(var(--visible-height,490px) - 46px))!important;max-height:calc(var(--visible-height,490px) - 46px)!important}
+}
+
+
+/* Apple-style contextual reveal instead of screenshot transitions.
+   Only four direct blocks animate; the reading surface stays fully opaque.
+   The shared glass indicator keeps its independent Motion spring. */
+@keyframes zx-v4-reveal {
+ from {opacity:.94;transform:translate3d(0,5px,0);}
+ to {opacity:1;transform:translate3d(0,0,0);}
+}
+main[data-content][data-entering="true"] > :nth-child(-n+4) {
+ animation: zx-v4-reveal 220ms cubic-bezier(.2,.72,.24,1) both;
+}
+@keyframes zx-v4-reveal-heading {from{opacity:.96}to{opacity:1}}
+main[data-content][data-entering="true"] > :first-child{animation-name:zx-v4-reveal-heading;transform:none;}
+main[data-content][data-entering="true"] > :nth-child(2){animation-delay:12ms;}
+main[data-content][data-entering="true"] > :nth-child(3){animation-delay:24ms;}
+main[data-content][data-entering="true"] > :nth-child(4){animation-delay:36ms;}
+@media (prefers-reduced-motion:reduce) {
+ main[data-content][data-entering="true"] > * {animation:none!important}
+}
+html[data-reduced="true"] main[data-content][data-entering="true"] > * {
+ animation:none!important;
+}

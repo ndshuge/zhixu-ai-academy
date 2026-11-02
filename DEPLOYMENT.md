@@ -7,6 +7,8 @@
 - 源码入口：`public/`、`server.mjs`、`model-provider.mjs`、`adapters/`、`quiz-bank.mjs`
 - Pages 专用差异：`pages-overlay/` 和 `scripts/build_pages_from_source.py`
 
+Apple V4 与 R3 的完整前端代码已收入仓库 `apple-editions/`，由 Pages 工作流与 `public/` 原版科学运行时一起发布。`docs/index.html` 是比赛入口路由，`original.html` 始终保留原版；**不再依赖跳转到 Galaxy 仓库才能运行新版**。未来迁移应同时验证本仓库的所有版本、页面静态资源、`learning.html` 同源桥和学习存储兼容性。
+
 **请勿将 GitHub Pages 当作 Node 服务端。** 浏览器内可运行数学实验、课堂和个人学习记录，但没有部署学校管理员鉴权、云端数据库或服务端防作弊。
 
 **API Key 在浏览器保存是用户自主选择的风险功能**：默认仅当前标签页；主动勾选后将 Key 存储在浏览器 localStorage，刷新后可再次测试连接、并可随时清除。此 Key 不进入 GitHub、Actions 或知序自己的服务器，但因前端可读，无法防御浏览器扩展或同源脚本访问。DeepSeek 官方不推荐将 Key 暴露在客户端；长期生产环境应部署安全后端。

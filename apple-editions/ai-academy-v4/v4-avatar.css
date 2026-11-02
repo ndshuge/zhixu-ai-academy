@@ -1,0 +1,75 @@
+/* V4 doctor portrait: one true circular avatar, not a mini full-body sticker.
+   This stylesheet intentionally overrides legacy toolbar button dimensions. */
+.toolbar-trailing .connected-dot {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  clip-path: inset(50%);
+  pointer-events: none !important;
+}
+.toolbar-trailing .doctor-launch {
+  position: static !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  flex: 0 0 42px !important;
+  padding: 2px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(129, 149, 154, .27) !important;
+  background: #f8fafb !important;
+  box-shadow:
+    0 1px 3px rgba(22, 45, 58, .07),
+    inset 0 1px 0 rgba(255, 255, 255, .82) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  transition: box-shadow .18s ease, background-color .18s ease;
+}
+.toolbar-trailing .doctor-launch .doctor-avatar__media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+  isolation: isolate;
+  background: #f2f7f9;
+}
+.toolbar-trailing .doctor-launch .doctor-avatar__media img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  border-radius: 50%;
+  transform: scale(1.015);
+}
+.toolbar-trailing .doctor-launch:hover {
+  background: #fff !important;
+  box-shadow: 0 2px 7px rgba(22, 45, 58, .11),inset 0 1px 0 #fff !important;
+}
+.toolbar-trailing .doctor-launch:focus-visible {
+  outline: 3px solid #197fce;
+  outline-offset: 3px;
+}
+.toolbar-trailing .icon-button[data-route="settings"] {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  flex: 0 0 42px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(129, 149, 154, .18) !important;
+  background: rgba(255,255,255,.82) !important;
+}
+.toolbar-trailing { gap: 10px !important; }
+@media(max-width:700px) {
+  .toolbar-trailing { gap: 9px !important; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .toolbar-trailing .doctor-launch { transition: none; }
+}

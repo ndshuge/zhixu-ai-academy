@@ -1,0 +1,21 @@
+/* Accessibility and explicit transparency fallback. Intentionally loaded after the Apple Edition theme. */
+html[data-effect="off"] lg-navbar.mobile-dock,
+html[data-effect="off"] .mobile-dock{
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  background:#fff!important;
+  border-color:#d5d9dc!important;
+}
+html[data-effect="off"] .reading-cover lg-lens{display:none!important}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more){
+  .mobile-dock,lg-navbar.mobile-dock{
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+    background:#fff!important;
+    border-color:#d5d9dc!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  ::view-transition-old(*),::view-transition-new(*){animation-duration:.01ms!important}
+  *{scroll-behavior:auto!important}
+}

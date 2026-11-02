@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e6eff0"/><stop offset=".5" stop-color="#d4e9e7"/><stop offset="1" stop-color="#9bbfc4"/></linearGradient><radialGradient id="orb" cx=".35" cy=".24" r=".78"><stop stop-color="#bcfffa"/><stop offset=".42" stop-color="#5fb8be"/><stop offset=".8" stop-color="#236d7a"/><stop offset="1" stop-color="#144b5d"/></radialGradient><filter id="shadow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="18"/></filter></defs>
+<rect width="1200" height="630" rx="35" fill="url(#bg)"/><rect x="28" y="28" width="1144" height="574" rx="25" fill="#ffffff" opacity=".6"/>
+<text x="90" y="156" font-family="Arial,Helvetica,sans-serif" font-size="23" fill="#27838e" font-weight="700" letter-spacing="8">ZHIXU / APPLE EDITION</text>
+<text x="82" y="294" font-family="Arial,Helvetica,sans-serif" font-size="102" fill="#20252a" font-weight="700" letter-spacing="-6">Think deeper.</text>
+<text x="87" y="357" font-family="Arial,Helvetica,sans-serif" font-size="29" fill="#69757b">Learning begins with a question.</text>
+<path d="M88 446H372" stroke="#157c86" stroke-width="5" stroke-linecap="round"/><path d="m355 434 17 12-17 12" fill="none" stroke="#157c86" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="910" cy="330" rx="229" ry="112" transform="rotate(28 910 330)" fill="none" stroke="#2f909b" stroke-opacity=".26" stroke-width="3"/>
+<ellipse cx="918" cy="360" rx="116" ry="32" fill="#124959" opacity=".3" filter="url(#shadow)"/>
+<circle cx="920" cy="314" r="104" fill="url(#orb)"/>
+<path d="M760 493c105-44 234-40 336-1" fill="none" stroke="#116d7f" stroke-opacity=".22" stroke-width="3"/>
+<text x="84" y="558" font-family="Georgia,serif" font-size="31" fill="#27666e" font-style="italic">x(n+1) = r x(n) (1 - x(n))</text>
+</svg>

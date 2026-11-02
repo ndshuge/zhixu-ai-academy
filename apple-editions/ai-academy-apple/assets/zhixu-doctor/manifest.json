@@ -1,0 +1,95 @@
+{
+  "project": "Zhixu AI Academy",
+  "assetCount": 11,
+  "source": "11 images received through local QQ cache; copied to assets-inbox",
+  "items": [
+    {
+      "state": "analyzing",
+      "file": "analyzing.webp",
+      "width": 330,
+      "height": 420,
+      "bytes": 50858,
+      "sha256": "cb02f2344d33c9dca5f0f9d331b9157433322b8b2dd6cb04290f55ef01ab09d3"
+    },
+    {
+      "state": "encouraging",
+      "file": "encouraging.webp",
+      "width": 330,
+      "height": 420,
+      "bytes": 39878,
+      "sha256": "f645740eef27a1fb29a9713410bbc2eb8bf6ff06ea0f71a44b217c7471998a42"
+    },
+    {
+      "state": "explaining",
+      "file": "explaining.webp",
+      "width": 330,
+      "height": 420,
+      "bytes": 50932,
+      "sha256": "95f47ec3998ca6893ed9c2bd742434a0698352ae41ded8f3e96c1998fa7950ef"
+    },
+    {
+      "state": "fallback",
+      "file": "fallback.webp",
+      "width": 330,
+      "height": 420,
+      "bytes": 47190,
+      "sha256": "27ab42734ff6517827e132db228bab369af1e5cfe99286c8eea17c5866060a34"
+    },
+    {
+      "state": "idle",
+      "file": "idle.webp",
+      "width": 330,
+      "height": 420,
+      "bytes": 22338,
+      "sha256": "c12744aefba5a06fa11c4ffa92548ccbde6b27ab6c427b9d236a5c47eb745eb7"
+    },
+    {
+      "state": "planning",
+      "file": "planning.webp",
+      "width": 330,
+      "height": 420,
+      "bytes": 31450,
+      "sha256": "f3e7efa5a144989cbf27ff4da8c9abe0d7f8ce19dedae611968ee2181af889ec"
+    },
+    {
+      "state": "success",
+      "file": "success.webp",
+      "width": 330,
+      "height": 420,
+      "bytes": 22654,
+      "sha256": "87c8d9234c6d0ddb616d10894ef07a2eabb1177627fc46317a5b9a44ab83918b"
+    },
+    {
+      "state": "teaching",
+      "file": "teaching.webp",
+      "width": 330,
+      "height": 420,
+      "bytes": 24664,
+      "sha256": "8a2db3d55d2e08b053b69a347d8906447c13ba6b89ffc4122b11639e32a755a2"
+    },
+    {
+      "state": "thinking",
+      "file": "thinking.webp",
+      "width": 330,
+      "height": 420,
+      "bytes": 26212,
+      "sha256": "d3c138659786391bf6b98712eca21e767fae6574e23dbd46e00d012b37653c3a"
+    },
+    {
+      "state": "warning",
+      "file": "warning.webp",
+      "width": 330,
+      "height": 420,
+      "bytes": 23004,
+      "sha256": "6bf62904cba25e5908e01768a14b04bca9bae197a117f275b118940bfea78fef"
+    },
+    {
+      "state": "welcome",
+      "file": "welcome.webp",
+      "width": 330,
+      "height": 420,
+      "bytes": 36838,
+      "sha256": "5219cf8d335c968c5cc464a38a3f623b52c863c55a37691b12e311e3f19bfb34"
+    }
+  ]
+}

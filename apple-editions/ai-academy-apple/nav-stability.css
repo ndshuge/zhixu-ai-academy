@@ -1,0 +1,35 @@
+/* Native-readability correction adapted from Apple Motion Lab R2.4.
+   An lg-navbar owns real accessible buttons AND an optical copy. At idle the
+   original text is the only visible ink, never two offset clones. */
+/* Apple Motion Lab R2.4 gesture engine retained, but on this light five-tab dock
+   never hand ink to the refracted duplicate: move optics behind crisp real text. */
+#mobile-nav>.lg-nav__copy{visibility:hidden!important}
+#mobile-nav.is-scrubbing>button>span,
+#mobile-nav.is-scrubbing>button>svg{visibility:visible!important}
+#mobile-nav{
+ background:rgba(248,250,249,.94)!important;
+ -webkit-backdrop-filter:blur(17px) saturate(1.12)!important;
+ backdrop-filter:blur(17px) saturate(1.12)!important;
+ box-shadow:0 7px 26px rgba(32,55,51,.15), inset 0 1px rgba(255,255,255,.78)!important;
+}
+#mobile-nav .lg-surface__tint{background:rgba(248,250,249,.22)!important}
+#mobile-nav.is-scrubbing{background:rgba(248,250,249,.9)!important}
+#mobile-nav:not(.is-scrubbing)>.lg-lens-shadow{
+ border-color:rgba(200,221,218,.56)!important;
+ box-shadow:inset 0 1px rgba(255,255,255,.85),0 2px 7px rgba(14,50,48,.07)!important;
+}
+#mobile-nav>button>span,#mobile-nav>button>svg{filter:none!important;text-shadow:none!important}
+#experiment-segment>.lg-refract{visibility:hidden!important;pointer-events:none!important}
+#experiment-segment>button.lg-seg__option{filter:none!important;text-shadow:none!important}
+#experiment-segment>button.lg-seg__option[aria-checked="true"]{z-index:4!important;color:#14545a!important}
+
+/* Stop full-document double-exposure during Safari tab changes. New content
+   is rendered atomically, then Motion softly animates that one new DOM tree. */
+.reading-inner,.lesson-paper,.r2-science{view-transition-name:none!important}
+::view-transition-old(root),::view-transition-new(root),
+::view-transition-old(lesson-focus),::view-transition-new(lesson-focus){animation:none!important}
+main>.page{backface-visibility:hidden}
+@media(prefers-reduced-motion:reduce){
+ #mobile-nav .lg-nav__copy{visibility:hidden!important}
+ #mobile-nav.is-scrubbing>button>span,#mobile-nav.is-scrubbing>button>svg{visibility:visible!important}
+}

@@ -1,0 +1,43 @@
+/* Persistent Doctor: original artwork, restrained nonmodal native-style panel. */
+#zx-doctor-host{position:fixed;right:20px;bottom:24px;z-index:24;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC",system-ui,sans-serif}
+#zx-doctor-open{display:flex;align-items:center;gap:10px;padding:7px 14px 7px 6px;max-width:195px;min-height:68px;border:1px solid #e0e8e6;border-radius:19px;background:#fffffff2;color:#183b39;box-shadow:0 7px 26px #1739331a;cursor:pointer;touch-action:manipulation;text-align:left;transition:transform .22s cubic-bezier(.2,.78,.25,1),box-shadow .2s}
+#zx-doctor-open img{width:50px;height:61px;object-fit:contain;flex:none}
+.zx-doctor-launch-copy{display:grid;gap:2px}
+.zx-doctor-launch-copy strong{white-space:nowrap;font-size:14px;letter-spacing:-.03em}
+.zx-doctor-launch-copy small{font-size:10px;color:#657b77}
+.zx-doctor-launch-copy em{font-size:11px;color:#087e77;font-weight:730;font-style:normal}
+#zx-doctor-open:active{transform:scale(.966)}
+#zx-doctor-panel{display:flex;flex-direction:column;position:absolute;right:0;bottom:calc(100% + 11px);width:min(390px,calc(100vw - 28px));height:min(550px,68dvh);min-height:290px;overflow:hidden;border:1px solid #dfe9e6;border-radius:23px;background:#fbfdfb;color:#1c3433;box-shadow:0 20px 62px #143d3d3c}
+#zx-doctor-panel[hidden]{display:none!important}
+.zx-doctor-header{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#eef6f2;border-bottom:1px solid #dceae4;min-height:76px}
+.zx-doctor-header img{width:56px;height:67px;object-fit:contain}
+.zx-doctor-header>div{flex:1;min-width:0}
+.zx-doctor-header h2{font-size:18px;letter-spacing:-.045em;line-height:1.25;margin:0}
+.zx-doctor-header p{font-size:11px;color:#657e77;margin:4px 0 0}
+#zx-doctor-close{border:0;border-radius:50%;width:34px;height:34px;background:#dee8e4;color:#2a4441;font-size:24px;line-height:1}
+#zx-doctor-log{flex:1;overflow-y:auto;min-height:0;padding:14px 15px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.zx-doctor-message{max-width:95%;padding:10px 12px;margin:0;border-radius:15px;background:#eef2f1;color:#23413d;font-size:13px;line-height:1.64;white-space:pre-wrap;overflow-wrap:anywhere}
+.zx-doctor-user{align-self:flex-end;background:#d5f1e7;color:#173e37}
+.zx-doctor-connection{display:flex;align-items:center;gap:9px;padding:8px 14px;background:#f1f7f4;font-size:11px;color:#526c65}
+.zx-doctor-connection span{flex:1}
+#zx-doctor-config{flex:none;background:#fff;color:#0d7469;border:1px solid #cbdcd5;border-radius:11px;padding:8px 9px;font-size:11px}
+#zx-doctor-form{display:flex;align-items:end;gap:8px;padding:10px 12px 5px;background:#fff}
+#zx-doctor-question{flex:1;min-height:47px;max-height:110px;resize:vertical;background:#fafcfb;font-size:13px}
+#zx-doctor-send{background:#0e7c73;color:white;border:0;border-radius:12px;padding:12px 15px;min-height:47px;font-size:13px}
+#zx-doctor-send:disabled{background:#b8cdc6;color:#627872;cursor:not-allowed}
+.zx-doctor-privacy{font-size:10px;line-height:1.35;color:#708680;margin:0;background:#fff;padding:5px 13px 10px}
+#zx-doctor-host :is(button,textarea):focus-visible{outline:3px solid #63bbb1;outline-offset:3px}
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:700px){
+ #zx-doctor-host{right:14px;bottom:calc(91px + env(safe-area-inset-bottom));}
+ #zx-doctor-open{min-height:58px;max-width:155px;padding:4px 10px 4px 3px;gap:6px;border-radius:17px}
+ #zx-doctor-open img{width:43px;height:52px}
+ .zx-doctor-launch-copy strong{font-size:12px}.zx-doctor-launch-copy em{font-size:10px}
+ #zx-doctor-panel{bottom:calc(100% + 8px);height:min(480px,65dvh);min-height:220px}
+}
+@media(prefers-reduced-motion:reduce){#zx-doctor-open{transition:none}}
+/* Consistent press feedback for ordinary controls; native dock uses its own Motion Lab gestures. */
+@media(hover:hover){button:not(:disabled):not(.dock-link):hover{filter:brightness(.985)}}
+:is(button[data-action],.study-stage:not(:disabled),.course-world button,.setting-row button,.answer,.secondary,.primary):not(:disabled){touch-action:manipulation;transition:transform .19s cubic-bezier(.2,.72,.22,1),background-color .18s,border-color .18s,opacity .18s}
+:is(button[data-action],.study-stage:not(:disabled),.course-world button,.setting-row button,.answer,.secondary,.primary):not(:disabled):active{transform:scale(.977)}
+@media(prefers-reduced-motion:reduce){:is(button[data-action],.study-stage,.course-world button,.setting-row button,.answer,.secondary,.primary){transition:none!important;transform:none!important}}

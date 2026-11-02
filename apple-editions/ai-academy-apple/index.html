@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f7">
+<meta name="description" content="知序 AI 学院 Apple Edition：真实科学探究、个人学习证据、分步教学与复习。">
+<title>知序 AI 学院 · Apple Edition</title>
+<link rel="icon" type="image/svg+xml" href="./favicon.svg"><link rel="preload" href="./assets/zhixu-doctor/idle.webp" as="image" type="image/webp" fetchpriority="high"><link rel="preload" href="./assets/zhixu-doctor/welcome.webp" as="image" type="image/webp">
+<link rel="stylesheet" href="./assets/apple-tokens.css">
+<link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./assets/accessibility.css"><link rel="stylesheet" href="./r2-style.css"><link rel="stylesheet" href="./r2-refine.css"><link rel="stylesheet" href="./r2-boot.css"><link rel="stylesheet" href="./nav-stability.css"><link rel="stylesheet" href="./doctor-companion.css">
+<link rel="stylesheet" href="./native-r3.css">
+</head><body>
+<svg class="defs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5C8 3 5 3 2 4v15c3-1 6-1 10 1 4-2 7-2 10-1V4c-3-1-6-1-10 1Zm0 0v15"/></symbol>
+<symbol id="i-house" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8v9H3zM9 20v-6h6v6"/></symbol>
+<symbol id="i-brain" viewBox="0 0 24 24"><path d="M12 6c-2-4-7-3-8 1-3 1-2 6 0 7-1 4 3 6 6 4l2 3 2-3c3 2 7 0 6-4 2-1 3-6 0-7-1-4-6-5-8-1v12M9 9l3 3m3-3-3 3"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 21V3m0 18h18M7 16l4-5 4 3 5-8"/></symbol>
+<symbol id="i-pages" viewBox="0 0 24 24"><rect x="5" y="3" width="15" height="18" rx="2"/><path d="M9 8h7M9 12h7M9 16h4M5 6H3v14"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><path d="m10 2-.5 2.2-2 1L5.3 4 3 6.5l1.5 2-1 2.5-2.5 1 1 3 2.3.2 1.2 2-1 2.3L7 22l2-1.4 2.4.5L13 23l2.5-1 0-2.5 2-1 2.2 1 2.3-3-1.7-2 .6-2.3 2.1-1-1-3-2.5-.3-1.1-2 1-2L16.5 2 14 3.4 12 3z"/><circle cx="12" cy="12.5" r="3"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-7-7 7 7-7 7"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 2 2.8 7.2L22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8z"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+</svg>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="知序主导航">
+    <a class="identity" href="#today" aria-label="知序 AI 学院，返回今天"><span class="identity-mark">∑</span><span>知序 <small>AI 学院</small></span></a>
+    <div class="nav-label">学习空间</div>
+    <nav class="side-items" id="side-nav">
+      <button data-view="today" class="nav-link selected"><svg><use href="#i-house"/></svg>今天</button>
+      <button data-view="learn" class="nav-link"><svg><use href="#i-book"/></svg>学习</button>
+      <button data-view="courses" class="nav-link"><svg><use href="#i-brain"/></svg>课程</button>
+      <button data-view="library" class="nav-link"><svg><use href="#i-pages"/></svg>资料与错题</button>
+      <button data-view="growth" class="nav-link"><svg><use href="#i-chart"/></svg>学习进度</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="nav-link" data-view="settings"><svg><use href="#i-gear"/></svg>设置</button>
+
+      <div class="bridge-state" id="bridge-state" role="status">正在连接原版科学引擎…</div>
+    </div>
+  </aside>
+  <div class="stage">
+    <header class="topbar">
+      <div class="top-left"><span class="mobile-brand">∑　知序</span><span class="crumb" id="crumb">今天</span></div>
+      <div class="top-right"><span class="edition-badge">Apple Edition</span><button class="user-button" data-view="settings" aria-label="设置"><svg aria-hidden="true"><use href="#i-gear"></use></svg></button></div>
+    </header>
+    <main id="main" tabindex="-1" aria-live="off"><div class="page zx-home" data-initial-shell>
+ <header class="zx-page-heading"><div class="zx-context">我的学习空间</div><h1>今天</h1><p>从自己的判断开始，发现更多可能。</p></header>
+ <section class="zx-feature" aria-label="继续学习">
+  <div class="zx-feature-copy">
+   <span class="zx-kicker"><span class="zx-kicker-dot"></span> 正在学习 · 科学探究</span>
+   <h2>微小的不同，<br>为什么会改变结果？</h2>
+   <p>先作出预测，再用真实计算观察两条轨迹怎样分离。</p>
+   <div class="zx-feature-actions"><a class="primary" href="/zhixu-ai-academy/original.html" aria-label="继续探索，进入原版科学课程">继续探索 <svg aria-hidden="true"><use href="#i-arrow"/></svg></a><span>初值敏感性 · Logistic</span></div>
+  </div>
+  <div class="zx-feature-graphic">
+   <div class="zx-plot" role="img" aria-label="Logistic 公式本地计算的静态预览">
+    <div class="zx-plot-title"><span>初值敏感性</span><span>Logistic · r = 3.9</span></div><svg viewBox="0 0 480 250" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><g class="zx-plot-grid"><line x1="34" x2="441" y1="205" y2="205"/><line x1="34" x2="441" y1="165.5" y2="165.5"/><line x1="34" x2="441" y1="126.0" y2="126.0"/><line x1="34" x2="441" y1="86.5" y2="86.5"/><line x1="34" x2="441" y1="47" y2="47"/></g><path class="zx-plot-line-one" d="M34.00 139.90 L40.24 55.72 L46.48 172.86 L52.72 105.16 L58.96 61.67 L65.20 153.09 L71.44 69.06 L77.68 130.97 L83.92 51.56 L90.16 187.73 L96.40 145.02 L102.64 59.88 L108.88 158.87 L115.12 77.61 L121.36 108.74 L127.60 58.31 L133.84 164.06 L140.08 86.71 L146.32 89.05 L152.56 84.64 L158.80 93.17 L165.04 77.56 L171.28 108.87 L177.52 58.20 L183.76 164.43 L190.00 87.40 L196.24 87.73 L202.48 87.10 L208.72 88.30 L214.96 86.03 L221.20 90.37 L227.44 82.28 L233.68 98.14 L239.92 70.11 L246.16 128.05 L252.40 51.05 L258.64 189.60 L264.88 150.79 L271.12 66.11 L277.36 139.47 L283.60 55.43 L289.84 173.88 L296.08 107.54 L302.32 59.36 L308.56 160.56 L314.80 80.43 L321.04 102.21 L327.28 64.92 L333.52 143.03 L339.76 58.11 L346.00 164.73 L352.24 87.97 L358.48 86.65 L364.72 89.17 L370.96 84.44 L377.20 93.59 L383.44 76.88 L389.68 110.51 L395.92 56.87 L402.16 168.91 L408.40 96.40 L414.64 72.58 L420.88 121.40 L427.12 51.47 L433.36 188.05 L439.60 145.98"/><path class="zx-plot-line-two" d="M34.00 139.90 L40.24 55.72 L46.48 172.87 L52.72 105.17 L58.96 61.66 L65.20 153.12 L71.44 69.10 L77.68 130.86 L83.92 51.53 L90.16 187.83 L96.40 145.31 L102.64 60.15 L108.88 157.97 L115.12 76.18 L121.36 112.21 L127.60 55.64 L133.84 173.14 L140.08 105.80 L146.32 61.02 L152.56 155.18 L158.80 71.96 L165.04 123.03 L171.28 51.17 L177.52 189.18 L183.76 149.46 L190.00 64.54 L196.24 144.19 L202.48 59.11 L208.72 161.38 L214.96 81.85 L221.20 99.07 L227.44 68.85 L233.68 131.58 L239.92 51.72 L246.16 187.15 L252.40 143.25 L258.64 58.30 L264.88 164.10 L271.12 86.77 L277.36 88.93 L283.60 84.86 L289.84 92.72 L296.08 78.28 L302.32 107.16 L308.56 59.71 L314.80 159.41 L321.04 78.50 L327.28 106.64 L333.52 60.21 L339.76 157.80 L346.00 75.91 L352.24 112.87 L358.48 55.20 L364.72 174.67 L370.96 109.41 L377.20 57.74 L383.44 165.96 L389.68 90.36 L395.92 82.31 L402.16 98.08 L408.40 70.20 L414.64 127.82 L420.88 51.03 L427.12 189.68 L433.36 151.04 L439.60 66.43"/></svg>
+    <div class="zx-plot-axis"><span>0</span><span>65 次迭代</span></div>
+    <div class="zx-plot-key"><span><i></i>x₀ = 0.41200</span><span><i></i>x₀ = 0.41201</span></div>
+   </div>
+  </div>
+ </section>
+ <section class="zx-home-grid"><div class="zx-section"><div class="zx-section-heading"><h2>接着学</h2></div><div class="zx-task-list">
+ <a class="zx-task-row" href="/zhixu-ai-academy/original.html"><span class="zx-task-text"><strong>完成一次科学探究</strong><small>预测 → 实验 → 导师 → 迁移</small></span><span class="zx-chevron" aria-hidden="true">›</span></a>
+ </div></div></section>
+ </div></main>
+  </div>
+</div>
+<lg-navbar class="mobile-dock" aria-label="主要页面" id="mobile-nav" tone="light" refraction="9" chroma="0.1">
+ <button data-view="today" class="dock-link selected"><svg><use href="#i-house"/></svg><span>今天</span></button>
+ <button data-view="learn" class="dock-link"><svg><use href="#i-book"/></svg><span>学习</span></button>
+ <button data-view="courses" class="dock-link"><svg><use href="#i-brain"/></svg><span>课程</span></button>
+ <button data-view="library" class="dock-link"><svg><use href="#i-pages"/></svg><span>资料</span></button>
+ <button data-view="growth" class="dock-link"><svg><use href="#i-chart"/></svg><span>进度</span></button>
+</lg-navbar>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="modal-root"></div>
+<!-- Loads the actual Original Pages lightweight learning runtime inside the same GitHub Pages origin.
+     Browser adapter and scientific logic execute there unchanged; this Edition speaks to its fetch API.
+     The iframe is never navigated to an untrusted location. -->
+<iframe id="original-engine" title="原版科学引擎（后台数据适配层）" src="/zhixu-ai-academy/learning.html" tabindex="-1" aria-hidden="true"></iframe>
+<script type="module" src="./app.js"></script><script type="module" src="./nav-integration.js"></script><script type="module" src="./doctor-companion.js"></script>
+</body></html>

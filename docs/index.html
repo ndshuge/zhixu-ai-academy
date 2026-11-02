@@ -17,12 +17,15 @@
     location.replace(original.href);
     return;
   }
-  var next=new URL('/ndshuge-galaxy/little-works/ai-academy-apple/',location.origin);
-  next.search=location.search;next.hash=location.hash;
+  var edition=query.get('edition');
+  if(edition==='r3'||edition==='v4')query.delete('edition');
+  var target=edition==='r3'?'./apple-editions/ai-academy-apple/':'./apple-editions/ai-academy-v4/';
+  var next=new URL(target,location.href);
+  next.search=query.toString();next.hash=location.hash;
   location.replace(next.href);
 })();
 </script>
-<noscript><meta http-equiv="refresh" content="0;url=/ndshuge-galaxy/little-works/ai-academy-apple/"></noscript>
+<noscript><meta http-equiv="refresh" content="0;url=./apple-editions/ai-academy-v4/"></noscript>
 </head>
-<body><main role="status">正在进入 Apple Edition…<br><a href="/ndshuge-galaxy/little-works/ai-academy-apple/">直接打开 Apple 版</a></main></body>
+<body><main role="status">正在进入 Apple Edition…<br><a href="./apple-editions/ai-academy-v4/">直接打开 Apple V4 版</a></main></body>
 </html>
