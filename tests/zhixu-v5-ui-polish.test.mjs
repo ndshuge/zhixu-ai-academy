@@ -28,7 +28,7 @@ test('home removes ornament labels and repeated giant title',()=>{
 });
 test('mobile reading copy and controls meet a deliberate size hierarchy',()=>{
  const html=read('index.html'),css=read('v5-ui-polish.css');
- assert.match(html,/v5-ui-polish.css/);
+ assert.match(html,/v5-ui-polish\.css\?v=20261103b/,'new CSS release must invalidate cached pre-iPad stylesheet');
  assert.match(css,/.workshop-hero-copy>p/);
  assert.match(css,/font-size:14px/);
  assert.match(css,/.preview-note/);
