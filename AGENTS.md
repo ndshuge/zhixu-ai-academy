@@ -54,3 +54,8 @@
 - 以后调整模型调用时必须运行 tests/browser-v5-byok-failures.cjs：拦截 https://api.deepseek.com/**，并拦截其它全部外部网络；合成200、401、429、断网均要验证导师状态与本地存储。测试禁止真实密钥与真实付费请求。
 - 原版网页的“记住 API Key”是用户明确选择的 **明文 localStorage**，存在同源脚本／扩展可读风险；不得宣传其被加密或强行替用户开启保存。正式长期方案应研究后端安全代理与密钥管理。
 - 此测试使用 Playwright Edge/WebKit，不等同真机 iPhone Safari 或实际 DeepSeek 运营网络；参考 docs/APPLE_V5_BYOK_FAILURE_QA_20261103.md。
+
+## V5 single-page navigation & lesson progress semantics
+- V5 learning stage indicator is an ARIA progressbar with valid 1..4 numeric bounds and the current stage's human-readable aria-valuetext. Keep visually identical four bars and ensure lesson step transitions update the semantic value.
+- Real single-page route changes must update the document title and hand keyboard/screen-reader reading focus to the new main content. Intra-page rerenders, including quiz submission, prediction and experiment responses, must NOT steal focus.
+- Chat plugin Skills remain Chat-environment resources, not locally installed Mice Hole files. See docs/APPLE_V5_SPA_A11Y_QA_20261103.md. Browser automated ARIA semantics are not a substitute for physical-device VoiceOver testing.

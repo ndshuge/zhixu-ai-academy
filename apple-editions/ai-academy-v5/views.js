@@ -49,7 +49,10 @@ export function courses({bridge}){
  (concepts.length?'<div class="simple-rows">'+concepts.map(c=>'<div class="simple-row"><div class="row-meta"><strong>'+esc(conceptNames[c.id]||c.id)+'</strong><small>'+esc(c.status)+'</small></div><span class="count-number">'+esc(c.attempts)+' 次</span></div>').join('')+'</div>':'<div class="empty-state"><strong>你的课程从这里开始</strong>第一次作答后，这里会显示真实的概念学习状态。</div>');
 }
 const steps=['独立判断','提出预测','实验与导师','迁移验证'];
-const controls=l=>'<div class="progress-strip" aria-label="四阶段学习进度">'+steps.map((x,i)=>'<span class="'+(i<=l.step?'done':'')+'" title="'+x+'"></span>').join('')+'</div>';
+const controls=l=>{
+ const current=Math.max(0,Math.min(steps.length-1,Number.isInteger(l.step)?l.step:0));
+ return '<div class="progress-strip" role="progressbar" aria-label="四阶段学习进度" aria-valuemin="1" aria-valuemax="4" aria-valuenow="'+(current+1)+'" aria-valuetext="'+(current+1)+' / '+steps.length+' · '+esc(steps[current])+'">'+steps.map((x,i)=>'<span class="'+(i<=current?'done':'')+'" title="'+x+'"></span>').join('')+'</div>';
+};
 const selected=x=>Number.isFinite(x)?x:undefined;
 function quiz(stage,l){
  const isPre=stage==='pre',q=isPre?l.question:l.transfer,g=isPre?l.grade:l.transferGrade,queue=isPre?l.preIds:l.transferIds,index=isPre?l.preIndex:l.transferIndex;
