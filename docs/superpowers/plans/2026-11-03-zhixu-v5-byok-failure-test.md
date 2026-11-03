@@ -23,3 +23,5 @@
 - [ ] 发布前 npm test、npm run verify、git diff --check 和范围审查。
 - [ ] 安全推送、正式部署后验证仓库实际 main 与报告。
 - [ ] 真机 Safari、真实计费模型、真人效果验证保留 NOT VERIFIED。
+- [x] 安全推送 d297cae 到正式 main、Pages Success，原评委 URL 保持不变。
+- [x] 正式线上深色/浅色全站 Edge/WebKit 48/48，确认框键盘焦点 4/4。

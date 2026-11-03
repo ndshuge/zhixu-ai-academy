@@ -47,3 +47,13 @@ node tests/browser-v5-byok-failures.cjs
 
 ## ChatGPT Plugin Skill
 已按当前对话读取 `shuge-engineering-studio` 的规划、TDD、worktree、验证技能和 Apple 产品审计相关 Skill。它们挂载在 ChatGPT 的插件环境，而不是 Windows 本机。
+
+## 2026-11-03 正式发布与线上补充验收
+- 提交 `d297caec8e71cd9255b525ea939ccf99b5fc1018` 已经通过安全无强推脚本进入 `ndshuge/zhixu-ai-academy/main`。
+- 对应 GitHub Pages 工作流 `41642624946`：`completed / success`；正式评委根入口仍 HTTP 200 并跳转 V5。
+- 使用**正式线上** `https://ndshuge.github.io/zhixu-ai-academy/apple-editions/ai-academy-v5/` 运行 `tests/browser-v5-system-appearance.cjs`：
+  - Edge 6 路由 × 390/1440px × light/dark：24/24 通过；
+  - Playwright WebKit 同样矩阵：24/24 通过；
+  - 两浏览器合计 48/48，无水平溢出、脚本错误或静态资源 404；代表性卡片文字／背景对比度通过 >=4.5 的测试断言。
+- 正式线上运行 `tests/browser-v5-modal-a11y.cjs`：Edge/WebKit × 390/1440px，4/4 通过；包括 Tab／Shift+Tab 焦点约束、Esc 取消、取消操作焦点恢复、确认后的焦点归属。
+- BYOK 401/429/断网测试仍使用**本机同源静态构建及模拟模型路由**，不能等同真实 DeepSeek 公网请求，也不能称为 iPhone Safari 真机验收。
