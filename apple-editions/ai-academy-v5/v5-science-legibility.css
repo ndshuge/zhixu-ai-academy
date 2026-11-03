@@ -1,0 +1,27 @@
+/* V5 science microtypography — legibility over decorative density.
+   Specific contextual overrides; never alter the historical editions. */
+.workshop-preview .preview-top,
+.workshop-preview .preview-top span,
+.workshop-preview .preview-note,
+.workshop-trust,
+.workshop-method .method-steps span,
+.workshop-hero-foot {
+  font-size:13px;
+  line-height:1.55;
+}
+.workshop-preview .preview-top {gap:10px;}
+.workshop-preview .preview-top span {overflow-wrap:anywhere;min-width:0;}
+.workshop-preview .preview-note,
+.workshop-trust {max-width:65ch;}
+.workshop-facts .metric span {font-size:13px;line-height:1.5;}
+@media(max-width:700px){
+ .workshop-preview .preview-top span {font-size:13px;}
+ .workshop-preview .preview-note,
+ .workshop-trust,
+ .workshop-method .method-steps span,
+ .workshop-hero-foot {font-size:13px;line-height:1.6;}
+ .workshop-method .method-steps {row-gap:13px;}
+}
+@media(prefers-reduced-motion:reduce){
+ .workshop-preview * {scroll-behavior:auto;}
+}

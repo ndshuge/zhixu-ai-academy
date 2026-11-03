@@ -43,6 +43,47 @@ const state={route:'today',lesson:newLesson(),busy:false,chat:[]};
 let navGlass=null,navResize=null,navAnimation=null,routeAnimation=null;
 let lastRoute='today';
 const nav=$('#mobile-tabs'),lens=nav.querySelector('.tab-lens');
+const zoomMore=$('#zoom-more'),zoomMenu=$('#zoom-more-menu');
+const compactNav=()=>matchMedia('(max-width:260px)').matches;
+const moreRoutes=/^(courses|library|growth)$/;
+function closeZoomMenu({returnFocus=false}={}){
+ if(zoomMenu.hidden)return;
+ zoomMenu.hidden=true;
+ zoomMore.setAttribute('aria-expanded','false');
+ if(returnFocus&&compactNav())zoomMore.focus({preventScroll:true});
+}
+function toggleZoomMenu(){
+ if(!compactNav())return;
+ if(!zoomMenu.hidden){closeZoomMenu({returnFocus:true});return;}
+ zoomMenu.querySelectorAll('button[data-route]').forEach(item=>{
+  if(item.dataset.route===state.route)item.setAttribute('aria-current','page');
+  else item.removeAttribute('aria-current');
+ });
+ zoomMenu.hidden=false;
+ zoomMore.setAttribute('aria-expanded','true');
+ (zoomMenu.querySelector('[aria-current="page"]')||zoomMenu.querySelector('button'))?.focus({preventScroll:true});
+}
+// Outside clicks, Escape and viewport changes must not strand an open menu.
+document.addEventListener('click',event=>{
+ if(!zoomMenu.hidden&&!zoomMenu.contains(event.target)&&!zoomMore.contains(event.target))closeZoomMenu();
+});
+document.addEventListener('keydown',event=>{
+ if(zoomMenu.hidden)return;
+ if(event.key==='Escape'){
+  event.preventDefault();event.stopImmediatePropagation();
+  closeZoomMenu({returnFocus:true});return;
+ }
+ if(event.key==='ArrowUp'||event.key==='ArrowDown'){
+  event.preventDefault();
+  const options=[...zoomMenu.querySelectorAll('[role="menuitem"]')];
+  const i=options.indexOf(document.activeElement),delta=event.key==='ArrowDown'?1:-1;
+  options[(i+delta+options.length)%options.length]?.focus({preventScroll:true});
+ }
+});
+window.addEventListener('resize',()=>{
+ if(!compactNav())closeZoomMenu();
+ syncNavSelection(true);
+},{passive:true});
 try{const saved=JSON.parse(sessionStorage.getItem('zx-v4-lesson')||'null');if(saved&&['sensitivity','logistic','evo-pair'].includes(saved.experiment)&&Number.isInteger(saved.step))state.lesson={...newLesson(saved.experiment),...saved};}catch{}
 const save=()=>{try{sessionStorage.setItem('zx-v4-lesson',JSON.stringify(state.lesson))}catch{}};
 let motion=null;
@@ -64,6 +105,7 @@ function render(){
 }
 function goto(route,{replace=false}={}){
  if(!titles[route])route='today';
+ closeZoomMenu();
  const previous=state.route,changed=previous!==route;
  if(!changed&&!replace)return;
  if(changed&&window.scrollY>0)window.scrollTo(0,0);
@@ -73,7 +115,17 @@ function goto(route,{replace=false}={}){
  if(changed)animateScreen(previous,route);
 }
 function syncNavSelection(immediate=false){
- const active=nav.querySelector('button[data-route="'+state.route+'"]');
+ const isCompactMore=compactNav()&&moreRoutes.test(state.route);
+ zoomMore.classList.toggle('is-active',isCompactMore);
+ zoomMore.classList.toggle('selected',isCompactMore);
+ if(isCompactMore){
+  zoomMore.setAttribute('aria-current','page');
+  zoomMore.setAttribute('aria-label','更多页面，当前：'+titles[state.route]);
+ }else{
+  zoomMore.removeAttribute('aria-current');
+  zoomMore.setAttribute('aria-label','更多页面');
+ }
+ const active=isCompactMore?zoomMore:nav.querySelector('button[data-route="'+state.route+'"]');
  if(!active)return;
  const x=active.offsetLeft;
  const w=active.offsetWidth;
@@ -113,6 +165,7 @@ const updateLesson=(patch)=>{Object.assign(state.lesson,patch);render()};
 const qid=obj=>obj?.itemId||obj?.id;
 async function act(el){
  const a=el.dataset.action,l=state.lesson;
+ if(a==='toggle-more')return toggleZoomMenu();
  if(a?.startsWith('nav-'))return goto(a.slice(4));
  if(a==='focus-preview'){
   const slider=$('#v5-r-control');
@@ -204,7 +257,7 @@ function confirmModal(title,message,action){
 document.addEventListener('click',async e=>{
  const b=e.target.closest?.('[data-route],[data-action],[data-experiment]');if(!b||state.busy||b.disabled)return;
  e.preventDefault();
- if(b.dataset.route){goto(b.dataset.route);return;}
+ if(b.dataset.route){closeZoomMenu();goto(b.dataset.route);return;}
  if(b.dataset.experiment){
   const exp=b.dataset.experiment;if(!['sensitivity','logistic','evo-pair'].includes(exp)||exp===state.lesson.experiment)return;
   state.lesson=newLesson(exp);render();return;
@@ -226,7 +279,7 @@ document.addEventListener('submit',async e=>{
  try{await submit(e.target)}catch(error){console.error('[V4 submit]',error);notify(error.message||'提交失败')}
  finally{state.busy=false}
 });
-window.addEventListener('popstate',()=>{const previous=state.route;const r=location.hash.slice(1);state.route=titles[r]?r:'today';render();animateScreen(previous,state.route)});
+window.addEventListener('popstate',()=>{closeZoomMenu();const previous=state.route;const r=location.hash.slice(1);state.route=titles[r]?r:'today';render();animateScreen(previous,state.route)});
 $('#outline-toggle').onclick=()=>document.documentElement.dataset.outline='collapsed';
 $('#outline-reveal').onclick=()=>document.documentElement.dataset.outline='open';
 const panel=$('#doctor-panel'),launch=$('#doctor-launch'),question=$('#doctor-question');
@@ -321,7 +374,7 @@ async function activateMotion(){
   const navButtons=[...nav.querySelectorAll('button[data-route]')];
   nav.addEventListener('pointerdown',e=>{
    const button=e.target.closest('button[data-route]');
-   if(!button||reduced())return;
+   if(!button||reduced()||compactNav())return;
    tabPress=button;dragOrigin={x:e.clientX,y:e.clientY,id:e.pointerId};
    dragging=false;clearTimeout(tabHoldTimer);
    motion.animate(lens,{scaleX:1.055,scaleY:.94},{type:'spring',stiffness:500,damping:37});

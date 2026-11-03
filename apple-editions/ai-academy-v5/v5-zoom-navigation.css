@@ -1,0 +1,44 @@
+/* Accessibility fallback for a very narrow reflow viewport (~390px at 200%).
+ * Follow Apple's constrained-space pattern: predictable Today / Learn / More.
+ * Preserve all destinations, each >=44px, rather than squeezing five tabs. */
+#zoom-more {display:none!important;}
+#zoom-more-menu[hidden],#zoom-more-menu {display:none;}
+@media(max-width:260px){
+ #mobile-tabs .tab-item[data-route="courses"],
+ #mobile-tabs .tab-item[data-route="library"],
+ #mobile-tabs .tab-item[data-route="growth"] {display:none!important;}
+ #mobile-tabs {justify-content:space-around!important;}
+ #mobile-tabs .tab-item[data-route="today"],
+ #mobile-tabs .tab-item[data-route="learn"],
+ #mobile-tabs #zoom-more {
+   flex:1 1 0!important;min-width:44px!important;
+   min-height:44px!important;width:auto!important;
+   padding-inline:3px!important;
+ }
+ #mobile-tabs #zoom-more {
+   display:flex!important;flex-direction:column;
+   align-items:center;justify-content:center;
+ }
+ #zoom-more .zoom-dots {font-weight:700;font-size:22px;line-height:19px;}
+ #zoom-more-menu:not([hidden]){
+   position:fixed;display:grid;gap:3px;
+   left:12px;right:12px;bottom:calc(88px + env(safe-area-inset-bottom,0px));
+   z-index:79;max-width:330px;margin-inline:auto;
+   border-radius:21px;padding:9px;
+   background:rgba(249,250,252,.96);
+   -webkit-backdrop-filter:blur(18px) saturate(1.2);
+   backdrop-filter:blur(18px) saturate(1.2);
+   border:1px solid rgba(170,190,188,.38);
+   box-shadow:0 15px 35px rgba(24,47,49,.16);
+ }
+ #zoom-more-menu button{
+   min-height:44px;display:flex;align-items:center;text-align:left;
+   padding:9px 14px;border:0;background:transparent;
+   border-radius:12px;color:#273434;font:600 14px/1.35 system-ui,sans-serif;
+ }
+ #zoom-more-menu button[aria-current="page"]{background:rgba(21,108,93,.10);color:#166858;}
+ #zoom-more-menu button:focus-visible{outline:2px solid #13776b;outline-offset:-2px;}
+}
+@media(prefers-reduced-transparency:reduce){
+ #zoom-more-menu:not([hidden]){background:#fafbfc;backdrop-filter:none;-webkit-backdrop-filter:none;}
+}

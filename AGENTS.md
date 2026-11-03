@@ -32,3 +32,11 @@
 - launch/close 使用 aria-expanded 作为用户期望状态；关闭未完成时重新打开需取消退出计时器，不得复位原聊天内容；Esc 退出焦点返回头像。Reduce Motion 立即切换，不触发 iOS 软键盘。
 - 该约束只作用于 `apple-editions/ai-academy-v5/`；V4/R3/Original 禁止回填。参考 `docs/APPLE_V5_DOCTOR_REVERSAL_QA_20261103.md`。
 - Chat 插件 Skill 在 ChatGPT 环境中加载，Mice Hole 只负责本机执行；Playwright WebKit ≠ iPhone Safari 真机，不得以绿测声称已完成视觉终验。
+
+## Apple V5 follow-up: immutable science artifacts and compact navigation (2026-11-03)
+- For PFL and EvoWorld provenance SHA256 evidence files, always preserve original bytes with .gitattributes -text; never reformat/normalize line endings, regenerate a bundle without provenance, or rewrite an expected hash to silence verification. Always run npm run verify on a fresh Windows checkout.
+- The official judge URL and Apple V5 remain in ndshuge/zhixu-ai-academy; V4/R3/Original must not be overwritten.
+- At viewports <=260 CSS px (e.g., approximate 200% zoom of a 390px mobile viewport), use Today / Learn / More. Each nav hit area >=44 CSS px. More contains Courses, Library, Growth; Escape returns focus; aria-expanded, aria-current and history must remain consistent.
+- Rules mentor does not imply a connected commercial model; no BYOK secret in tests. Use tests/browser-v5-full-journey.cjs to exercise actual evidence-producing science adapter.
+- Browser WebKit simulation and local 195px reflow are NOT real iPhone Safari, VoiceOver, system Dynamic Type or 60fps performance certification.
+- ChatGPT Apple/UI plugin Skills are loaded in the ChatGPT plugin environment, not automatically installed in the local Windows filesystem. Reference docs/APPLE_V5_FINAL_CLOSURE_20261103.md.

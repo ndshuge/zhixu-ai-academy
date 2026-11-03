@@ -1,0 +1,6 @@
+# Science evidence files are byte-pinned by SHA-256 provenance.
+# Windows autocrlf conversion changes their bytes and falsely breaks verification.
+# Disable checkout/check-in newline conversions for immutable snapshots.
+adapters/pfl-engine.mjs -text
+adapters/pfl.entry.ts -text
+adapters/evo-snapshot/** -text

@@ -13,6 +13,8 @@
 <link rel="stylesheet" href="./v5-recording-fixes.css?v=20261103r1">
 <link rel="stylesheet" href="./v5-product-design.css?v=20261103b">
 <link rel="stylesheet" href="./v5-doctor-motion.css?v=20261103c">
+<link rel="stylesheet" href="./v5-science-legibility.css?v=20261103">
+<link rel="stylesheet" href="./v5-zoom-navigation.css?v=20261103">
 <link rel="modulepreload" href="../ai-academy-apple/assets/motion.bundle.js">
 <link rel="preload" href="../ai-academy-apple/assets/zhixu-doctor/idle.webp" as="image">
 </head>
@@ -79,7 +81,14 @@
  <button data-route="learn" class="tab-item"><svg><use href="#i-spark"/></svg><span>学习</span></button>
  <button data-route="library" class="tab-item"><svg><use href="#i-note"/></svg><span>资料</span></button>
  <button data-route="growth" class="tab-item"><svg><use href="#i-chart"/></svg><span>进度</span></button>
+ <button id="zoom-more" type="button" class="tab-item" data-action="toggle-more" aria-haspopup="menu" aria-controls="zoom-more-menu" aria-expanded="false"><span class="zoom-dots" aria-hidden="true">···</span><span>更多</span></button>
 </nav>
+<div id="zoom-more-menu" role="menu" aria-label="更多页面" hidden>
+ <button role="menuitem" data-route="courses">课程</button>
+ <button role="menuitem" data-route="library">资料</button>
+ <button role="menuitem" data-route="growth">进度</button>
+</div>
+
 <section id="doctor-panel" class="doctor-panel" role="dialog" aria-label="知序博士对话" hidden>
   <header><img src="../ai-academy-apple/assets/zhixu-doctor/welcome.webp" alt=""><div><strong>知序博士</strong><span id="doctor-status">规则导师已就绪</span></div><button class="icon-button" id="doctor-close" aria-label="关闭知序博士"><svg><use href="#i-close"/></svg></button></header>
   <div class="chat-log" id="doctor-log" role="log" aria-live="polite"><p class="chat-bubble">学习遇到的问题，可以在这里问我。使用真实 AI 前需要先在设置中验证 DeepSeek。</p></div>
