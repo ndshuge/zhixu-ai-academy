@@ -177,3 +177,9 @@
  .toolbar{background:#161f22!important}
  #mobile-tabs.mobile-native-tabs,#zoom-more-menu:not([hidden]){background:#223236!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 }
+
+/* Settings is a toolbar destination: the Dock has no selected tab. */
+@media(prefers-color-scheme:dark){
+ html body #mobile-tabs.mobile-native-tabs.has-no-tab button.tab-item{color:#b9caca!important}
+ #mobile-tabs.has-no-tab button.tab-item svg{stroke:#b9caca!important;color:#b9caca!important}
+}

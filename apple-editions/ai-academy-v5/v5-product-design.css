@@ -53,3 +53,11 @@ body:has(#screen[data-page="settings"]) .toolbar-trailing button[data-route="set
 @media(prefers-reduced-motion:reduce){
  #screen[data-page="settings"] .setting-row .switch{transition:none;}
 }
+/* Settings is entered from the toolbar; it is not a sixth tab. */
+.mobile-native-tabs.has-no-tab .tab-lens{opacity:0!important;pointer-events:none!important}
+/* A toolbar Settings page has no selected tab, including icon strokes. */
+#mobile-tabs.has-no-tab button.tab-item{color:#515e64!important;background:transparent!important}
+#mobile-tabs.has-no-tab button.tab-item svg{stroke:currentColor!important;color:inherit!important}
+#mobile-tabs.has-no-tab button.tab-item span{color:inherit!important}
+@media(prefers-color-scheme:dark){#mobile-tabs.has-no-tab button.tab-item{color:#b9caca!important}}
+@media(prefers-reduced-motion:reduce){#mobile-tabs.has-no-tab button.tab-item,#mobile-tabs.has-no-tab button.tab-item svg{transition:none!important}}

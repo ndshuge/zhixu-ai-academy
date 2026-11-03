@@ -126,7 +126,16 @@ function syncNavSelection(immediate=false){
   zoomMore.setAttribute('aria-label','更多页面');
  }
  const active=isCompactMore?zoomMore:nav.querySelector('button[data-route="'+state.route+'"]');
- if(!active)return;
+ nav.classList.toggle('has-no-tab',!active);
+ // Settings is a toolbar route: keep all Dock labels neutral until a tab is selected.
+ nav.querySelectorAll('button.tab-item').forEach(button=>{
+  if(!active)button.style.setProperty('color','var(--secondary)','important');
+  else button.style.removeProperty('color');
+ });
+ if(!active){
+  navAnimation?.stop?.();
+  return;
+ }
  const x=active.offsetLeft;
  const w=active.offsetWidth;
  lens.style.width=w+'px';
