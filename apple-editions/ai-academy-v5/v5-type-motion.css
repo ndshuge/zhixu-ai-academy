@@ -1,0 +1,60 @@
+/* 知序 V5 — relative reading type, intentional motion. */
+:root{--zx-type-scale:1;font-size:100%;-webkit-text-size-adjust:auto;text-size-adjust:auto}
+#screen{overflow-wrap:anywhere;min-width:0}
+#screen .page-intro h1{font-size:clamp(1.8rem,calc(2.05rem * var(--zx-type-scale)),3rem);line-height:1.25}
+#screen .page-intro p,#screen .learning-page p,#screen .quiet-note,#screen .simple-row,
+#screen .setting-row p,#screen .setting-row strong,#screen .feedback,#screen .empty-state,
+#screen .workshop-hero-copy>p,#screen .world-card>span:not(.world-shape){
+ font-size:calc(.95rem * var(--zx-type-scale));line-height:1.58
+}
+#screen .learning-page .form-actions button,#screen .setting-row button,
+#screen .world-card em,#screen .workshop-actions button,#screen .workshop-section-head button{
+ font-size:calc(.9rem * var(--zx-type-scale));line-height:1.45
+}
+#screen .workshop-hero h1{
+ font-size:clamp(1.875rem,calc(1.875rem * var(--zx-type-scale)),3rem);
+ line-height:1.25;letter-spacing:-.035em;overflow-wrap:anywhere
+}
+#screen .preview-note,#screen .workshop-trust,#screen .method-steps span,
+#screen .preview-legend,#screen .workshop-facts .metric span{
+ font-size:calc(.8125rem * var(--zx-type-scale));line-height:1.6
+}
+#screen .setting-row{min-width:0;overflow-wrap:anywhere}
+.type-scale-control{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end;max-width:100%}
+#screen .type-scale-control button{
+ min-width:51px;min-height:44px;padding:7px 10px;
+ border:1px solid #d9e4e1;border-radius:12px;background:#fff;
+ color:#183b43;font-size:.875rem;cursor:pointer;white-space:nowrap
+}
+#screen .type-scale-control button[aria-pressed="true"]{
+ background:#176d65;color:#fff;border-color:#176d65
+}
+#screen .type-scale-control button:focus-visible{outline:2px solid #0c9485;outline-offset:3px}
+@media(prefers-color-scheme:dark){
+ #screen .type-scale-control button{background:#243539;color:#e5f2ef;border-color:#5b7272}
+ #screen .type-scale-control button[aria-pressed="true"]{background:#58d0b3;color:#10201e}
+}
+@media(max-width:700px){
+ #screen .setting-row{flex-wrap:wrap;gap:12px}
+ #screen .type-scale-control{justify-content:flex-start;width:100%}
+ #screen .workshop-hero-copy{min-width:0}
+}
+@media(prefers-reduced-motion:reduce){
+ #screen .workshop-hero,#screen .workshop-method,#screen .workshop-paths,
+ #screen .world-card,#screen .primary,#screen .book-tile,
+ #mobile-tabs .tab-lens,#doctor-panel{
+ animation-duration:.01ms!important;animation-delay:0ms!important;
+ transition-duration:.01ms!important;scroll-behavior:auto!important
+ }
+}
+html[data-reduced="true"] #screen .workshop-hero,
+html[data-reduced="true"] #screen .workshop-method,
+html[data-reduced="true"] #screen .workshop-paths,
+html[data-reduced="true"] #screen .world-card,
+html[data-reduced="true"] #screen .primary,
+html[data-reduced="true"] #screen .book-tile,
+html[data-reduced="true"] #mobile-tabs .tab-lens,
+html[data-reduced="true"] #doctor-panel{
+ animation-duration:.01ms!important;animation-delay:0ms!important;
+ transition-duration:.01ms!important;scroll-behavior:auto!important
+}

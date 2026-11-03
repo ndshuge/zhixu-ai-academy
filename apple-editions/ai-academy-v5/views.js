@@ -136,7 +136,8 @@ export function growth({bridge}){
 export function settings({bridge,prefs}){
  return '<header class="page-intro"><h1>设置</h1></header>'+
  '<div class="section-bar"><h2>学习空间</h2></div><section class="setting-group">'+
- '<div class="setting-row"><div><strong>减少动态效果</strong><p>系统偏好减少动态时自动遵循；也可主动选择。</p></div><button role="switch" aria-label="减少动态效果" aria-checked="'+prefs.reduceMotion+'" class="switch" data-action="toggle-reduced"></button></div>'+
+  '<div class="setting-row"><div><strong>阅读字号</strong><p>支持浏览器和系统文本缩放，也可单独调整知序 V5 的阅读大小。</p></div><div class="type-scale-control" role="group" aria-label="阅读字号">'+[100,115,130,150].map(size=>'<button type="button" data-action="set-type-scale" data-scale="'+size+'" aria-pressed="'+((prefs.textScale||100)===size)+'">'+size+'%</button>').join('')+'</div></div>'+
+  '<div class="setting-row"><div><strong>减少动态效果</strong><p>系统偏好减少动态时自动遵循；也可主动选择。</p></div><button role="switch" aria-label="减少动态效果" aria-checked="'+prefs.reduceMotion+'" class="switch" data-action="toggle-reduced"></button></div>'+
  '<div class="setting-row"><div><strong>重新开始当前课程</strong><p>重置课程步骤，不删除已经形成的学习事件。</p></div>'+click('重新开始','reset-lesson')+'</div>'+
  '</section><div class="section-bar"><h2>模型与数据</h2></div><section class="setting-group">'+
  '<div class="setting-row"><div><strong>DeepSeek 真实模型连接</strong><p>'+(bridge.modelLoaded?'原版 BYOK 配置面板；仅用户授权请求。':'原版模型配置暂不可用。')+'</p></div>'+click('连接','open-ai-config')+'</div>'+

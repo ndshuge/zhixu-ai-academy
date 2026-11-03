@@ -31,12 +31,21 @@ const $=id=>document.getElementById(id);let key='',verified=false,busy=false,req
 let lastFailure='';
 function modelState(){return verified?'verified':key?'saved-unverified':'unconfigured'}
 const STORE_KEY='zhixu-ai-academy-deepseek-key-v1';
+const sessionOnly=new URLSearchParams(location.search).get('zhixu-v5-session')==='1';
+if(sessionOnly){
+ $('pages-ai-save-row').style.display='none';
+ $('pages-ai-save').disabled=true;
+ $('pages-ai-save-warning').textContent='V5 只在当前页面使用 Key，不读取或长期保存旧版 Key。可主动点击清除以前的保存。';
+ $('pages-ai-card').querySelector('p').textContent='知序 V5 仅使用当前会话输入的官方 DeepSeek API Key。需要主动测试连接，刷新页面后重新填写。浏览器将请求直接发送给 DeepSeek。';
+}
 function storedKey(){
+ if(sessionOnly)return '';
  try{const v=JSON.parse(localStorage.getItem(STORE_KEY)||'null');
   return v?.provider==='deepseek'&&typeof v.key==='string'&&v.key.length>=8?v:''}
  catch{return ''}
 }
 function persistChoice(){
+ if(sessionOnly)return true;
  try{
   if($('pages-ai-save').checked&&key){
    localStorage.setItem(STORE_KEY,JSON.stringify({version:1,provider:'deepseek',model:$('pages-ai-model').value,key,savedAt:new Date().toISOString()}));

@@ -37,8 +37,10 @@ const notify=message=>{
 };
 const bridge=new ScienceBridge(frame,notify);
 const prefKey='zx-v4-preferences';
-let prefs={reduceMotion:false};try{prefs={...prefs,...JSON.parse(localStorage.getItem(prefKey)||'{}')}}catch{}
+let prefs={reduceMotion:false,textScale:100};try{prefs={...prefs,...JSON.parse(localStorage.getItem(prefKey)||'{}')}}catch{}
+if(![100,115,130,150].includes(prefs.textScale))prefs.textScale=100;
 document.documentElement.dataset.reduced=prefs.reduceMotion?'true':'false';
+document.documentElement.style.setProperty('--zx-type-scale',String(prefs.textScale/100));
 const state={route:'today',lesson:newLesson(),busy:false,chat:[]};
 let navGlass=null,navResize=null,navAnimation=null,routeAnimation=null;
 let lastRoute='today';
@@ -233,7 +235,17 @@ async function act(el){
   study(t.conceptId?.startsWith('evolution.')?'evo-pair':'sensitivity');notify('已进入对应课程，重新进行独立判断');return;
  }
  if(a==='misconfirm'||a==='misreject'){bridge.decide(el.dataset.event,a==='misconfirm');render();notify('已记录你的判断');return;}
- if(a==='toggle-reduced'){prefs.reduceMotion=!prefs.reduceMotion;localStorage.setItem(prefKey,JSON.stringify(prefs));document.documentElement.dataset.reduced=prefs.reduceMotion?'true':'false';render();return;}
+  if(a==='set-type-scale'){
+   const size=Number(el.dataset.scale);
+   if(![100,115,130,150].includes(size))return;
+   prefs.textScale=size;
+   document.documentElement.style.setProperty('--zx-type-scale',String(size/100));
+   try{localStorage.setItem(prefKey,JSON.stringify(prefs))}catch{}
+   render();
+   stage.querySelector('button[data-action="set-type-scale"][data-scale="'+size+'"]')?.focus({preventScroll:true});
+   return;
+  }
+  if(a==='toggle-reduced'){prefs.reduceMotion=!prefs.reduceMotion;try{localStorage.setItem(prefKey,JSON.stringify(prefs))}catch{}document.documentElement.dataset.reduced=prefs.reduceMotion?'true':'false';render();stage.querySelector('button[data-action="toggle-reduced"]')?.focus({preventScroll:true});return;}
  if(a==='clear-data')return confirmModal('清空学习记录？','将清空本浏览器 V2 学习事件，无法直接恢复。建议先导出备份；原 V1 数据不会被删除。',()=>{bridge.clear();render();notify('V2 学习记录已清空')},el);
  if(a==='open-ai-config'){
   await awaitReady();document.body.classList.add('show-original-engine');
@@ -444,7 +456,8 @@ async function activateMotion(){
     syncNavSelection();
    }
    dragging=false;tabPress=null;dragOrigin=null;
-   motion.animate(lens,{scaleX:1,scaleY:1},{type:'spring',stiffness:390,damping:28});
+   if(reduced())lens.style.scale='1';
+   else motion.animate(lens,{scaleX:1,scaleY:1},{type:'spring',stiffness:390,damping:28});
   };
   nav.addEventListener('click',e=>{
    if(swallowClick){e.preventDefault();e.stopImmediatePropagation();swallowClick=false}
