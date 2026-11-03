@@ -214,10 +214,10 @@ function closeDoctor(){
  if(reduced()||!motion){panel.hidden=true;launch.focus({preventScroll:true});return;}
  doctorAnimation?.stop?.();
  doctorAnimation=motion.animate(panel,{opacity:[1,0],y:[0,10],scale:[1,.975]}, {duration:.18,ease:[.35,0,1,1]});
- doctorAnimation.finished.then(()=>{if(launch.getAttribute('aria-expanded')==='false')panel.hidden=true;launch.focus({preventScroll:true})}).catch(()=>{panel.hidden=true});
+ doctorAnimation.finished.then(()=>{if(launch.getAttribute('aria-expanded')==='false')panel.hidden=true;launch.focus({preventScroll:true})}).catch(()=>{if(launch.getAttribute('aria-expanded')==='false')panel.hidden=true;});
 }
 launch.onclick=()=>{
- if(!panel.hidden){closeDoctor();return;}
+ if(launch.getAttribute('aria-expanded')==='true'){closeDoctor();return;}
  doctorAnimation?.stop?.();
  panel.hidden=false;
  document.body.classList.add('doctor-open');
