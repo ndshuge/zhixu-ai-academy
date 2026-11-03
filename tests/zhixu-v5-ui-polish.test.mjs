@@ -36,6 +36,17 @@ test('mobile reading copy and controls meet a deliberate size hierarchy',()=>{
  assert.match(css,/min-height:44px/);
  assert.match(css,/@media\(max-width:700px\)/);
 });
+test('tablet landscape/narrow viewport switches scientific hero to full-width layout',()=>{
+ const css=read('v5-ui-polish.css');
+ assert.match(css,/@media\s*\(min-width:701px\)\s*and\s*\(max-width:990px\)/);
+ assert.match(css,/\.workshop-hero\s*\{\s*grid-template-columns:1fr/);
+ assert.match(css,/\.workshop-preview\s*\{[^}]*border-left:0/);
+});
+test('mobile header icon and avatar meet minimum 44px touch geometry',()=>{
+ const css=read('v5-ui-polish.css');
+ assert.match(css,/\.toolbar-trailing \.doctor-launch\s*\{[^}]*width:44px/);
+ assert.match(css,/\.toolbar-trailing \.icon-button\s*\{[^}]*width:44px/);
+});
 test('same-route taps do not rerender or jump and navigation is stable',()=>{
  const js=read('v4.js');
  assert.match(js,/if\(!changed&&!replace\)return/);

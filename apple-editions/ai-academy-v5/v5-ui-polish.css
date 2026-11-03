@@ -70,3 +70,19 @@
 @media(prefers-reduced-motion:reduce) {
   .workshop-actions button,.workshop-section-head button {transition:none!important;}
 }
+
+/* iPad portrait: the sidebar leaves too little room for two hero columns.
+   Keep the same content hierarchy and expose the chart at full width. */
+@media (min-width:701px) and (max-width:990px) {
+  .workshop-hero {grid-template-columns:1fr;}
+  .workshop-hero-copy {padding:34px 30px 30px;}
+  .workshop-hero h1 {font-size:clamp(29px,4.5vw,39px);max-width:520px;}
+  .workshop-hero-copy>p {max-width:530px;}
+  .workshop-preview {border-left:0;border-top:1px solid rgba(255,255,255,.22);padding:27px 30px 25px;}
+  #v5-preview-plot {max-height:210px;}
+  .preview-legend {gap:20px;}
+}
+/* Header controls retain a stable minimum hit box; do not scale their layout. */
+.toolbar-trailing .doctor-launch {width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;flex:0 0 44px!important;}
+.toolbar-trailing .icon-button {width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;flex:0 0 44px!important;}
+body .toolbar-trailing .icon-button[data-route="settings"] {width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;flex:0 0 44px!important;}
