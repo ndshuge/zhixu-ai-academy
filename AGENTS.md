@@ -48,3 +48,9 @@
 - The public evidence summary is a sanitized synthetic technical aggregate regenerated from source under strict conditions, with source SHA256 fingerprints; do not commit case-level prompts, responses or private model credentials. Never state that this is evidence of student learning improvement (verified sample remains 0).
 - Temporary browser screenshots and reports go to ignored evidence/browser/ or isolated _tmp, not the public Git repo. Selected non-sensitive design screenshots may go to docs/evidence/ after review.
 - ChatGPT Apple and frontend Skills are mounted in Chat, not installed by default in Windows. See docs/APPLE_V5_APPEARANCE_A11Y_LEGACY_QA_20261103.md.
+
+## V5 BYOK 失败与隐私测试（2026-11-03）
+- 官方 V5 的 BYOK 配置透过同源 original learning iframe 实现，只有用户明确填入 Key 并执行连接测试才能开启在线博士；未验证与请求失败时不可继续显示“已连通”。
+- 以后调整模型调用时必须运行 tests/browser-v5-byok-failures.cjs：拦截 https://api.deepseek.com/**，并拦截其它全部外部网络；合成200、401、429、断网均要验证导师状态与本地存储。测试禁止真实密钥与真实付费请求。
+- 原版网页的“记住 API Key”是用户明确选择的 **明文 localStorage**，存在同源脚本／扩展可读风险；不得宣传其被加密或强行替用户开启保存。正式长期方案应研究后端安全代理与密钥管理。
+- 此测试使用 Playwright Edge/WebKit，不等同真机 iPhone Safari 或实际 DeepSeek 运营网络；参考 docs/APPLE_V5_BYOK_FAILURE_QA_20261103.md。
