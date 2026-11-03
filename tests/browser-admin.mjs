@@ -18,7 +18,7 @@ try{
  const page=await browser.newPage({viewport:{width:1440,height:1000}});
  const pageErrors=[];
  page.on('pageerror',e=>pageErrors.push(String(e.message)));
- await page.goto(url+'/admin',{waitUntil:'networkidle'});
+ await page.goto(url+'/admin',{waitUntil:'domcontentloaded'});
  assert.match(await page.title(),/学校模型配置/);
  assert.equal(await page.locator('#save-provider').isEnabled(),true);
  const bad=await page.request.get(url+'/api/admin/provider');
@@ -42,7 +42,7 @@ try{
  assert.equal(await page.locator('#admin-status').innerText().then(x=>x.includes('FAKE-INTEGRATION-KEY')),false);
  await page.screenshot({path:join(dir,'07-school-model-connected.png'),fullPage:true});
  const student=await browser.newPage({viewport:{width:1200,height:900}});
- await student.goto(url+'/',{waitUntil:'networkidle'});
+ await student.goto(url+'/',{waitUntil:'domcontentloaded'});
  // Module scripts and the async provider-status fetch may settle after page navigation.
  // Wait for the actual state, not the initial DOM placeholder under load.
  await student.waitForFunction(()=>document.getElementById('model-state')?.textContent?.includes('某高校专属教学模型'),null,{timeout:15000});

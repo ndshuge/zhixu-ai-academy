@@ -20,7 +20,7 @@ try{
  const failures=[],requests=[];
  page.on('pageerror',e=>failures.push(e.message));
  page.on('response',r=>{if(r.status()>=400)requests.push([r.status(),r.url()])});
- await page.goto(BASE,{waitUntil:'networkidle'});
+ await page.goto(BASE,{waitUntil:'domcontentloaded'});
  assert.match(await page.title(),/AI\s*学院/);
  assert.equal(await page.locator('#run').isDisabled(),true);
  await page.screenshot({path:join(path,'01-start-desktop.png'),fullPage:true});
@@ -60,7 +60,7 @@ try{
   screenshots:['01-start-desktop.png','02-real-pfl-results.png','03-tutor-and-transfer.png','04-real-evo-results.png'],pageErrors:failures,apiErrors:requests};
  if(failures.length||requests.length)throw Error(JSON.stringify(record));
  await page.setViewportSize({width:390,height:844});
- await page.goto(BASE,{waitUntil:'networkidle'});
+ await page.goto(BASE,{waitUntil:'domcontentloaded'});
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);
  assert.equal(overflow,false,'mobile horizontal overflow');
  await page.screenshot({path:join(path,'05-mobile.png'),fullPage:true});

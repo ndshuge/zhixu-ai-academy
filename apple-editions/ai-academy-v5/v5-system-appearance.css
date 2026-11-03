@@ -1,0 +1,179 @@
+/* Zhixu Apple V5 — system appearance.
+   Only V5: original science iframe and historic editions remain unchanged.
+   Content receives opaque dark surfaces; the dock remains the sole glass layer. */
+@media (prefers-color-scheme:dark){
+ :root{
+  color-scheme:dark;
+  --ground:#12191c;
+  --surface:#202a2e;
+  --line:#36484d;
+  --secondary:#b4c4c7;
+  --tertiary:#a5b5b9;
+ }
+ html,body{background:#12191c!important;color:#ebf3f1!important}
+ .reading-column{background:#12191c!important;color:#ebf3f1!important}
+ .master-sidebar,.outline-sidebar{background:#192226!important;border-color:#324046!important}
+ .toolbar{
+  background:rgba(18,25,28,.88)!important;
+  border-color:#35464c!important;
+  color:#ecf3f3!important;
+ }
+ .toolbar-title,.toolbar-leading,.toolbar-trailing,.page-intro h1,
+ .section-bar h2,.reading-feature-copy h2,
+ .book-copy strong,.row-meta strong,.setting-row strong,.metric strong,
+ .learning-paper h2,.learning-header,.modal h2,.book-detail h2,
+ .empty-state strong,.review-item strong,.discovery-content strong,
+ .outline-row strong,.menu-item strong{
+  color:#ebf3f1!important;
+ }
+ .reading-column main,.page-intro,.section-bar{color:#ebf3f1!important}
+ .page-intro p,.reading-feature-copy p,.discovery-content small,.book-copy span,
+ .book-copy small,.row-meta small,.section-bar span,.nav-caption,
+ .outline-caption,.outline-row small,.engine-caption,.quiet-note,
+ .setting-row p,.metric span,.learning-paper p,.book-detail p,
+ .empty-state,.review-item small,.workshop-intro p,
+ .workshop-trust,.workshop-method .method-steps span,
+ .workshop-hero-foot,#screen[data-page="library"] .review-task .review-reason,
+ #screen[data-page="library"] .review-task .review-due{
+  color:#b5c5c7!important;
+ }
+ .reading-feature,.continue-panel,.discovery-row,.book-tile,
+ .learning-paper,.setting-group,.book-detail,.review-item,
+ .empty-state,.metrics,.simple-rows,.simple-row,
+ .workshop-facts,.workshop-method,.workshop-essay,
+ .workshop-study,.workshop-notes,.workshop-stat,
+ .workshop-scenario,.workshop-section,
+ .glass-card,.science-preview{
+  background:#202a2e!important;
+  color:#ebf3f1!important;
+  border-color:#36484d!important;
+ }
+ .reading-feature{background:#1c292b!important}
+ .book-tile,.discovery-row,.simple-row{box-shadow:none!important}
+ .discovery-arrow,.outline-row.is-active,.menu-item.is-active{
+  background:#264443!important;color:#b0efdf!important;
+ }
+ .menu-item,.outline-row{color:#d2e1e2!important;border-color:#34474a!important}
+ .menu-item:hover,.outline-row:hover{background:#253438!important}
+ .toolbar .icon-button,.toolbar-trailing .doctor-launch{
+  background:#28363a!important;
+  color:#e2eeee!important;
+  border-color:#3c5358!important;
+ }
+ .toolbar .icon-button svg,.toolbar-trailing .icon-button svg{
+  stroke:#dce9e8!important;
+ }
+ .toolbar-trailing .doctor-launch:hover{background:#324449!important}
+ body .toolbar .toolbar-trailing button[data-route="settings"]{background:#28363a!important;color:#e2eeee!important;border-color:#3c5358!important}
+ .experiment-tabs,.progress-strip span{background:#283439!important}
+ .experiment-tabs button{color:#b8cbd0!important}
+ .experiment-tabs button.is-active{background:#3b5153!important;color:#ecf7f2!important}
+ .progress-strip span.done{background:#64c6ac!important}
+ .math-card,.callout,.feedback,.feedback.warn,.plot-chart,.preview-paper{
+  background:#213436!important;
+  color:#e7f3ef!important;
+  border-color:#42615e!important;
+ }
+ .callout p,.feedback p{color:#cbdcda!important}
+ .answer-option{
+  background:#202a2e!important;
+  color:#d9e6e6!important;
+  border-color:#3e5257!important;
+ }
+ .answer-option:hover{border-color:#77bbae!important}
+ .answer-option:has(input:checked){
+  background:#254840!important;color:#d5f5ea!important;border-color:#73c7b6!important;
+ }
+ .field,.answer-group legend{color:#c9dbdc!important}
+ textarea,input[type=number],input[type=text],select{
+  background:#182226!important;
+  color:#f0f6f5!important;
+  border-color:#476064!important;
+ }
+ textarea::placeholder,input::placeholder{color:#acbbbe!important}
+ input[type=radio],input[type=checkbox]{accent-color:#62c6ae}
+ .secondary,.quiet-button,.book-detail .quiet-button{
+  background:#2d3c41!important;
+  color:#eaf2f2!important;
+  border-color:#4e6267!important;
+ }
+ .link-action,.lesson-eyebrow,.count-number,
+ .workshop-breadcrumb,.workshop-overline,.eyebrow{
+  color:#82d6c2!important;
+ }
+ .link-action.danger{color:#ff9c91!important}
+ #mobile-tabs.mobile-native-tabs{
+  background:rgba(33,46,50,.86)!important;
+  border-color:rgba(162,194,192,.2)!important;
+  color:#dcece8!important;
+  box-shadow:0 6px 25px rgba(0,0,0,.35)!important;
+ }
+ #mobile-tabs button.tab-item{color:#b9caca!important}
+ #mobile-tabs button.tab-item.is-active{
+  color:#a6f2de!important;background:rgba(109,179,160,.17)!important;
+ }
+ #mobile-tabs .tab-lens{
+  background:rgba(108,165,151,.2)!important;
+  border-color:rgba(156,221,199,.27)!important;
+ }
+ #zoom-more-menu:not([hidden]){
+  background:rgba(33,46,50,.97)!important;
+  border-color:#455a60!important;
+ }
+ #zoom-more-menu button{color:#e5f0ed!important}
+ #zoom-more-menu button[aria-current="page"]{background:#31584e!important}
+ .workshop-hero{
+  background:linear-gradient(115deg,#124047,#1c5557 72%,#2c6864)!important;
+  border-color:#34686a!important;
+ }
+ .workshop-hero h1,.workshop-hero h2{color:#f2faf8!important}
+ .workshop-preview{
+  background:linear-gradient(155deg,#213637,#1a2d31)!important;
+  color:#e9f4f0!important;
+  border-color:#456364!important;
+ }
+ .workshop-preview .preview-top,
+ .workshop-preview .preview-top span,
+ .workshop-preview .preview-legend,
+ .workshop-preview .preview-slider,
+ .workshop-preview .preview-note{color:#bad6d1!important}
+ #v5-preview-plot .v5-grid{stroke:#58716f!important;opacity:.65}
+ #v5-preview-plot .v5-curve.a{stroke:#71d5c6!important}
+ #v5-preview-plot .v5-curve.b{stroke:#efb479!important}
+ .preview-legend i.a{background:#71d5c6!important}
+ .preview-legend i.b{background:#efb479!important}
+ .doctor-panel,.modal{
+  background:#202b2e!important;
+  color:#edf5f3!important;
+  border-color:#405458!important;
+ }
+ .doctor-panel header,#doctor-form{
+  background:#263c3b!important;
+  border-color:#405a56!important;
+ }
+ .doctor-panel header span,.chat-privacy,.modal p{color:#b7c9c9!important}
+ .chat-bubble{background:#2f4044!important;color:#edf6f4!important}
+ .chat-bubble.mine{background:#28564a!important;color:#e4f7ee!important}
+ #doctor-form textarea{background:#152326!important;color:#e6f3f0!important}
+ #toast{background:rgba(29,44,47,.97)!important;color:#f0f7f5!important}
+ .plot-chart line{stroke:#526a68!important}
+ .plot-chart polyline{stroke:#65c8b5!important}
+ .plot-chart polyline.alt{stroke:#ecae72!important}
+ #screen .workshop-facts .metric span{color:#b5c5c7!important}
+ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
+ [role="menuitem"]:focus-visible{outline:2px solid #95e4d1!important;outline-offset:2px}
+}
+@media(prefers-color-scheme:dark) and (prefers-contrast:more){
+ :root{--line:#718b8f}
+ .reading-column,.master-sidebar,.outline-sidebar{border-color:#718b8f!important}
+ .setting-group,.learning-paper,.book-tile,.simple-rows,.book-detail,.doctor-panel{
+  border-color:#76989a!important;
+ }
+ #mobile-tabs.mobile-native-tabs{background:#1d3135!important;border-color:#a2d2c8!important}
+ #mobile-tabs button.tab-item.is-active{background:#31685c!important;color:#fff!important}
+ .quiet-note,.row-meta small,.setting-row p{color:#e2f1ed!important}
+}
+@media(prefers-color-scheme:dark) and (prefers-reduced-transparency:reduce){
+ .toolbar{background:#161f22!important}
+ #mobile-tabs.mobile-native-tabs,#zoom-more-menu:not([hidden]){background:#223236!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+}

@@ -1,0 +1,42 @@
+const fs=require('fs'),path=require('path'),http=require('http'),assert=require('node:assert/strict');
+const pw=require(process.env.PLAYWRIGHT_CORE_PATH||'playwright-core');
+const root=process.env.ZHIXU_PREVIEW_ROOT&&path.resolve(process.env.ZHIXU_PREVIEW_ROOT);
+const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.webp':'image/webp','.svg':'image/svg+xml'};
+const server=root?http.createServer((req,res)=>{const u=new URL(req.url,'http://local'),file=path.resolve(root,'.'+decodeURIComponent(u.pathname)+(u.pathname.endsWith('/')?'index.html':''));if(!file.startsWith(root+path.sep))return res.writeHead(403).end();fs.readFile(file,(e,b)=>e?res.writeHead(404).end(u.pathname):res.writeHead(200,{'content-type':mime[path.extname(file)]||'application/octet-stream'}).end(b))}):null;
+(async()=>{if(server)await new Promise(ok=>server.listen(0,'127.0.0.1',ok));let pass=0;
+ try{for(const [name,engine]of [['edge',pw.chromium],['webkit',pw.webkit]]){
+  const browser=name==='edge'?await engine.launch({headless:true,channel:'msedge'}):await engine.launch({headless:true});
+  try{for(const width of [390,1440]){
+   const p=await browser.newPage({viewport:{width,height:844},hasTouch:width<700,reducedMotion:'reduce'});
+   const errors=[];p.on('pageerror',e=>errors.push(e.message));
+   const url=root?'http://127.0.0.1:'+server.address().port+'/zhixu-ai-academy/apple-editions/ai-academy-v5/':'https://ndshuge.github.io/zhixu-ai-academy/apple-editions/ai-academy-v5/';
+   await p.goto(url,{waitUntil:'domcontentloaded',timeout:16000});
+   await p.waitForFunction(()=>!!window.ZHIXU_V4_NAVIGATE,null,{timeout:15000});
+   await p.evaluate(()=>window.ZHIXU_V4_NAVIGATE('settings'));
+   const trigger=p.locator('#screen [data-action=clear-data]');
+   await trigger.click();
+   const dlg=p.locator('#dialog-layer [role=dialog]');
+   assert.equal(await dlg.getAttribute('aria-modal'),'true');
+   assert.ok((await dlg.getAttribute('aria-describedby'))==='confirm-description');
+   assert.equal(await p.evaluate(()=>document.activeElement?.id),'cancel-confirm');
+   await p.keyboard.press('Shift+Tab');
+   assert.equal(await p.evaluate(()=>document.activeElement?.id),'accept-confirm');
+   await p.keyboard.press('Tab');
+   assert.equal(await p.evaluate(()=>document.activeElement?.id),'cancel-confirm');
+   await p.keyboard.press('Escape');
+   assert.equal(await dlg.count(),0);
+   assert.ok(await trigger.evaluate(e=>document.activeElement===e));
+   await trigger.click();
+   await p.locator('#cancel-confirm').click();
+   assert.equal(await dlg.count(),0);
+   assert.ok(await trigger.evaluate(e=>document.activeElement===e));
+   await trigger.click();
+   await p.locator('#accept-confirm').click();
+   assert.equal(await dlg.count(),0);
+   assert.ok(await p.locator('#screen').evaluate(e=>document.activeElement===e));
+   assert.deepEqual(errors,[]);
+   console.log('MODAL_A11Y_PASS',name,width);
+   pass++;await p.close();
+  }}finally{await browser.close()}}
+  console.log('MODAL_A11Y_TOTAL '+pass+'/4');
+ }catch(e){console.error('MODAL_A11Y_FAIL',e.stack);process.exitCode=1}finally{server?.close()}})();

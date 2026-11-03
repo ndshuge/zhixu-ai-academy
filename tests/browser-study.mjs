@@ -16,7 +16,7 @@ try{
  browser=await chromium.launch({channel:'msedge',headless:true});
  const context=await browser.newContext({viewport:{width:1365,height:950},acceptDownloads:true});
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto(base+'/study',{waitUntil:'networkidle'});
+ await page.goto(base+'/study',{waitUntil:'domcontentloaded'});
  assert.match(await page.locator('#study-records').innerText(),/尚无真实参与者/);
  assert.equal((await page.evaluate(()=>JSON.parse(localStorage.getItem('ai-academy-learning-v02')).events)).length,0);
  await page.locator('#make-code').click();

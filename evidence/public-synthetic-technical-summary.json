@@ -1,0 +1,31 @@
+{
+  "scope": "VERIFIED_SYNTHETIC_TECHNICAL_TESTS_NOT_STUDENT_LEARNING",
+  "offline": {
+    "situations": 60,
+    "recomputations": 120,
+    "blockedUnsafeOutputs": 20,
+    "goalAlignedRule": 32,
+    "goalAlignedDeterministicPolicy": 55,
+    "modelCalls": 0,
+    "hash": "0bab260e08a955a7387929e82d73f227d33ef6aa7243b9571ea8bad611f0a118",
+    "noSuitableDirectionCases": 5
+  },
+  "remote": {
+    "syntheticSituations": 8,
+    "goalAlignedModel": 8,
+    "goalAlignedRule": 4,
+    "remoteCalls": 1,
+    "modelName": "DeepSeek V4.1 Flash",
+    "toolCalls": 0
+  },
+  "actualStudentParticipants": 0,
+  "caution": "60 synthetic offline situations; one real remote model call covers 8 synthetic inputs. These results are not student learning efficacy.",
+  "provenance": {
+    "kind": "sha256-pinned-synthetic-benchmark-aggregate",
+    "files": {
+      "g2-benchmark/result-p5-60.json": "5806fa406a85330a5ec2247578e7e6eeece05e309592313be66e5a0056eb77f1",
+      "g2-benchmark/cases-p5-60.json": "fab3b2d4294baf94fec7693dff6ca38f763ca249a89817c9c00c37a48ab98e49",
+      "g2-live/live-real-vs-rules-results.json": "0a41f0f6e968e545523729deb94df6d38f55e947d6a6daf2506c043ca5c98355"
+    }
+  }
+}

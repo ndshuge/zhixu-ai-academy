@@ -15,7 +15,7 @@ try{
  browser=await chromium.launch({channel:'msedge',headless:true});
  const page=await browser.newPage({viewport:{width:1366,height:900}});
  const errors=[];page.on('pageerror',err=>errors.push(err.message));
- await page.goto(base+'/',{waitUntil:'networkidle'});
+ await page.goto(base+'/',{waitUntil:'domcontentloaded'});
  assert.equal(await page.locator('#agent-planning').isVisible(),false);
  assert.equal(await page.locator('#run').isDisabled(),true);
  await page.locator('#prediction-input').fill('第一次预测：初值很接近的轨道会逐渐分离。');
@@ -74,7 +74,7 @@ try{
  assert.match(await page.locator('#experiment-comparison').innerText(),/73230/);
  await page.screenshot({path:join(output,'11-approved-evo-paired-run.png'),fullPage:true});
  await page.setViewportSize({width:390,height:844});
- await page.goto(base+'/',{waitUntil:'networkidle'});
+ await page.goto(base+'/',{waitUntil:'domcontentloaded'});
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);
  assert.deepEqual(errors,[]);
  await page.screenshot({path:join(output,'12-mobile-agent.png'),fullPage:true});

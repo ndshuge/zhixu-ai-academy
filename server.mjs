@@ -233,6 +233,24 @@ export function createAcademyServer({providerRegistry,judgeRegistryFactory}={}){
     send(res,200,runSafetyExample(id));return;
    }
    if(req.method==='GET'&&path==='/api/evidence/summary'){
+    // A clean public source checkout excludes raw benchmark cases and model
+    // transcripts. Use a SHA256-derived, strictly aggregate-only public
+    // snapshot; never return 500 or leak source-level prompts.
+    const rawSource=join(ROOT,'evidence/rc3-20261012/g2-benchmark/result-p5-60.json');
+    let rawExists=true;
+    try{await readFile(rawSource)}catch(error){
+     if(error.code==='ENOENT')rawExists=false;else throw error;
+    }
+    if(!rawExists){
+     const safe=JSON.parse(await readFile(join(ROOT,'evidence/public-synthetic-technical-summary.json'),'utf8'));
+     if(safe.scope!=='VERIFIED_SYNTHETIC_TECHNICAL_TESTS_NOT_STUDENT_LEARNING'||
+        safe.actualStudentParticipants!==0||safe.offline?.situations!==60||
+        safe.remote?.syntheticSituations!==8||
+        !/^[a-f0-9]{64}$/.test(safe.offline?.hash||'')||
+        safe.provenance?.kind!=='sha256-pinned-synthetic-benchmark-aggregate')
+       throw fail(503,'Published technical evidence aggregate is missing or invalid');
+     send(res,200,safe);return;
+    }
     // Read-only, explicitly allowlisted aggregated technical benchmark evidence.
     // Never serve private Pi RPC sessions, credentials, participant records or raw prompts.
     const offline=JSON.parse(await readFile(join(ROOT,'evidence/rc3-20261012/g2-benchmark/result-p5-60.json'),'utf8'));

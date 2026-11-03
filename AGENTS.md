@@ -40,3 +40,11 @@
 - Rules mentor does not imply a connected commercial model; no BYOK secret in tests. Use tests/browser-v5-full-journey.cjs to exercise actual evidence-producing science adapter.
 - Browser WebKit simulation and local 195px reflow are NOT real iPhone Safari, VoiceOver, system Dynamic Type or 60fps performance certification.
 - ChatGPT Apple/UI plugin Skills are loaded in the ChatGPT plugin environment, not automatically installed in the local Windows filesystem. Reference docs/APPLE_V5_FINAL_CLOSURE_20261103.md.
+
+## V5 systemic appearance and modal accessibility (2026-11-03)
+- V5 follows prefers-color-scheme dark/light and explicitly accommodates prefers-contrast:more and prefers-reduced-transparency. Only the V5 CSS is changed; Original/R3/V4 keep their own appearance. Use content-first opaque reading surfaces; avoid claiming native Apple L2 refraction.
+- A destructive confirmation dialog must have an accessible name and description, Escape cancel, Tab/Shift+Tab containment and focus restoration. Pass the actual invoking button explicitly: disabling a button can clear document.activeElement on WebKit before the modal is rendered.
+- Old backend browser scripts must wait for DOM content and named app controls instead of networkidle; the original app keeps background requests alive. Never drop assertions that detect HTTP >=400.
+- The public evidence summary is a sanitized synthetic technical aggregate regenerated from source under strict conditions, with source SHA256 fingerprints; do not commit case-level prompts, responses or private model credentials. Never state that this is evidence of student learning improvement (verified sample remains 0).
+- Temporary browser screenshots and reports go to ignored evidence/browser/ or isolated _tmp, not the public Git repo. Selected non-sensitive design screenshots may go to docs/evidence/ after review.
+- ChatGPT Apple and frontend Skills are mounted in Chat, not installed by default in Windows. See docs/APPLE_V5_APPEARANCE_A11Y_LEGACY_QA_20261103.md.

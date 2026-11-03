@@ -225,7 +225,7 @@ async function act(el){
  }
  if(a==='misconfirm'||a==='misreject'){bridge.decide(el.dataset.event,a==='misconfirm');render();notify('已记录你的判断');return;}
  if(a==='toggle-reduced'){prefs.reduceMotion=!prefs.reduceMotion;localStorage.setItem(prefKey,JSON.stringify(prefs));document.documentElement.dataset.reduced=prefs.reduceMotion?'true':'false';render();return;}
- if(a==='clear-data')return confirmModal('清空学习记录？','将清空本浏览器 V2 学习事件，无法直接恢复。建议先导出备份；原 V1 数据不会被删除。',()=>{bridge.clear();render();notify('V2 学习记录已清空')});
+ if(a==='clear-data')return confirmModal('清空学习记录？','将清空本浏览器 V2 学习事件，无法直接恢复。建议先导出备份；原 V1 数据不会被删除。',()=>{bridge.clear();render();notify('V2 学习记录已清空')},el);
  if(a==='open-ai-config'){
   await awaitReady();document.body.classList.add('show-original-engine');
   $('#dialog-layer').innerHTML='<div class="modal-shade" id="configure-shade"><div class="modal"><h2>原版 DeepSeek 设置</h2><p>请在原版面板里配置并真实验证连接。此页面不会读取或展示你的密钥。</p><div class="modal-actions"><button id="close-config" class="secondary">关闭并返回 V5</button></div></div></div>';
@@ -250,9 +250,32 @@ async function submit(form){
   Object.assign(l,{prediction,run,mentor:null,step:2,highest:Math.max(l.highest,2)});render();notify('原版科学引擎完成一次真实实验');return;
  }
 }
-function confirmModal(title,message,action){
- const shade=document.createElement('div');shade.className='modal-shade';shade.innerHTML='<div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title"><h2 id="confirm-title">'+esc(title)+'</h2><p>'+esc(message)+'</p><div class="modal-actions"><button class="secondary" id="cancel-confirm">取消</button><button class="primary" id="accept-confirm">确认</button></div></div>';
- $('#dialog-layer').append(shade);const close=()=>shade.remove();$('#cancel-confirm').onclick=close;$('#accept-confirm').onclick=()=>{close();action()};shade.addEventListener('click',e=>{if(e.target===shade)close()});$('#cancel-confirm').focus();
+function confirmModal(title,message,action,triggerEl){
+ const trigger=triggerEl||document.activeElement;
+ const shade=document.createElement('div');shade.className='modal-shade';
+ shade.innerHTML='<div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-description"><h2 id="confirm-title">'+esc(title)+'</h2><p id="confirm-description">'+esc(message)+'</p><div class="modal-actions"><button class="secondary" id="cancel-confirm">取消</button><button class="primary" id="accept-confirm">确认</button></div></div>';
+ $('#dialog-layer').append(shade);
+ const cancel=shade.querySelector('#cancel-confirm'),accept=shade.querySelector('#accept-confirm');
+ const close=(restoreFocus=true)=>{
+  shade.remove();
+  if(restoreFocus&&trigger?.isConnected)trigger.focus({preventScroll:true});
+ };
+ cancel.onclick=()=>close();
+ accept.onclick=()=>{close(false);action();stage.focus({preventScroll:true});};
+ shade.addEventListener('click',event=>{if(event.target===shade)close()});
+ shade.addEventListener('keydown',event=>{
+  if(event.key==='Escape'){
+   event.preventDefault();event.stopPropagation();close();return;
+  }
+  if(event.key==='Tab'){
+   if(event.shiftKey&&document.activeElement===cancel){
+    event.preventDefault();accept.focus({preventScroll:true});
+   }else if(!event.shiftKey&&document.activeElement===accept){
+    event.preventDefault();cancel.focus({preventScroll:true});
+   }
+  }
+ });
+ cancel.focus({preventScroll:true});
 }
 document.addEventListener('click',async e=>{
  const b=e.target.closest?.('[data-route],[data-action],[data-experiment]');if(!b||state.busy||b.disabled)return;

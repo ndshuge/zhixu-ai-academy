@@ -26,6 +26,8 @@ credentials/
 
 # Temporary debugging, local execution history and snapshots
 evidence/runtime/
+# Playwright browser QA screenshots/reports are generated locally, may contain test inputs.
+evidence/browser/
 *.log
 *.log.*
 debug/
