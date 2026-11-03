@@ -26,3 +26,12 @@
 
 ## 诚实边界
 ARIA 属性与程序化焦点验证是工程层面的证据，**不等于已在实体 iPhone 上完成 VoiceOver 朗读验证**。尚未经过真人无障碍用户试测；真人教育成效样本仍为 0。
+
+## 2026-11-03 正式部署后核验
+- Commit `9d965092b9c3d4da6abc452e346495487e1ebdd0` 已受保护脚本非强制推送到 `ndshuge/zhixu-ai-academy/main`。
+- 全新 Windows worktree 以该 commit 独立检出，`npm run verify` PASS（PFL SHA256 / EvoWorld SHA256 均保持），`npm test` 145/145 PASS。
+- 原版 `npm run test:browser` 五套通过；本轮 Edge/WebKit × 手机/桌面单页焦点与进度值 4/4。
+- GitHub Pages 发布任务 `41654268197`：`completed / success`。
+- 正式评委原 URL `https://ndshuge.github.io/zhixu-ai-academy/?judge=1` 的真实 Edge + WebKit 浏览器回归：2/2 通过；均自动转至仓库 Apple V5；导航后 aria-valuenow=1，aria-valuetext 为独立判断，标题随学习/进度路由更新，新页获得焦点，没有 404 或 pageerror。
+- 原始链接未变，Original/R3/V4 未修改；其它并行分支未被覆盖。
+- 物理 iPhone Safari、VoiceOver 真实语音、真实 BYOK 密钥授权及真人教学效果仍是 UNVERIFIED。
