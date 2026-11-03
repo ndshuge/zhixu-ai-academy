@@ -54,3 +54,13 @@
 1. 完成新 Git worktree 的重新检出哈希测试和正式 Pages 部署验收后，才能宣称本轮合并发布成功。
 2. 真人真机 Safari / VoiceOver / 深色模式 / WebKit 性能测量，需要可接触的物理设备；浏览器模拟无法取代。
 3. 不发布、打印或记录私人 API Key；规则导师和真实模型明确区分。
+
+## Release confirmation (after the pre-release checklist)
+- SHA `8d9baff9908271d0c2bbc0fbf226f5d129b6119d` committed and pushed to `ndshuge/zhixu-ai-academy/main` with protected non-force safe-HTTPS script.
+- Fresh independent Windows checkout at the exact commit: `npm run verify` PASS; `npm test` 134/134 PASS. PFL original expected SHA remains 88f7c1a1...; original scientific Git blobs unchanged.
+- GitHub Pages workflow run `41632009573` completed with `success`.
+- Production from judge root `https://ndshuge.github.io/zhixu-ai-academy/?judge=1`: Edge/WebKit 2/2 rerouted to V5, no JS errors or 404.
+- Production compact navigation (195, 320, 390 CSS px) Edge/WebKit 6/6 PASS.
+- Production Edge Logistic end-to-end journey PASS, including genuine model-free science, persisted V2 record and export. EvoWorld and WebKit journeys additionally passed in the local Pages build, not re-run in the public deployment.
+- Original page `https://ndshuge.github.io/zhixu-ai-academy/original.html` still HTTP 200.
+- Unverified limits remain actual iPhone Safari, VoiceOver, BYOK live model and independent human learning efficacy; older backend browser scripts timed out locally.

@@ -39,3 +39,7 @@
 - [ ] Commit and fresh Windows worktree checkout; verify exact bytes independent of original working tree; then Pages deploy and live judge URL smoke.
 - [ ] Real iPhone Safari/VoiceOver/true system Dynamic Type and authentic BYOK calls require external device/user key and remain UNVERIFIED.
 - Ruling: legacy backend browser scripts timed out after 28s in the bounded Mice Hole executor, so they cannot be marked passing; new V5 E2E is independently recorded without misrepresenting legacy test coverage.
+- [x] Commit and fresh Windows worktree checkout; original manifest SHA256 unchanged; full verify and 134 tests pass on independent checkout.
+- [x] Protected push to original judge source repository main. GitHub Pages workflow 41632009573 succeeded.
+- [x] Original judge root Edge/WebKit 2/2; production compact nav Edge/WebKit x 3 viewport sizes 6/6; production Edge Logistic E2E PASS.
+- [ ] Real physical iPhone Safari, screen reader, human learning trial and live BYOK continue as explicit external verification limits.
