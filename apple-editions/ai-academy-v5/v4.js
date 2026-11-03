@@ -122,7 +122,11 @@ async function act(el){
  }
  if(a==='enter-sensitivity')return study('sensitivity');
  if(a==='enter-evo')return study('evo-pair');
- if(a==='reset-lesson'){state.lesson=newLesson(state.lesson.experiment);return goto('learn')}
+ if(a==='reset-lesson'){
+  state.lesson=newLesson(state.lesson.experiment);
+  if(state.route==='learn')render();else goto('learn');
+  return;
+ }
  if(a==='study-step')return setStep(Number(el.dataset.index));
  if(a==='step-predict')return updateLesson({step:1});
  if(a==='load-question'||a==='load-transfer'){

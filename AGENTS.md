@@ -18,3 +18,12 @@
 - 桌面：主阅读/实验工作台优先；左侧目录栏按需使用，避免空白列；保持助手上下文可达；不要重复顶部标题和正文标题。
 - 清除无意义英文全大写装饰、重复解释和 9–11px 低可读说明；保留必要的数学公式、真实提示和 AI 授权边界。
 - 重点测试首页→实验→私人教师→迁移练习，记录 UI 实际截图、点击后布局稳定性、Edge/WebKit、320/390/768/1440 四档，以及 V4/R3/Original 不变。
+
+## Apple V5 全站审计持久约束（2026-11-03）
+- 在 ChatGPT 插件 Skills 中，优先调用 `shuge-apple-product-audit` 并阅读 `references/AUDIT_MATRIX.md`，再选择 `shuge-apple-design`、`apple-web-design`、`motion`、`liquid-glass-web`、`finesse-ui`、`impeccable`。这些技能是 **ChatGPT 会话挂载**，不是 Windows 本机默认安装。每次区分 FOUND / READ / APPLIED / VERIFIED；不得以本机目录扫描冒充调用。
+- 知序是“独立前测→预测→可复现科学计算→导师追问→迁移→复习”的学习产品，非小芽生活管理；保留原版教学引擎、用户 V2 事件、真实数据和 BYOK 用户授权边界；无证据不制造成绩。
+- 每个新页面/组件先审查“是否必须存在”，再处理正文/控件层级、按钮和辅助文案。优先让阅读内容清楚、操作可靠。手机 dock/scroll edge 是单独浮动层，不能用固定白雾冒充 Liquid Glass L2；不能在单一滚动区叠多套边缘遮罩。
+- 系统性 UI 变更按 `docs/APPLE_V5_RESEARCH_AND_SKILLS_20261103.md` 与 `docs/APPLE_V5_FULL_AUDIT_QA_20261103.md` 门禁：基线 6 路由，320/390/768/1440px，两端真实浏览器点击、滚动到底、控制状态、中途取消、键盘、长文、Reduced Motion；截图前后对照、确认可访问性与核心学习流才集成。
+- 同页“重新开始”必须实际刷新当前 UI 而不删除已记载的学习事件。设置属于工具路由，不能把前一个底部主 tab 伪装选中，也不应重复多个设置入口。桌面课程/学习可用二级目录，资料/进度/设置若只有静态说明则不应占用一整列。
+- WebKit 模拟绝不等同 iPhone Safari 真机；“已调用插件/实现 L2 原生折射/达 Apple 第一方视觉”均须有实测证据。PFL SHA256 mismatch 需独立调查，不得为消除红灯篡改科学证据。
+- 施工只改 `apple-editions/ai-academy-v5/`，保留 R3/V4/Original；独立 worktree、无 force push，发布必须核对正式评委 URL 指向与静态部署成功。文档状态以实际源码和验证记录为准。

@@ -131,7 +131,7 @@ export function growth({bridge}){
  '<p class="quiet-note">数据仅来自原版 V2 学习记录，绝不展示模拟学习时长、AI 估算成绩或伪造的“掌握率”。</p>';
 }
 export function settings({bridge,prefs}){
- return heading('个人中心','设置','把学习空间调整为适合你自己的节奏。')+
+ return '<header class="page-intro"><h1>设置</h1></header>'+
  '<div class="section-bar"><h2>学习空间</h2></div><section class="setting-group">'+
  '<div class="setting-row"><div><strong>减少动态效果</strong><p>系统偏好减少动态时自动遵循；也可主动选择。</p></div><button role="switch" aria-label="减少动态效果" aria-checked="'+prefs.reduceMotion+'" class="switch" data-action="toggle-reduced"></button></div>'+
  '<div class="setting-row"><div><strong>重新开始当前课程</strong><p>重置课程步骤，不删除已经形成的学习事件。</p></div>'+click('重新开始','reset-lesson')+'</div>'+

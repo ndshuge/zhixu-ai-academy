@@ -1,0 +1,55 @@
+/* Zhixu V5 · evidence-led Apple product polish: touch, reading, responsive IA */
+#screen[data-page="settings"] .setting-row>div{
+  flex:1 1 auto;min-width:0;
+}
+#screen[data-page="settings"] .setting-row .quiet-button,
+#screen[data-page="settings"] .setting-row .link-action{
+  display:inline-flex;align-items:center;justify-content:center;
+  flex:0 0 auto;min-width:64px;min-height:44px;
+  padding:10px 11px;box-sizing:border-box;white-space:nowrap;
+  overflow-wrap:normal;word-break:keep-all;text-align:center;
+}
+#screen[data-page="settings"] .setting-row p{
+  font-size:13px;line-height:1.55;overflow-wrap:anywhere;
+}
+#screen[data-page="settings"] .setting-row .switch{
+  flex:0 0 49px;width:49px;height:44px;min-height:44px;background:transparent;
+}
+#screen[data-page="settings"] .setting-row .switch::after{
+  content:"";position:absolute;inset:7px 0 7px;width:49px;height:30px;
+  border-radius:15px;background:#d1d1d6;pointer-events:none;
+}
+#screen[data-page="settings"] .setting-row .switch[aria-checked=true]::after{background:#14816f;}
+#screen[data-page="settings"] .setting-row .switch::before{top:10px;z-index:1;}
+#screen[data-page="learn"] .learning-paper .primary{min-height:44px;}
+/* Settings is a secondary route: do not imply the previous tab is still selected. */
+body:has(#screen[data-page="settings"]) #mobile-tabs .tab-lens{opacity:0!important;}
+body:has(#screen[data-page="settings"]) #mobile-tabs button.tab-item{color:#515e64!important;background:transparent!important;font-weight:550!important;}
+body:has(#screen[data-page="settings"]) .toolbar-trailing button[data-route="settings"]{display:none!important;}
+#v5-r-control{min-height:44px;}
+@media(max-width:700px){
+ #screen[data-page="settings"] .setting-row{gap:9px;padding:16px 14px;}
+ #screen[data-page="settings"] .setting-row p{font-size:12.5px;}
+ #screen[data-page="settings"] .setting-row .quiet-button,
+ #screen[data-page="settings"] .setting-row .link-action{
+   padding:10px 8px;min-width:64px;min-height:44px;
+ }
+}
+@media(min-width:1121px){
+ body:has(#screen[data-page="library"]) .app,
+ body:has(#screen[data-page="growth"]) .app,
+ body:has(#screen[data-page="settings"]) .app{
+   grid-template-columns:218px minmax(0,1fr);
+ }
+ body:has(#screen[data-page="library"]) .outline-sidebar,
+ body:has(#screen[data-page="growth"]) .outline-sidebar,
+ body:has(#screen[data-page="settings"]) .outline-sidebar{display:none;}
+ body:has(#screen[data-page="library"]) main[data-content],
+ body:has(#screen[data-page="growth"]) main[data-content],
+ body:has(#screen[data-page="settings"]) main[data-content]{
+   max-width:1100px;margin-inline:auto;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ #screen[data-page="settings"] .setting-row .switch{transition:none;}
+}
