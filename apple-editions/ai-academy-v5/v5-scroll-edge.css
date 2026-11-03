@@ -20,6 +20,7 @@
     inset: auto 0 0;
     height: calc(139px + env(safe-area-inset-bottom, 0px));
     pointer-events: none;
+    opacity: var(--zx-edge-opacity, 1);
     background: linear-gradient(
       to bottom,
       rgba(var(--zx-dock-ground),0) 0%,

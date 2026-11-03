@@ -31,6 +31,7 @@ function render(){
  });
  stage.innerHTML=screens[route]({bridge,lesson:state.lesson,prefs});
  refreshLabPreview(stage);
+ window.dispatchEvent(new Event('zhixu:content-rendered'));
  save();
  syncNavSelection();
 }
