@@ -23,7 +23,7 @@ const reduced=()=>prefs.reduceMotion||matchMedia('(prefers-reduced-motion:reduce
 function render(){
  const route=state.route;
  stage.dataset.page=route;
- $('#toolbar-title').textContent=titles[route];$('#outline-name').textContent=titles[route];
+ $('#toolbar-title').textContent=titles[route];$('#outline-name').textContent=route==='learn'?'学习步骤':titles[route];
  $('#outline-content').innerHTML=outline(route,bridge,state.lesson);
  $$('.menu-item[data-route],.tab-item[data-route]').forEach(node=>{
   const active=node.dataset.route===route;node.classList.toggle('is-active',active);node.classList.toggle('selected',active);
@@ -37,9 +37,11 @@ function render(){
 function goto(route,{replace=false}={}){
  if(!titles[route])route='today';
  const previous=state.route,changed=previous!==route;
+ if(!changed&&!replace)return;
+ if(changed&&window.scrollY>0)window.scrollTo(0,0);
  state.route=route;
  if(replace)history.replaceState(null,'','#'+route);else history.pushState(null,'','#'+route);
- render();window.scrollTo({top:0,behavior:'instant'});
+ render();
  if(changed)animateScreen(previous,route);
 }
 function syncNavSelection(immediate=false){
@@ -84,6 +86,12 @@ const qid=obj=>obj?.itemId||obj?.id;
 async function act(el){
  const a=el.dataset.action,l=state.lesson;
  if(a?.startsWith('nav-'))return goto(a.slice(4));
+ if(a==='focus-preview'){
+  const slider=$('#v5-r-control');
+  slider?.scrollIntoView({behavior:reduced()?'instant':'smooth',block:'center'});
+  slider?.focus({preventScroll:true});
+  return;
+ }
  if(a==='enter-sensitivity')return study('sensitivity');
  if(a==='enter-evo')return study('evo-pair');
  if(a==='reset-lesson'){state.lesson=newLesson(state.lesson.experiment);return goto('learn')}
@@ -135,7 +143,7 @@ async function act(el){
  if(a==='clear-data')return confirmModal('清空学习记录？','将清空本浏览器 V2 学习事件，无法直接恢复。建议先导出备份；原 V1 数据不会被删除。',()=>{bridge.clear();render();notify('V2 学习记录已清空')});
  if(a==='open-ai-config'){
   await awaitReady();document.body.classList.add('show-original-engine');
-  $('#dialog-layer').innerHTML='<div class="modal-shade" id="configure-shade"><div class="modal"><h2>原版 DeepSeek 设置</h2><p>请在原版面板里配置并真实验证连接。此页面不会读取或展示你的密钥。</p><div class="modal-actions"><button id="close-config" class="secondary">关闭并返回 V4</button></div></div></div>';
+  $('#dialog-layer').innerHTML='<div class="modal-shade" id="configure-shade"><div class="modal"><h2>原版 DeepSeek 设置</h2><p>请在原版面板里配置并真实验证连接。此页面不会读取或展示你的密钥。</p><div class="modal-actions"><button id="close-config" class="secondary">关闭并返回 V5</button></div></div></div>';
   const w=bridge.win;const d=w.document.querySelector('#pages-ai-dialog'),o=w.document.querySelector('#pages-ai-open');if(o)o.click();else if(d)d.dataset.open='true';
   $('#close-config').onclick=async()=>{if(d)d.dataset.open='false';document.body.classList.remove('show-original-engine');$('#dialog-layer').replaceChildren();try{bridge.status=await bridge.request('/api/status')}catch{}render()};
  }

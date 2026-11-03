@@ -1,0 +1,72 @@
+/* 知序 V5 · Apple reading and teaching UI refinement.
+   Scope: V5 only. V4, R3 and original styles remain untouched. */
+@media (min-width:1121px) {
+  .app { grid-template-columns:218px 216px minmax(0,1fr); }
+  body:has(#screen[data-page="today"]) .app { grid-template-columns:218px minmax(0,1fr); }
+  main[data-content] { padding:40px clamp(28px,3vw,52px) 100px; max-width:1240px; }
+  #screen[data-page="learn"] .learning-page { max-width:880px; margin:0 auto; }
+}
+.workshop-intro { margin:0 0 16px; }
+.workshop-breadcrumb { font-size:13px;letter-spacing:0;font-weight:650;color:#37776e; }
+.workshop-hero h1 {
+  color:#fff;
+  font-weight:685;
+  font-size:clamp(29px,3.15vw,43px);
+  line-height:1.27;
+  letter-spacing:-.058em;
+  margin:24px 0 16px;
+}
+.workshop-hero-copy>p {font-size:15px;line-height:1.75;}
+.workshop-hero-foot {font-size:12px;line-height:1.55;}
+.preview-top,.preview-top span:first-child {font-size:12px;letter-spacing:0;line-height:1.45;}
+.preview-legend {font-size:12px;}
+.preview-slider {font-size:13px;}
+.preview-note {font-size:12px;line-height:1.55;}
+.workshop-method .method-steps span {font-size:13px;line-height:1.5;}
+.workshop-section-head .quiet-button {min-height:44px;display:inline-flex;align-items:center;padding:8px 12px;}
+.world-card>span:not(.world-type):not(.world-shape) {font-size:14px;}
+.world-card em {font-size:13px;}
+.workshop-facts .metric span {font-size:13px;}
+.workshop-trust {font-size:12px;line-height:1.6;}
+/* Stable hit boxes: enlarge interactive area without changing geometry on press. */
+.menu-item {min-height:44px;}
+.doctor-launch {min-width:44px;min-height:44px;}
+.experiment-tabs button {min-height:44px;}
+.toolbar .icon-button,.outline-toolbar .icon-button {width:44px;height:44px;}
+.learning-header button,.learning-page .form-actions button,.workshop-actions button,
+.world-card,.setting-row button {min-height:44px;}
+.world-card:focus-visible,.workshop-actions button:focus-visible,
+.toolbar button:focus-visible,.mobile-native-tabs button:focus-visible {
+  outline:2px solid #127970;
+  outline-offset:3px;
+}
+/* Preserve legible controls when iOS WebKit focuses a form input. */
+.learning-page input[type="number"],.learning-page textarea,
+#doctor-question {font-size:16px;line-height:1.6;}
+@media(max-width:700px){
+  #screen[data-page="today"] {padding-top:23px;}
+  .workshop-intro {margin-bottom:14px;}
+  .workshop-breadcrumb {font-size:13px;}
+  .workshop-hero h1 {font-size:30px;line-height:1.25;margin:17px 0 13px;}
+  .workshop-hero-copy>p {font-size:14px;line-height:1.65;}
+  .workshop-eyebrow {font-size:12px;letter-spacing:0;}
+  .workshop-actions .primary,.workshop-actions .quiet-button {font-size:14px;min-height:44px;}
+  .workshop-hero-foot {font-size:12px;}
+  .preview-top,.preview-top span:first-child {font-size:12px;}
+  .preview-legend {font-size:12px;}
+  .preview-note {font-size:12px;line-height:1.6;}
+  .preview-slider {font-size:13px;}
+  .workshop-method .method-steps strong {font-size:14px;}
+  .workshop-method .method-steps span {font-size:12px;}
+  .workshop-facts .metric span {font-size:12px;}
+  .workshop-section-head .quiet-button {min-height:44px;}
+  .page-intro h1 {font-size:clamp(29px,8vw,34px);line-height:1.25;}
+  .learning-header {align-items:center;}
+  .learning-page .learning-paper {padding:clamp(23px,5.5vw,29px);}
+  .learning-page .answer-group legend {font-size:13px;}
+  .learning-page .quiet-note {font-size:12px;line-height:1.6;}
+  .toolbar .icon-button,.outline-toolbar .icon-button {width:44px;height:44px;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .workshop-actions button,.workshop-section-head button {transition:none!important;}
+}

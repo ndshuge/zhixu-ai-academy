@@ -8,6 +8,8 @@
 <link rel="stylesheet" href="./v4-kinetic.css?v=kinetic-20261029e">
 <link rel="stylesheet" href="./v4-avatar.css?v=portrait-20261029a">
 <link rel="stylesheet" href="./v5-workshop.css?v=1">
+<link rel="stylesheet" href="./v5-scroll-edge.css?v=20261103a">
+<link rel="stylesheet" href="./v5-ui-polish.css?v=20261103a">
 <link rel="modulepreload" href="../ai-academy-apple/assets/motion.bundle.js">
 <link rel="preload" href="../ai-academy-apple/assets/zhixu-doctor/idle.webp" as="image">
 </head>
@@ -37,9 +39,9 @@
     <nav class="primary-menu" aria-label="学习导航">
       <button data-route="today" class="menu-item is-active"><svg><use href="#i-home"/></svg><span>今天</span></button>
       <button data-route="courses" class="menu-item"><svg><use href="#i-books"/></svg><span>课程</span></button>
-      <button data-route="learn" class="menu-item"><svg><use href="#i-spark"/></svg><span>私人教师</span></button>
-      <button data-route="library" class="menu-item"><svg><use href="#i-note"/></svg><span>资料与错题</span></button>
-      <button data-route="growth" class="menu-item"><svg><use href="#i-chart"/></svg><span>学习进度</span></button>
+      <button data-route="learn" class="menu-item"><svg><use href="#i-spark"/></svg><span>学习</span></button>
+      <button data-route="library" class="menu-item"><svg><use href="#i-note"/></svg><span>资料</span></button>
+      <button data-route="growth" class="menu-item"><svg><use href="#i-chart"/></svg><span>进度</span></button>
     </nav>
     <div class="sidebar-bottom"><button data-route="settings" class="menu-item"><svg><use href="#i-gear"/></svg><span>设置</span></button><span class="engine-caption" id="engine-caption">连接科学引擎…</span></div>
   </aside>
@@ -53,15 +55,15 @@
       <div class="toolbar-trailing"><span class="connected-dot" id="connected-dot" title="科学引擎连接状态"></span><button class="doctor-launch" id="doctor-launch" aria-label="打开知序博士" aria-expanded="false"><span class="doctor-avatar__media"><img src="./assets/doctor-avatar.webp" alt="" width="320" height="320" decoding="async"></span></button><button class="icon-button" data-route="settings" aria-label="设置"><svg><use href="#i-gear"/></svg></button></div>
     </header>
     <main id="screen" data-content data-page="today" tabindex="-1" aria-live="off">
- <div class="workshop-intro"><span class="workshop-breadcrumb">知序 · PERSONAL LEARNING STUDIO</span><h1>把好奇心，变成自己的理解。</h1><p>从一次独立判断开始，用真实科学计算和知序博士的追问亲自验证答案。</p></div>
+ <div class="workshop-intro"><span class="workshop-breadcrumb">今天的探索</span></div>
  <section class="workshop-hero" aria-label="准备进入学习工作室">
   <div class="workshop-hero-copy">
    <div class="workshop-eyebrow"><span class="signal-dot"></span>科学探究 · 开放实验</div>
-   <h2>只差十万分之一，<br>结果会有多不同？</h2>
+   <h1>只差十万分之一，<br>结果会有多不同？</h1>
    <p>学习工作室与科学实验室，马上就绪。</p>
    <div class="workshop-actions"><a class="primary" href="#learn">从独立判断开始 ↗</a></div>
   </div>
-  <div class="workshop-preview"><span class="workshop-overline">LIVE MATH PREVIEW</span><p>正在连接可交互的科学预览…</p></div>
+  <div class="workshop-preview"><span class="workshop-overline">公式预览</span><p>正在准备实验图表…</p></div>
  </section>
 </main>
   </div>
@@ -92,7 +94,7 @@
 (() => {
  const routes={
   courses:['科学探究','课程','选择一个科学世界，从真实问题开始。','课程正在准备'],
-  learn:['知序私人教师 · 科学探究','从判断开始，亲自验证','每次只完成一个学习阶段。真实计算，真实记录。','私人教师正在准备'],
+  learn:['学习 · 科学探究','从判断开始，亲自验证','每次只完成一个学习阶段。真实计算，真实记录。','私人教师正在准备'],
   library:['学习档案','资料与错题','复习计划由真实作答生成；未经核实的误解需要你确认。','学习档案正在准备'],
   growth:['个人进度','学习进度','只统计本浏览器中有证据支持的学习行为。','进度记录正在准备'],
   settings:['个人中心','设置','把学习空间调整为适合你自己的节奏。','设置正在准备']
@@ -103,7 +105,7 @@
  page.dataset.page=route;
  page.innerHTML='<header class="page-intro"><div class="eyebrow">'+meta[0]+'</div><h1>'+meta[1]+'</h1><p>'+meta[2]+'</p></header><div class="section-bar first-section"><h2>'+meta[3]+'</h2></div><div class="empty-state">正在载入对应页面内容…</div>';
  const toolbar=document.getElementById('toolbar-title');
- if(toolbar)toolbar.textContent=route==='learn'?'私人教师':meta[1];
+ if(toolbar)toolbar.textContent=route==='learn'?'学习':meta[1];
  const nav=document.getElementById('mobile-tabs');
  document.querySelectorAll('.menu-item[data-route],.tab-item[data-route]').forEach(button=>{
   const selected=button.dataset.route===route;

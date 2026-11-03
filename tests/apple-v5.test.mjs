@@ -24,7 +24,7 @@ test('V5 is a separate working copy preserving scientific adapter',()=>{
 });
 test('V5 home presents two working paths and evidence-based flow',()=>{
  const src=page('ai-academy-v5','views.js');
- for(const phrase of ['跟着知序博士学习','进入科学实验室','独立判断','提出预测','真实验证','迁移理解'])
+ for(const phrase of ['跟着知序博士学习','亲手调节参数','独立判断','提出预测','真实验证','迁移理解'])
   assert.ok(src.includes(phrase),phrase);
  assert.match(src,/data-action="enter-sensitivity"/);
  assert.match(src,/data-action="enter-evo"/);
@@ -43,7 +43,7 @@ test('V5 live graph follows the genuine Logistic recurrence, with separate serie
 test('V5 has its own theme, responsive lab and reduced-motion rule',()=>{
  const html=page('ai-academy-v5','index.html');
  assert.match(html,/v5-workshop.css/);
- assert.match(html,/PERSONAL LEARNING STUDIO/,'first paint should be V5, even before JavaScript hydrates');
+ assert.match(html,/<h1>只差十万分之一/,'first paint should render the actual science question before hydration');
  const css=page('ai-academy-v5','v5-workshop.css');
  assert.match(css,/workshop-hero/);
  assert.match(css,/prefers-reduced-motion/);
