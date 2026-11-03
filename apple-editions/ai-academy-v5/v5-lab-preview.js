@@ -24,6 +24,8 @@ export function refreshLabPreview(root=document){
  svg.querySelector('[data-curve="first"]')?.setAttribute('d',toPath(first));
  svg.querySelector('[data-curve="second"]')?.setAttribute('d',toPath(second));
  if(value)value.textContent=r.toFixed(2);
+ // Match the SVG's readable label to the current, genuinely computed graph.
+ svg.setAttribute('aria-label','Logistic 轨迹公式预览，增长参数 r='+r.toFixed(2)+'，初始值 x₀=0.41200 和 x₀=0.41201；预览不计入学习记录。');
 }
 if(typeof document!=='undefined')document.addEventListener('input',event=>{
  if(event.target?.id==='v5-r-control')refreshLabPreview();
