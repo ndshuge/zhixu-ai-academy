@@ -40,7 +40,7 @@ const prefKey='zx-v4-preferences';
 let prefs={reduceMotion:false};try{prefs={...prefs,...JSON.parse(localStorage.getItem(prefKey)||'{}')}}catch{}
 document.documentElement.dataset.reduced=prefs.reduceMotion?'true':'false';
 const state={route:'today',lesson:newLesson(),busy:false,chat:[]};
-let navGlass=null,navResize=null,navAnimation=null,routeAnimation=null,doctorAnimation=null;
+let navGlass=null,navResize=null,navAnimation=null,routeAnimation=null;
 let lastRoute='today';
 const nav=$('#mobile-tabs'),lens=nav.querySelector('.tab-lens');
 try{const saved=JSON.parse(sessionStorage.getItem('zx-v4-lesson')||'null');if(saved&&['sensitivity','logistic','evo-pair'].includes(saved.experiment)&&Number.isInteger(saved.step))state.lesson={...newLesson(saved.experiment),...saved};}catch{}
@@ -238,25 +238,41 @@ function syncVisibleViewport(){
  const showing=!panel.hidden && document.activeElement===question && innerWidth<=700;
  document.body.classList.toggle('keyboard-visible',showing);
 }
+// Doctor sheet has one CSS-interpolated state; interrupted open/close
+// transitions resume from the current rendered pixels without restarting a
+// second WAAPI or Motion effect on WebKit.
+let doctorCloseTimer=null;
+function finishDoctorClose(){
+ if(launch.getAttribute('aria-expanded')!=='false')return;
+ panel.hidden=true;
+ launch.focus({preventScroll:true});
+}
+panel.addEventListener('transitionend',event=>{
+ if(event.target===panel && event.propertyName==='opacity')finishDoctorClose();
+});
 function closeDoctor(){
+ if(launch.getAttribute('aria-expanded')==='false')return;
  question.blur();
  document.body.classList.remove('doctor-open','keyboard-visible');
  launch.setAttribute('aria-expanded','false');
- if(reduced()||!motion){panel.hidden=true;launch.focus({preventScroll:true});return;}
- doctorAnimation?.stop?.();
- doctorAnimation=motion.animate(panel,{opacity:[1,0],y:[0,10],scale:[1,.975]}, {duration:.18,ease:[.35,0,1,1]});
- doctorAnimation.finished.then(()=>{if(launch.getAttribute('aria-expanded')==='false')panel.hidden=true;launch.focus({preventScroll:true})}).catch(()=>{if(launch.getAttribute('aria-expanded')==='false')panel.hidden=true;});
+ panel.classList.remove('doctor-visible');
+ clearTimeout(doctorCloseTimer);
+ if(reduced()){finishDoctorClose();return;}
+ doctorCloseTimer=setTimeout(finishDoctorClose,380);
 }
 launch.onclick=()=>{
  if(launch.getAttribute('aria-expanded')==='true'){closeDoctor();return;}
- doctorAnimation?.stop?.();
- panel.hidden=false;
+ clearTimeout(doctorCloseTimer);
+ if(panel.hidden){
+  panel.hidden=false;
+  panel.classList.remove('doctor-visible');
+  // First entry needs a committed initial state; returning mid-flight does not.
+  void panel.offsetWidth;
+ }
  document.body.classList.add('doctor-open');
  launch.setAttribute('aria-expanded','true');
+ panel.classList.add('doctor-visible');
  doctorStatus();syncVisibleViewport();
- if(!reduced()&&motion){
-   doctorAnimation=motion.animate(panel,{opacity:[0,1],y:[12,0],scale:[.972,1]}, {type:'spring',stiffness:395,damping:35,mass:1});
- }
  // Do not focus textarea: that unexpectedly invokes the iOS keyboard.
  $('#doctor-close').focus({preventScroll:true});
 };

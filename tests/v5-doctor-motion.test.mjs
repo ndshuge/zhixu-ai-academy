@@ -8,9 +8,12 @@ test('rapid Doctor click toggles desired expanded state even if exit animation i
  assert.match(open[1],/launch\.getAttribute\('aria-expanded'\)==='true'/);
  assert.doesNotMatch(open[1],/if\(!panel\.hidden\)\{closeDoctor\(\);return;/);
 });
-test('canceled Doctor close never hides a re-opened panel',()=>{
+test('closed state is the only state that can hide the panel',()=>{
+ const finish=src.match(/function finishDoctorClose\(\)\{([\s\S]*?)\n\}/);
  const close=src.match(/function closeDoctor\(\)\{([\s\S]*?)\n\}/);
- assert.ok(close);
- assert.match(close[1],/\.catch\(\(\)=>\{if\(launch\.getAttribute\('aria-expanded'\)==='false'\)panel\.hidden=true;/);
- assert.doesNotMatch(close[1],/\.catch\(\(\)=>\{panel\.hidden=true\}/);
+ assert.ok(finish&&close);
+ assert.match(finish[1],/launch\.getAttribute\('aria-expanded'\)!=='false'/);
+ assert.match(finish[1],/panel\.hidden=true/);
+ assert.match(close[1],/panel\.classList\.remove\('doctor-visible'\)/);
+ assert.match(close[1],/clearTimeout\(doctorCloseTimer\)/);
 });

@@ -1,0 +1,25 @@
+/* Zhixu V5 — Doctor panel interruptible spatial transition.
+ * One CSS transition owns the panel's opacity and geometry. Navigation/dock
+ * still use the existing Motion engine; historical editions are unchanged. */
+#doctor-panel {
+  opacity:0;
+  transform:translate3d(0,12px,0) scale(.972);
+  transform-origin:calc(100% - 30px) 100%;
+  transition:
+    opacity .235s cubic-bezier(.25,.65,.25,1),
+    transform .335s cubic-bezier(.18,.82,.26,1);
+}
+#doctor-panel.doctor-visible {
+  opacity:1;
+  transform:translate3d(0,0,0) scale(1);
+}
+@media (max-width:700px) {
+  #doctor-panel{transform-origin:calc(100% - 25px) 100%;}
+}
+@media (prefers-reduced-motion:reduce) {
+  #doctor-panel{transition:none!important;transform:none!important;}
+}
+html[data-reduced="true"] #doctor-panel{
+ transition:none!important;
+ transform:none!important;
+}

@@ -27,3 +27,8 @@
 - 同页“重新开始”必须实际刷新当前 UI 而不删除已记载的学习事件。设置属于工具路由，不能把前一个底部主 tab 伪装选中，也不应重复多个设置入口。桌面课程/学习可用二级目录，资料/进度/设置若只有静态说明则不应占用一整列。
 - WebKit 模拟绝不等同 iPhone Safari 真机；“已调用插件/实现 L2 原生折射/达 Apple 第一方视觉”均须有实测证据。PFL SHA256 mismatch 需独立调查，不得为消除红灯篡改科学证据。
 - 施工只改 `apple-editions/ai-academy-v5/`，保留 R3/V4/Original；独立 worktree、无 force push，发布必须核对正式评委 URL 指向与静态部署成功。文档状态以实际源码和验证记录为准。
+## 2026-11-03：博士弹层中途反向行为（仅知序 V5）
+- Apple UI 的动效生命周期不得让 Motion 与另一个 WAAPI 动画同时控制同一面板的 opacity/transform；本次已在 V5 将博士面板改为单一 doctor-visible 状态 + CSS transition，支持中途反向并只在真实关闭完成后 hidden。
+- launch/close 使用 aria-expanded 作为用户期望状态；关闭未完成时重新打开需取消退出计时器，不得复位原聊天内容；Esc 退出焦点返回头像。Reduce Motion 立即切换，不触发 iOS 软键盘。
+- 该约束只作用于 `apple-editions/ai-academy-v5/`；V4/R3/Original 禁止回填。参考 `docs/APPLE_V5_DOCTOR_REVERSAL_QA_20261103.md`。
+- Chat 插件 Skill 在 ChatGPT 环境中加载，Mice Hole 只负责本机执行；Playwright WebKit ≠ iPhone Safari 真机，不得以绿测声称已完成视觉终验。
