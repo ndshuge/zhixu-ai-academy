@@ -7,7 +7,34 @@ import {screens,outline,titles,esc} from './views.js';
 import {refreshLabPreview} from './v5-lab-preview.js';
 const $=q=>document.querySelector(q),$$=q=>Array.from(document.querySelectorAll(q));
 const stage=$('#screen'),frame=$('#original-engine'),toast=$('#toast');
-const notify=message=>{toast.textContent=String(message);toast.classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>toast.classList.remove('show'),3600)};
+function syncToastPosition(){
+ const dock=document.querySelector('#mobile-tabs');
+ if(!dock||!matchMedia('(max-width:700px)').matches){
+  toast.style.removeProperty('--zx-toast-bottom');return;
+ }
+ const top=dock.getBoundingClientRect().top;
+ if(top>0&&Number.isFinite(top)){
+  toast.style.setProperty('--zx-toast-bottom',Math.ceil(Math.max(16,innerHeight-top+24))+'px');
+ }
+}
+let toastPositionPending=false;
+function scheduleToastPosition(){
+ if(!toast.classList.contains('show')||toastPositionPending)return;
+ toastPositionPending=true;
+ requestAnimationFrame(()=>{toastPositionPending=false;syncToastPosition()});
+}
+window.addEventListener('resize',scheduleToastPosition,{passive:true});
+window.addEventListener('scroll',scheduleToastPosition,{passive:true});
+window.visualViewport?.addEventListener('resize',scheduleToastPosition,{passive:true});
+window.visualViewport?.addEventListener('scroll',scheduleToastPosition,{passive:true});
+const notify=message=>{
+ toast.textContent=String(message);
+ syncToastPosition();
+ toast.classList.add('show');
+ clearTimeout(notify.timer);
+ // Longer explanations need more reading time; never truncate source errors.
+ notify.timer=setTimeout(()=>toast.classList.remove('show'),Math.min(8000,Math.max(3600,String(message).length*65)));
+};
 const bridge=new ScienceBridge(frame,notify);
 const prefKey='zx-v4-preferences';
 let prefs={reduceMotion:false};try{prefs={...prefs,...JSON.parse(localStorage.getItem(prefKey)||'{}')}}catch{}

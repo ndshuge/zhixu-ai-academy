@@ -1,0 +1,55 @@
+/* Zhixu V5 · iPhone Safari recording fixes · 2026-11-03 */
+#screen[data-page="library"] .review-task{
+ display:flex;align-items:center;gap:14px;min-height:76px;padding:16px 18px;max-inline-size:100%;
+}
+#screen[data-page="library"] .review-task .row-meta{
+ flex:1 1 0;min-width:0;max-inline-size:100%;overflow-wrap:anywhere;
+}
+#screen[data-page="library"] .review-task .row-meta strong{
+ font-size:15px;line-height:1.45;word-break:normal;
+}
+#screen[data-page="library"] .review-task .review-reason{
+ display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;
+ overflow:hidden;font-size:13px;line-height:1.6;color:#666b70;
+ overflow-wrap:anywhere;max-inline-size:100%;
+}
+#screen[data-page="library"] .review-task .review-due{
+ display:block;margin-top:6px;font-size:12px;color:#717780;font-variant-numeric:tabular-nums;
+}
+#screen[data-page="library"] .review-task .row-chevron{
+ display:block;flex:0 0 18px;width:18px;height:18px;
+ stroke:#7c878b;stroke-width:1.8;fill:none;align-self:center;
+}
+#screen[data-page="library"] .review-task:focus-visible{
+ outline:2px solid #127970;outline-offset:-3px;
+}
+/* Floating status, visually attached above the bottom tab bar. */
+#toast{
+ max-width:min(440px,calc(100vw - 36px));padding:12px 17px;
+ font-size:14px;line-height:1.55;border-radius:16px;overflow-wrap:anywhere;
+ white-space:normal;color:#f7f9fa;background:rgba(35,42,44,.94);
+ border:1px solid rgba(255,255,255,.13);
+ box-shadow:0 7px 26px rgba(20,38,39,.2),0 1px 5px rgba(20,38,39,.08);
+ -webkit-backdrop-filter:blur(14px) saturate(1.14);
+ backdrop-filter:blur(14px) saturate(1.14);
+ transition:opacity .2s ease,transform .2s cubic-bezier(.2,.8,.2,1);
+}
+@media(max-width:700px){
+ #toast{
+  box-sizing:border-box;width:max-content;max-width:calc(100vw - 36px);
+  left:50%;right:auto;
+  bottom:var(--zx-toast-bottom,calc(140px + env(safe-area-inset-bottom,0px)))!important;
+  font-size:14px;line-height:1.55;text-align:left;
+ }
+ #toast.show{opacity:1;transform:translate(-50%,0);}
+ main[data-content]{padding-bottom:calc(185px + env(safe-area-inset-bottom,0px));}
+}
+@media(min-width:701px){
+ #toast{bottom:28px;left:50%;max-width:min(440px,calc(100vw - 48px));}
+}
+@media(prefers-reduced-transparency:reduce){
+ #toast{background:#242a2c;-webkit-backdrop-filter:none;backdrop-filter:none;}
+}
+@media(prefers-reduced-motion:reduce){
+ #toast{transition:opacity .12s linear;transform:translate(-50%,0)!important;}
+}
