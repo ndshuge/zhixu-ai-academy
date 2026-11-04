@@ -29,7 +29,7 @@ test('settings no longer suggests that the last tab is selected or duplicates it
  const css=read('v5-product-design.css'),views=read('views.js');
  assert.ok(css.includes('#mobile-tabs .tab-lens{opacity:0'));
  assert.ok(css.includes('#mobile-tabs button.tab-item{color:#515e64!important'));
- assert.ok(css.includes('.toolbar-trailing button[data-route="settings"]{display:none'));
+ assert.ok(!css.includes('.toolbar-trailing button[data-route="settings"]{display:none'));
  assert.ok(!views.includes("heading('个人中心','设置','把学习空间调整为适合你自己的节奏。')"));
 });
 test('desktop collapses inert secondary columns but leaves active navigation intact',()=>{

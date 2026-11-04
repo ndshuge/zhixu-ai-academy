@@ -1,0 +1,71 @@
+/* V5 iPhone continuity: stable toolbar target, spatial routes and a full-height scroll edge.
+   Background blur (L1) is used on WebKit; no unsupported native glass claim. */
+.toolbar-trailing button[data-route="settings"]{
+  transition:transform .22s cubic-bezier(.21,.83,.3,1),background-color .18s ease,border-color .18s ease;
+  transform-origin:center;
+}
+.toolbar-trailing button[data-route="settings"]:active{transform:scale(.93)}
+.toolbar-trailing button[data-route="settings"][aria-current="page"]{
+  border-color:rgba(17,112,103,.22)!important;
+  background:rgba(220,241,236,.78)!important;
+}
+@media(prefers-color-scheme:dark){
+ .toolbar-trailing button[data-route="settings"][aria-current="page"]{
+  background:rgba(60,91,91,.85)!important;
+  border-color:rgba(137,206,196,.3)!important;
+ }
+}
+/* The glass lens already travels using the bundled Motion spring.
+   Content uses a restrained directional reveal and never double-animates the stage itself. */
+@keyframes zx-ios-page-enter{
+  from{opacity:.70;transform:translate3d(var(--zx-enter-x,12px),5px,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+#screen[data-entering="true"]{--zx-enter-x:12px}
+#screen[data-entering="true"][data-direction="backward"]{--zx-enter-x:-12px}
+#screen[data-entering="true"] > :nth-child(-n+4){
+  animation:zx-ios-page-enter .32s cubic-bezier(.2,.85,.25,1) both;
+}
+#screen[data-entering="true"] > :nth-child(2){animation-delay:20ms}
+#screen[data-entering="true"] > :nth-child(3){animation-delay:37ms}
+#screen[data-entering="true"] > :nth-child(4){animation-delay:52ms}
+@media(max-width:700px){
+  /* Preserve the material all the way below the Dock, including at the end of
+     a long document. The old scroll-edge controller sets zero at the bottom. */
+  body::after{
+    height:calc(196px + env(safe-area-inset-bottom,0px))!important;
+    opacity:1!important;
+    background:linear-gradient(to bottom,
+      rgba(var(--zx-dock-ground,246,247,249),0) 0%,
+      rgba(var(--zx-dock-ground,246,247,249),.025) 23%,
+      rgba(var(--zx-dock-ground,246,247,249),.065) 43%,
+      rgba(var(--zx-dock-ground,246,247,249),.15) 67%,
+      rgba(var(--zx-dock-ground,246,247,249),.34) 100%)!important;
+    -webkit-backdrop-filter:blur(28px) saturate(1.16)!important;
+    backdrop-filter:blur(28px) saturate(1.16)!important;
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.12) 20%,rgba(0,0,0,.52) 48%,#000 83%)!important;
+    mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.12) 20%,rgba(0,0,0,.52) 48%,#000 83%)!important;
+  }
+  body.keyboard-visible::after,
+  body:has(.doctor-panel:not([hidden]))::after{
+    opacity:0!important;
+    visibility:hidden!important;
+  }
+}
+@media(max-width:700px) and (prefers-color-scheme:dark){
+  :root{--zx-dock-ground:18,25,28}
+}
+@media(max-width:700px) and (prefers-reduced-transparency:reduce),
+       (max-width:700px) and (prefers-contrast:more){
+ body::after{
+   -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+   -webkit-mask-image:none!important;mask-image:none!important;
+   background:linear-gradient(to bottom,transparent,rgba(var(--zx-dock-ground,246,247,249),.95))!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .toolbar-trailing button[data-route="settings"]{transition:none!important}
+ #screen[data-entering="true"] > :nth-child(-n+4){animation:none!important}
+}
+html[data-reduced="true"] .toolbar-trailing button[data-route="settings"]{transition:none!important}
+html[data-reduced="true"] #screen[data-entering="true"] > :nth-child(-n+4){animation:none!important}

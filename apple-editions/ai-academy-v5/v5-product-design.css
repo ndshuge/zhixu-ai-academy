@@ -25,7 +25,7 @@
 /* Settings is a secondary route: do not imply the previous tab is still selected. */
 body:has(#screen[data-page="settings"]) #mobile-tabs .tab-lens{opacity:0!important;}
 body:has(#screen[data-page="settings"]) #mobile-tabs button.tab-item{color:#515e64!important;background:transparent!important;font-weight:550!important;}
-body:has(#screen[data-page="settings"]) .toolbar-trailing button[data-route="settings"]{display:none!important;}
+/* Toolbar settings control remains visible on its own route for a stable target. */
 #v5-r-control{min-height:44px;}
 @media(max-width:700px){
  #screen[data-page="settings"] .setting-row{gap:9px;padding:16px 14px;}

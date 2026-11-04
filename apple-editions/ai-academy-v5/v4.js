@@ -93,6 +93,7 @@ const reduced=()=>prefs.reduceMotion||matchMedia('(prefers-reduced-motion:reduce
 function render(){
  const route=state.route;
  stage.dataset.page=route;
+ const settingsButton=$('.toolbar-trailing button[data-route="settings"]');if(settingsButton){if(route==='settings')settingsButton.setAttribute('aria-current','page');else settingsButton.removeAttribute('aria-current');}
  $('#toolbar-title').textContent=titles[route];$('#outline-name').textContent=route==='learn'?'学习步骤':titles[route];
  $('#outline-content').innerHTML=outline(route,bridge,state.lesson);
  $$('.menu-item[data-route],.tab-item[data-route]').forEach(node=>{
@@ -154,7 +155,9 @@ function syncNavSelection(immediate=false){
 }
 let routeRevealTimer=null;
 function animateScreen(previous,next){
- if(reduced())return;
+ const routes=['today','courses','learn','library','growth','settings'];
+ stage.dataset.direction=routes.indexOf(next)>=routes.indexOf(previous)?'forward':'backward';
+ if(reduced()){clearTimeout(routeRevealTimer);delete stage.dataset.entering;return;}
  // No frozen page screenshots: those cause ghost text in Blink and blank midframes in WebKit.
  // Keep navigation physical and only stage the first few content groups with small,
  // opacity-safe compositor transforms. Never fade the entire reading surface.
@@ -167,7 +170,7 @@ function animateScreen(previous,next){
  clearTimeout(routeRevealTimer);
  routeRevealTimer=setTimeout(()=>{
   delete stage.dataset.entering;
- },340);
+ },420);
 }
 function study(experiment='sensitivity'){state.lesson=newLesson(experiment);goto('learn')}
 function setStep(n){if(n<=state.lesson.highest){state.lesson.step=n;render()}}
