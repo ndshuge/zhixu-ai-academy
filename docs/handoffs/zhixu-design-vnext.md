@@ -33,7 +33,7 @@
 - 新专项真实 Edge：390/1440 两场景 PASS，覆盖未选择→已选择→返回/恢复→提交→下一题清空。已有专注导航 195/390/1440 三场景 PASS；BYOK 失败保护 390/1440 两场景 PASS；完整真实科学路线 `QA_ENGINE=edge` 敏感性实验 PASS，9 条事件、4 次独立作答、1 次真实科学执行、导出及持久化且 404=0。
 - 浏览器最初完整科学测试 404 是本地预览目录未按正式 Pages 根目录平铺导致，诊断时 `learning.html`、`learning-store.js` 缺失，改由独立只读源链接与扁平复制的预览目录重跑成功。此处**仅修正测试预览结构，未更改应用科学逻辑**。
 - 预览测试根：`E:/CHATGPT/work/zhixu-design-vnext-pages-preview-20261104`。Playwright-core 缺失时仅在本工作树使用 `npm install --no-save --no-package-lock --ignore-scripts playwright-core`，无 package.json / lock 改动。
-- **未验收**：Playwright WebKit（当前本机浏览器组件未证实可用）、iPhone Safari 真机/VoiceOver/真实帧率；Magic Move 及产品级弹簧、全面视觉 QA、完整深色/Reduced Motion 回归仍待实测。不可宣称 G4/G5/G6 完成，更不能称用户艺术签收。
+- **后续更新（2026-11-04 晚间）**：本机 Playwright WebKit 已确认可运行，学习阶段/五页路由/学员科学流程/BYOK 失败保护经 Edge+WebKit 回归；详见 `docs/zhixu-vnext-g4-g6-acceptance-20261104.md`，覆盖范围与真实证据以该文档为准。**仍未验收**：iPhone Safari 真机/VoiceOver/真实帧率、真正的共享元素 Magic Move、全面物理动效视觉艺术签收。不能宣称整项 Apple 级设计已全部完成。
 - 当前施工版不发布、不改 main/正式评委 Pages。下一步：完成 Edge/WebKit 对照、返回/长文本/Reduced Motion、非 Dock 页面过渡和全部按钮审计；按 G4→G6 单项有据施工。
 
 ## 继续时的首要命令
@@ -43,4 +43,4 @@ git -C E:/CHATGPT/work/zhixu-design-vnext-20261104 log -4 --oneline
 npm test
 npm run verify
 ```
-之后执行 `tests/browser-v5-learning-continuity.cjs` 与原有 V5 Focus / BYOK / Full Journey 专项脚本。使用 `ZHIXU_PREVIEW_ROOT=E:/CHATGPT/work/zhixu-design-vnext-20261104`。任何未完成测试标记 NOT_RUN；真机 Safari 需设备验证。
+之后执行 `tests/browser-v5-learning-continuity.cjs` 与原有 V5 Focus / BYOK / Full Journey 专项脚本。使用 `ZHIXU_PREVIEW_ROOT=E:/CHATGPT/work/zhixu-design-vnext-pages-preview-20261104`（模拟正式 Pages 平铺目录）；分 `edge` / `webkit` 运行。任何未完成测试标记 NOT_RUN；真机 Safari 需设备验证。

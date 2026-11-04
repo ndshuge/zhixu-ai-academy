@@ -19,3 +19,8 @@
 @media(max-width:390px){#screen .zx-next-lesson{align-items:stretch}#screen .zx-next-lesson button{width:100%;justify-content:center}}
 @media(prefers-color-scheme:dark){#screen #quiz-form .answer-option[data-answer-state="selected"],#screen #quiz-form .answer-option[data-answer-state="correct"]{background:rgba(35,155,125,.16)}#screen #quiz-form .answer-option[data-answer-state="incorrect"]{background:rgba(210,118,72,.17)}}
 @media(prefers-reduced-motion:reduce){#screen .zx-next-lesson,#screen #quiz-form .answer-option{animation:none;transition:none}}
+/* Settings page heading cleanup */
+#screen[data-page="settings"] > .page-intro{
+ position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;border:0;white-space:nowrap;
+ clip:rect(0,0,0,0);clip-path:inset(50%);
+}

@@ -67,10 +67,10 @@ function quiz(stage,l){
  '<form id="quiz-form" data-stage="'+stage+'" data-quiz-state="'+outcome+'"><fieldset class="answer-group" '+(submitted?'disabled':'')+'><legend>请选择一个答案，默认不选</legend>'+
  opts.map((o,i)=>{const active=chosen===i;const status=active?(submitted&&!isPre?(g.gradedResult==='correct'?'correct':'incorrect'):submitted?'submitted':'selected'):'unselected';return '<label class="answer-option" data-answer-state="'+status+'"><input type="radio" name="answer" value="'+i+'" required '+(active?'checked':'')+'><span>'+esc(o)+'</span></label>'}).join('')+'</fieldset>'+
  feedback+(submitted?'<div class="form-actions">'+click(more?'下一道题 '+next:isPre?'提出自己的预测 '+next:'查看学习证据 '+next,more?(isPre?'next-pre':'next-transfer-question'):(isPre?'next-prediction':'nav-growth'),true)+'</div>':
- '<div class="form-actions"><button class="primary" type="submit" '+(chosen===undefined?'disabled':'')+'>提交我的判断 '+next+'</button></div>')+'</form><p class="quiet-note">前测提交后暂不显示正确答案。</p>';
+ '<div class="form-actions"><button class="primary" type="submit" '+(chosen===undefined?'disabled':'')+'>提交我的判断 '+next+'</button></div>')+'</form>'+(isPre?'<p class="quiet-note">前测提交后暂不显示正确答案。</p>':'<p class="quiet-note">迁移答题完成后会给出判定和解析。</p>');
 }
 function predict(l){
- return '<p class="lesson-eyebrow">02 · 提出预测</p><h2>你认为会发生什么？</h2>'+
+ return '<h2>你认为会发生什么？</h2>'+
  '<p>先独立写下想法，再交给真实科学引擎计算。不能跳过预测直接看答案。</p>'+
  (l.experiment==='evo-pair'?'<div class="callout"><p>生态模拟每次改变随机种子，观察独立重复如何影响结果。</p></div>':'<div class="math-card">xₙ₊₁ = r xₙ (1 − xₙ)</div>')+
  '<form id="prediction-form"><label class="field" for="prediction">我的预测 · 至少 8 个字</label><textarea id="prediction" name="prediction" required minlength="8" maxlength="500" placeholder="我认为……因为……">'+esc(l.prediction)+'</textarea>'+
@@ -92,7 +92,7 @@ function scienceRun(l){
  if(!run)return '<p>请先提出预测再运行科学实验。</p>'+click('返回预测','step-predict',true);
  const metrics=run.metrics||[];
  const formatMetric=v=>typeof v==='number'?(Math.abs(v)>0&&Math.abs(v)<.0001?v.toExponential(2):Number(v.toPrecision(5)).toLocaleString('zh-CN')):String(v??'—');
- return '<p class="lesson-eyebrow">03 · 观察科学证据</p><h2>实验已经给出结果</h2><p>以下数据来自原版科学引擎的实际执行，而不是 AI 生成的观察。</p>'+
+ return '<h2>实验已经给出结果</h2><p>以下数据来自原版科学引擎的实际执行，而不是 AI 生成的观察。</p>'+
  (metrics.length?'<div class="simple-rows">'+metrics.map(m=>'<div class="simple-row"><div class="row-meta"><strong>'+esc(m.label)+'</strong><small>'+esc(m.unit||'')+'</small></div><span class="count-number">'+esc(formatMetric(m.value))+'</span></div>').join('')+'</div>':'')+
  resultsPlot(run)+ (run.results?.length?'<div class="simple-rows">'+run.results.slice(0,10).map(x=>'<div class="simple-row"><div class="row-meta"><strong>实验种子 '+esc(x.seed)+'</strong><small>'+esc(x.condition||'独立实验')+'</small></div><span class="count-number">'+esc(x.endingPopulation||'—')+'</span></div>').join('')+'</div>':'')+
  '<div class="section-bar"><h2>向知序博士追问</h2></div>'+
@@ -103,11 +103,18 @@ function scienceRun(l){
 }
 export function learn({lesson}){
  const l=lesson;
+ const intros=[
+  ['从判断开始','先给出自己的答案，再用实验验证。'],
+  ['写下你的预测','先明确自己的猜想，再观察真实计算结果。'],
+  ['读懂实验结果','对照预测与实际观测，追问变化的原因。'],
+  ['验证你的理解','换一个情境，独立完成迁移判断。']
+ ];
+ const intro=intros[Math.max(0,Math.min(3,Number.isInteger(l.step)?l.step:0))];
  return '<div class="learning-page">'+
  '<div class="learning-header"><span class="eyebrow">科学探究</span>'+click('退出学习','exit-focus')+'</div>'+
- '<header class="page-intro"><h1>从判断开始</h1><p>先给出自己的答案，再用实验验证。</p></header>'+
+ '<header class="page-intro"><h1>'+intro[0]+'</h1><p>'+intro[1]+'</p></header>'+
  controls(l)+
- '<article class="learning-paper">'+(l.step===0?'<p class="lesson-eyebrow">01 · 独立判断</p><h2>关于这个世界，你已经知道什么？</h2>'+quiz('pre',l):l.step===1?predict(l):l.step===2?scienceRun(l):'<p class="lesson-eyebrow">04 · 独立迁移</p><h2>换一种情境，你还会判断吗？</h2>'+quiz('transfer',l))+
+ '<article class="learning-paper">'+(l.step===0?'<h2>关于这个世界，你已经知道什么？</h2>'+quiz('pre',l):l.step===1?predict(l):l.step===2?scienceRun(l):'<h2>换一种情境，你还会判断吗？</h2>'+quiz('transfer',l))+
  '</article></div>';
 }
 const formatTime=s=>{if(!s)return '未记录日期';const d=new Date(s);return Number.isFinite(+d)?d.toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}):'日期未知';};
@@ -150,7 +157,7 @@ export function settings({bridge,prefs}){
 export function outline(route,bridge,lesson){
  if(route==='today')return '<div class="outline-caption">今日继续</div><button class="outline-row is-active" data-action="enter-sensitivity"><strong>初值敏感性</strong><small>继续科学探究</small></button><div class="outline-caption">我的空间</div><button class="outline-row" data-route="growth"><strong>学习记录</strong><small>基于真实事件</small></button>';
  if(route==='learn')return steps.map((name,i)=>'<button class="outline-row '+(lesson.step===i?'is-active':'')+'" data-action="study-step" data-index="'+i+'" '+(i>lesson.highest?'disabled':'')+'><strong>'+String(i+1).padStart(2,'0')+' '+name+'</strong><small>'+(i===lesson.step?'正在进行':i<=lesson.highest?'可返回此阶段':'完成上一步解锁')+'</small></button>').join('');
- if(route==='library')return '<div class="outline-caption">资料分类</div><button class="outline-row is-active"><strong>待复习</strong><small>'+bridge.tasks().length+' 项任务</small></button><button class="outline-row"><strong>最近作答</strong><small>真实评分记录</small></button>';
+ if(route==='library')return '<div class="outline-caption">资料分类</div><div class="outline-row is-active"><strong>待复习</strong><small>'+bridge.tasks().length+' 项任务</small></div><div class="outline-row"><strong>最近作答</strong><small>真实评分记录</small></div>';
  if(route==='growth')return '<div class="outline-caption">成长记录</div><div class="outline-empty">学习记录会随每次真实作答、科学实验和复习自动更新。</div>';
  return '<div class="outline-caption">设置</div><div class="outline-empty">原版科学引擎及学习数据存储方式保持不变。</div>';
 }

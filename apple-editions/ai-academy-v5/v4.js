@@ -5,6 +5,7 @@ import {createGlass,engine as glassEngine} from '../ai-academy-apple/assets/liqu
 import {ScienceBridge,newLesson} from './bridge.js?v=20261104-native-a';
 import {screens,outline,titles,esc} from './views.js?v=20261104-focus-a';
 import {refreshLabPreview} from './v5-lab-preview.js';
+import {settleLessonStep} from './v5-lesson-motion.js';
 const $=q=>document.querySelector(q),$$=q=>Array.from(document.querySelectorAll(q));
 const stage=$('#screen'),frame=$('#original-engine'),toast=$('#toast');
 function syncToastPosition(){
@@ -42,6 +43,7 @@ if(![100,115,130,150].includes(prefs.textScale))prefs.textScale=100;
 document.documentElement.dataset.reduced=prefs.reduceMotion?'true':'false';
 document.documentElement.style.setProperty('--zx-type-scale',String(prefs.textScale/100));
 const state={route:'today',lesson:newLesson(),busy:false,chat:[]};
+let renderedRoute=null,renderedStep=null;
 let settingsReturnRoute='today';
 let navGlass=null,navResize=null,navAnimation=null,routeAnimation=null;
 let lastRoute='today';
@@ -104,7 +106,10 @@ function render(){
   const active=node.dataset.route===route;node.classList.toggle('is-active',active);node.classList.toggle('selected',active);
   if(active)node.setAttribute('aria-current','page');else node.removeAttribute('aria-current');
  });
+ const before=renderedRoute==='learn'?renderedStep:null;
  stage.innerHTML=screens[route]({bridge,lesson:state.lesson,prefs});
+ if(route==='learn')settleLessonStep(stage,{before,after:state.lesson.step,reduced:reduced(),scrollTop:()=>window.scrollTo(0,0)});
+ renderedRoute=route;renderedStep=state.lesson.step;
  refreshLabPreview(stage);
  window.dispatchEvent(new Event('zhixu:content-rendered'));
  save();
