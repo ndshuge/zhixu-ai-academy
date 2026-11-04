@@ -21,7 +21,7 @@ try{for(const [engineName,engine]of [['edge',pw.chromium],['webkit',pw.webkit]].
   const base=root?'http://127.0.0.1:'+server.address().port+'/zhixu-ai-academy/apple-editions/ai-academy-v5/':'https://ndshuge.github.io/zhixu-ai-academy/apple-editions/ai-academy-v5/';
   await page.goto(base,{waitUntil:'domcontentloaded',timeout:18000});
   await page.waitForFunction(()=>document.querySelector('#screen')?.dataset.page==='today',null,{timeout:14000});
-  for(const route of ['today','courses','learn','library','growth','settings']){
+  for(const route of ['today','learn','library','growth','settings']){
    await page.evaluate(route=>window.ZHIXU_V4_NAVIGATE?.(route),route);await page.waitForTimeout(65);
    const info=await page.evaluate(()=>{
     const bg=getComputedStyle(document.querySelector('.reading-column')).backgroundColor,htmlBg=getComputedStyle(document.documentElement).backgroundColor;
@@ -30,7 +30,6 @@ try{for(const [engineName,engine]of [['edge',pw.chromium],['webkit',pw.webkit]].
     const testSel=(containerSel,textSel)=>{const a=document.querySelector(containerSel),b=document.querySelector(textSel);return a&&b?{bg:getComputedStyle(a).backgroundColor,fg:getComputedStyle(b).color}:null};
     let pair=null;switch(document.querySelector('#screen').dataset.page){
      case 'settings':pair=testSel('.setting-group','.setting-row strong');break;
-     case 'courses':pair=testSel('.book-tile','.book-copy strong');break;
      case 'learn':pair=testSel('.learning-paper','.learning-paper h2');break;
      case 'growth':pair=testSel('.metrics','.metric strong');break;
     }
@@ -47,7 +46,7 @@ try{for(const [engineName,engine]of [['edge',pw.chromium],['webkit',pw.webkit]].
     const score=contrast(info.pair.fg,info.pair.bg);
     assert.ok(score>=4.5,'low surface/label contrast '+JSON.stringify({route,scheme,width,score,pair:info.pair}));
    }
-   if(out&&width===390&&['settings','today','learn','courses'].includes(route)){
+   if(out&&width===390&&['settings','today','learn'].includes(route)){
      fs.mkdirSync(out,{recursive:true});
      await page.screenshot({path:path.join(out,engineName+'-'+scheme+'-'+route+'.png')});
    }

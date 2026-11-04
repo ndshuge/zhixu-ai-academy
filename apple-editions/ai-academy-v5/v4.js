@@ -3,7 +3,7 @@
 import '../ai-academy-apple/assets/components.js';
 import {createGlass,engine as glassEngine} from '../ai-academy-apple/assets/liquid-glass.js';
 import {ScienceBridge,newLesson} from './bridge.js?v=20261104-native-a';
-import {screens,outline,titles,esc} from './views.js';
+import {screens,outline,titles,esc} from './views.js?v=20261104-focus-a';
 import {refreshLabPreview} from './v5-lab-preview.js';
 const $=q=>document.querySelector(q),$$=q=>Array.from(document.querySelectorAll(q));
 const stage=$('#screen'),frame=$('#original-engine'),toast=$('#toast');
@@ -48,7 +48,7 @@ let lastRoute='today';
 const nav=$('#mobile-tabs'),lens=nav.querySelector('.tab-lens');
 const zoomMore=$('#zoom-more'),zoomMenu=$('#zoom-more-menu');
 const compactNav=()=>matchMedia('(max-width:260px)').matches;
-const moreRoutes=/^(courses|library|growth)$/;
+const moreRoutes=/^(library|growth)$/;
 function closeZoomMenu({returnFocus=false}={}){
  if(zoomMenu.hidden)return;
  zoomMenu.hidden=true;
@@ -94,6 +94,9 @@ const reduced=()=>prefs.reduceMotion||matchMedia('(prefers-reduced-motion:reduce
 function render(){
  const route=state.route;
  stage.dataset.page=route;
+ document.body.dataset.focus=route==='learn'?'true':'false';
+ nav.inert=route==='learn';
+ if(route==='learn')nav.setAttribute('aria-hidden','true');else nav.removeAttribute('aria-hidden');
  const settingsButton=$('.toolbar-trailing button[data-route="settings"]');if(settingsButton){if(route==='settings'){settingsButton.setAttribute('aria-current','page');settingsButton.setAttribute('aria-label','返回'+titles[settingsReturnRoute]);}else{settingsButton.removeAttribute('aria-current');settingsButton.setAttribute('aria-label','设置');}}
  $('#toolbar-title').textContent=titles[route];$('#outline-name').textContent=route==='learn'?'学习步骤':titles[route];
  $('#outline-content').innerHTML=outline(route,bridge,state.lesson);
@@ -101,24 +104,14 @@ function render(){
   const active=node.dataset.route===route;node.classList.toggle('is-active',active);node.classList.toggle('selected',active);
   if(active)node.setAttribute('aria-current','page');else node.removeAttribute('aria-current');
  });
- const retainedTabs=route==='learn'?stage.querySelector('.experiment-tabs'):null;
  stage.innerHTML=screens[route]({bridge,lesson:state.lesson,prefs});
- if(retainedTabs){
-  const created=stage.querySelector('.experiment-tabs');
-  if(created){created.replaceWith(retainedTabs);
-   retainedTabs.querySelectorAll('button[data-experiment]').forEach(b=>{
-    const chosen=b.dataset.experiment===state.lesson.experiment;
-    b.classList.toggle('is-active',chosen);
-    b.setAttribute('aria-pressed',String(chosen));b.setAttribute('aria-selected',String(chosen));
-   });}
- }
  refreshLabPreview(stage);
  window.dispatchEvent(new Event('zhixu:content-rendered'));
  save();
  syncNavSelection();
 }
 function goto(route,{replace=false}={}){
- if(!titles[route])route='today';
+ if(!titles[route]){route='today';replace=true;}
  // A second tap on the toolbar control returns to the originating tab.
  if(route==='settings' && state.route==='settings' && !replace)route=settingsReturnRoute;
  closeZoomMenu();
@@ -203,6 +196,8 @@ async function act(el){
  }
  if(a==='enter-sensitivity')return study('sensitivity');
  if(a==='enter-evo')return study('evo-pair');
+ if(a==='enter-logistic')return study('logistic');
+ if(a==='exit-focus')return goto('today');
  if(a==='reset-lesson'){
   state.lesson=newLesson(state.lesson.experiment);
   if(state.route==='learn')render();else goto('learn');
@@ -339,7 +334,7 @@ document.addEventListener('submit',async e=>{
  try{await submit(e.target)}catch(error){console.error('[V4 submit]',error);notify(error.message||'提交失败')}
  finally{state.busy=false}
 });
-window.addEventListener('popstate',()=>{closeZoomMenu();const previous=state.route;const r=location.hash.slice(1);const destination=titles[r]?r:'today';if(destination==='settings'&&previous!=='settings')settingsReturnRoute=previous;state.route=destination;render();animateScreen(previous,state.route)});
+window.addEventListener('popstate',()=>{closeZoomMenu();const previous=state.route;const r=location.hash.slice(1);const destination=titles[r]?r:'today';if(!titles[r])history.replaceState(null,'','#today');if(destination==='settings'&&previous!=='settings')settingsReturnRoute=previous;state.route=destination;render();animateScreen(previous,state.route)});
 $('#outline-toggle').onclick=()=>document.documentElement.dataset.outline='collapsed';
 $('#outline-reveal').onclick=()=>document.documentElement.dataset.outline='open';
 const panel=$('#doctor-panel'),launch=$('#doctor-launch'),question=$('#doctor-question');

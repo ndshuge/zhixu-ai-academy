@@ -22,5 +22,5 @@ test('More navigation maps hidden destinations, closes on Escape, and remains in
  assert.match(js,/toggle-more/);
  assert.match(js,/zoom-more-menu/);
  assert.match(js,/if\(event\.key==='Escape'/);
- assert.ok(js.includes('const moreRoutes=/^(courses|library|growth)$/;'));
+ assert.ok(js.includes('const moreRoutes=/^(library|growth)$/;'));
 });

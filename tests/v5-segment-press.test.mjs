@@ -1,14 +1,12 @@
 import test from 'node:test';import assert from 'node:assert/strict';import{readFileSync}from'node:fs';
 const read=f=>readFileSync(new URL('../apple-editions/ai-academy-v5/'+f,import.meta.url),'utf8');
-test('experiment control uses one retained sliding indicator, not a rebuilt horizontal strip',()=>{
- assert.match(read('views.js'),/experiment-lens/);
- assert.match(read('v4.js'),/retainedTabs/);
- assert.match(read('index.html'),/v5-segmented\.js/);
- const css=read('v5-segmented.css');
- assert.match(css,/\.experiment-lens/);
- assert.match(css,/overflow-x:hidden/);
- assert.match(css,/transform/);
- assert.match(css,/prefers-reduced-motion:\s*reduce/);
+test('learning focuses without global experiment tabs while home retains model choice',()=>{
+ const views=read('views.js'),app=read('v4.js'),css=read('v5-focus-navigation.css');
+ assert.doesNotMatch(views,/experiment-lens/);
+ assert.match(views,/enter-logistic/);
+ assert.match(views,/exit-focus/);
+ assert.match(app,/document.body.dataset.focus/);
+ assert.match(css,/body\[data-focus="true"\] #mobile-tabs/);
 });
 test('dock commits faster and API controls belong to V5, never Original iframe',()=>{
  assert.match(read('v5-press-feedback.js'),/isDockNavigation/);

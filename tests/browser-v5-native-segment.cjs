@@ -14,35 +14,20 @@ if(!f.startsWith(root+path.sep))return res.writeHead(403).end();fs.readFile(f,(e
  let status=mode==='success'?200:mode==='401'?401:mode==='402'?402:429;
  return route.fulfill({status,contentType:'application/json',body:JSON.stringify(status===200?{model:'deepseek-flash',choices:[{message:{content:'连接成功'}}],usage:{total_tokens:7}}:{error:{message:'synthetic test failure'}})})});
  try{
-  await page.goto('http://127.0.0.1:'+server.address().port+'/zhixu-ai-academy/apple-editions/ai-academy-v5/#learn',{waitUntil:'domcontentloaded'});
-  const row=page.locator('#screen .experiment-tabs');await row.waitFor({timeout:13000});
-  await page.waitForFunction(()=>document.querySelector('.experiment-tabs')?.style.getPropertyValue('--zx-segment-index')==='0',{timeout:10000});
-  const firstHandle=await row.elementHandle();
-  const lens=page.locator('#screen .experiment-lens');
-  const initial=await lens.evaluate(el=>new DOMMatrixReadOnly(getComputedStyle(el).transform).m41);
-  const third=page.locator('#screen .experiment-tabs button[data-experiment="evo-pair"]');
-  await third.click();
-  await page.waitForFunction(()=>document.querySelector('.experiment-tabs')?.style.getPropertyValue('--zx-segment-index')==='2',{timeout:10000});
-  assert.equal(await row.evaluate((el,old)=>el===old,firstHandle),true,'segmented row survives re-render');
-  await page.waitForTimeout(410);
-  const after=await lens.evaluate(el=>new DOMMatrixReadOnly(getComputedStyle(el).transform).m41);
-  assert.ok(after>initial+35,'same lens travels horizontally to third option');
-  const state=await row.evaluate(el=>({scrollWidth:el.scrollWidth,width:el.clientWidth,
-   display:getComputedStyle(el).display,overflow:getComputedStyle(el).overflowX,
-   focus:document.activeElement?.dataset.experiment,
-   active:[...el.querySelectorAll('button')].filter(b=>b.classList.contains('is-active')).length}));
-  assert.equal(state.active,1);assert.equal(state.focus,'evo-pair');
-  assert.ok(state.scrollWidth<=state.width+1,'no jumping horizontal scroller');
+  await page.goto('http://127.0.0.1:'+server.address().port+'/zhixu-ai-academy/apple-editions/ai-academy-v5/#today',{waitUntil:'domcontentloaded'});
+  await page.locator('#screen[data-page="today"] [data-action=enter-evo]').click();
+  await page.locator('#screen[data-page="learn"] [data-action=exit-focus]').waitFor({timeout:13000});
+  assert.equal(await page.locator('#screen .experiment-tabs').count(),0,'focused learning has no global experiment tabs');
+  assert.equal(await page.evaluate(()=>window.ZHIXU_V4_DEBUG().lesson.experiment),'evo-pair');
+  assert.equal(await page.evaluate(()=>document.querySelector('#mobile-tabs').inert),true);
+  await page.locator('#screen [data-action="exit-focus"]').click();
+  await page.locator('#screen[data-page="today"]').waitFor({timeout:13000});
   if(width<701){
-   const material=await page.evaluate(()=>{const c=document.querySelector('.zx-progressive-underlay'),
-    layers=[...c.querySelectorAll('.zx-blur-layer')];
-    return {bottom:getComputedStyle(c).bottom,height:parseFloat(getComputedStyle(c).height),
-    blur:layers.map(el=>getComputedStyle(el).backdropFilter||getComputedStyle(el).webkitBackdropFilter),
-    old:getComputedStyle(document.body,'::after').display,mask:layers.map(el=>getComputedStyle(el).maskImage||getComputedStyle(el).webkitMaskImage)}});
-   assert.equal(material.bottom,'0px');assert.ok(material.height>=114&&material.height<=160,'underlay begins only near the Dock');
+   const material=await page.evaluate(()=>{const c=document.querySelector('.zx-progressive-underlay'),layers=[...c.querySelectorAll('.zx-blur-layer')];
+   return {bottom:getComputedStyle(c).bottom,height:parseFloat(getComputedStyle(c).height),
+   blur:layers.map(el=>getComputedStyle(el).backdropFilter||getComputedStyle(el).webkitBackdropFilter)}});
+   assert.equal(material.bottom,'0px');assert.ok(material.height>=114&&material.height<=160);
    assert.deepEqual(material.blur.map(x=>x.match(/blur\((\d+)px\)/)?.[1]),['2','6','12','20']);
-   assert.equal(material.old,'none','legacy blur layer removed');
-   assert.ok(material.mask.every(x=>x.includes('linear-gradient')));
   }
   await page.locator('.toolbar-trailing button[data-route="settings"]').click();
   await page.locator('#screen[data-page="settings"] [data-action="open-ai-config"]').click();
@@ -79,7 +64,7 @@ if(!f.startsWith(root+path.sep))return res.writeHead(403).end();fs.readFile(f,(e
   await page.locator('.zx-api-revoke').click();
   assert.equal(await page.evaluate(()=>window.ZHIXU_NATIVE_API.status()),false);
   assert.deepEqual(errors,[]);
-  console.log('NATIVE_SEGMENT_OK',name,width,'lens='+after.toFixed(1),'cases='+calls);
+  console.log('NATIVE_SEGMENT_OK',name,width,'focused-study','cases='+calls);
   passed++;
  }finally{await page.close()}
  } }finally{await browser.close()}

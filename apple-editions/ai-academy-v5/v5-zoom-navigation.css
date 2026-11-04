@@ -4,7 +4,6 @@
 #zoom-more {display:none!important;}
 #zoom-more-menu[hidden],#zoom-more-menu {display:none;}
 @media(max-width:260px){
- #mobile-tabs .tab-item[data-route="courses"],
  #mobile-tabs .tab-item[data-route="library"],
  #mobile-tabs .tab-item[data-route="growth"] {display:none!important;}
  #mobile-tabs {justify-content:space-around!important;}

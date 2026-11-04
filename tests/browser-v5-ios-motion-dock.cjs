@@ -48,12 +48,12 @@ const server=http.createServer((req,res)=>{
      }
      await page.waitForTimeout(360);
      if(width===390){
-      const tab=page.locator('#mobile-tabs button[data-route="courses"]');
+      const tab=page.locator('#mobile-tabs button[data-route="library"]');
       await tab.click();
      }else{
-      await page.locator('.primary-menu button[data-route="courses"]').click();
+      await page.locator('.primary-menu button[data-route="library"]').click();
      }
-     await page.locator('#screen[data-page="courses"] h1').waitFor();
+     await page.locator('#screen[data-page="library"] h1').waitFor();
      assert.equal(await gear.isVisible(),true);
      assert.equal(await gear.getAttribute('aria-current'),null);
      assert.equal(await page.locator('#screen').getAttribute('data-direction'),'backward');

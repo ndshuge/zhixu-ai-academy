@@ -1,0 +1,59 @@
+/* Focus principle: entering a lesson is a distinct working mode.
+   One reversible exit; global Dock slides down, global sidebars recede.
+   No JavaScript animation loops; physics-friendly compositor transform. */
+@media(max-width:700px){
+  #mobile-tabs{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    transition:transform .32s cubic-bezier(.24,.82,.28,1),opacity .21s ease,visibility 0s linear 0s!important;
+    transform:translate3d(0,0,0);
+  }
+  body[data-focus="true"] #mobile-tabs{
+    transform:translate3d(0,calc(100% + 48px + env(safe-area-inset-bottom,0px)),0)!important;
+    opacity:0!important;
+    visibility:hidden!important;
+    transition:transform .32s cubic-bezier(.24,.82,.28,1),opacity .21s ease,visibility 0s linear .32s!important;
+    pointer-events:none!important;
+  }
+  body[data-focus="true"] .zx-progressive-underlay{
+    display:none!important;
+    opacity:0!important;
+    visibility:hidden!important;
+    transition:opacity .22s ease,visibility 0s linear .22s!important;
+  }
+  body:not([data-focus="true"]) .zx-progressive-underlay{
+    opacity:1;
+    visibility:visible;
+    transition:opacity .28s ease;
+  }
+  body[data-focus="true"] #zoom-more-menu{display:none!important}
+  body[data-focus="true"] #screen{padding-bottom:max(24px,env(safe-area-inset-bottom,0px))!important}
+}
+@media(max-width:260px){#mobile-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(min-width:701px){
+  /* The learning canvas is the primary surface; no competing left rails. */
+  body[data-focus="true"] .master-sidebar,
+  body[data-focus="true"] .outline-sidebar{display:none!important}
+  body[data-focus="true"] .app{grid-template-columns:minmax(0,1fr)!important}
+  body[data-focus="true"] .reading-column{grid-column:1/-1;width:min(100%,1050px);max-width:1050px;margin-inline:auto}
+  body[data-focus="true"] .outline-reveal{display:none!important}
+}
+#screen[data-page="learn"] .experiment-tabs{display:none!important}
+/* The user can always exit, including with keyboard and VoiceOver. */
+#screen[data-page="learn"] .learning-header [data-action="exit-focus"]{
+  min-height:44px;min-width:88px;
+  padding:9px 14px;
+  border-radius:999px;
+  background:rgba(29,111,99,.07);
+  color:var(--ink,#1c2f2b);
+  border:1px solid rgba(40,112,107,.17);
+  font-weight:660;
+}
+#screen[data-page="learn"] .learning-header [data-action="exit-focus"]:focus-visible{
+  outline:2px solid #237a6b;outline-offset:3px;
+}
+@media(prefers-reduced-motion:reduce){
+  #mobile-tabs,body[data-focus="true"] #mobile-tabs,
+  .zx-progressive-underlay,body[data-focus="true"] .zx-progressive-underlay{transition:none!important}
+}
+html[data-reduced="true"] #mobile-tabs,
+html[data-reduced="true"] .zx-progressive-underlay{transition:none!important}

@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="./v5-product-design.css?v=20261103b">
 <link rel="stylesheet" href="./v5-doctor-motion.css?v=20261103c">
 <link rel="stylesheet" href="./v5-science-legibility.css?v=20261103">
-<link rel="stylesheet" href="./v5-zoom-navigation.css?v=20261103">
+<link rel="stylesheet" href="./v5-zoom-navigation.css?v=20261104-focus-a">
 <link rel="stylesheet" href="./v5-system-appearance.css?v=20261103">
 <link rel="stylesheet" href="./v5-type-motion.css?v=20261104a">
 <link rel="stylesheet" href="./v5-ios-continuity.css?v=20261104-touch-b">
@@ -22,10 +22,10 @@
 <link rel="stylesheet" href="./v5-apple-swipe.css?v=20261104-swipe-a">
 <link rel="stylesheet" href="./v5-visual-audit.css?v=20261104-audit-a">
 <link rel="stylesheet" href="./v5-bottom-shade.css?v=20261104-bottom-a">
-<link rel="stylesheet" href="./v5-segmented.css?v=20261104-segment-a">
 <link rel="stylesheet" href="./v5-native-api.css?v=20261104-native-a">
 <link rel="stylesheet" href="./v5-xiaoya-dock.css?v=20261104-xiaoya-a">
 <link rel="stylesheet" href="./v5-dock-near-clear.css?v=20261104-xiaoya-b">
+<link rel="stylesheet" href="./v5-focus-navigation.css?v=20261104-focus-a">
 <link rel="modulepreload" href="../ai-academy-apple/assets/motion.bundle.js">
 <link rel="preload" href="../ai-academy-apple/assets/zhixu-doctor/idle.webp" as="image">
 </head>
@@ -54,7 +54,6 @@
     <div class="nav-caption">学习空间</div>
     <nav class="primary-menu" aria-label="学习导航">
       <button data-route="today" class="menu-item is-active"><svg><use href="#i-home"/></svg><span>今天</span></button>
-      <button data-route="courses" class="menu-item"><svg><use href="#i-books"/></svg><span>课程</span></button>
       <button data-route="learn" class="menu-item"><svg><use href="#i-spark"/></svg><span>学习</span></button>
       <button data-route="library" class="menu-item"><svg><use href="#i-note"/></svg><span>资料</span></button>
       <button data-route="growth" class="menu-item"><svg><use href="#i-chart"/></svg><span>进度</span></button>
@@ -89,14 +88,12 @@
  <span class="nav-optics" aria-hidden="true"></span>
  <span class="tab-lens" aria-hidden="true"></span>
  <button data-route="today" class="tab-item is-active"><svg><use href="#i-home"/></svg><span>今天</span></button>
- <button data-route="courses" class="tab-item"><svg><use href="#i-books"/></svg><span>课程</span></button>
  <button data-route="learn" class="tab-item"><svg><use href="#i-spark"/></svg><span>学习</span></button>
  <button data-route="library" class="tab-item"><svg><use href="#i-note"/></svg><span>资料</span></button>
  <button data-route="growth" class="tab-item"><svg><use href="#i-chart"/></svg><span>进度</span></button>
  <button id="zoom-more" type="button" class="tab-item" data-action="toggle-more" aria-haspopup="menu" aria-controls="zoom-more-menu" aria-expanded="false"><span class="zoom-dots" aria-hidden="true">···</span><span>更多</span></button>
 </nav>
 <div id="zoom-more-menu" role="menu" aria-label="更多页面" hidden>
- <button role="menuitem" data-route="courses">课程</button>
  <button role="menuitem" data-route="library">资料</button>
  <button role="menuitem" data-route="growth">进度</button>
 </div>
@@ -144,7 +141,6 @@
 </script>
 <script type="module" src="./v5-settings-touch.js?v=20261104a"></script>
 <script type="module" src="./v5-press-feedback.js?v=20261104-segment-a"></script>
-<script type="module" src="./v5-segmented.js?v=20261104-segment-a"></script>
-<script type="module" src="./v4.js?v=20261104-native-a"></script>
+<script type="module" src="./v4.js?v=20261104-focus-a"></script>
 <script type="module" src="./v5-route-focus.js?v=20261103"></script>
 </body></html>

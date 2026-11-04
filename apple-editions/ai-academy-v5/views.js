@@ -1,12 +1,11 @@
 /* V4 independently authored view templates: Books-like library and Notes-like reading. */
 import {conceptNames} from './bridge.js?v=20261104-native-a';
-export const titles={today:'今天',courses:'课程',learn:'学习',library:'资料',growth:'进度',settings:'设置'};
+export const titles={today:'今天',learn:'学习',library:'资料',growth:'进度',settings:'设置'};
 export const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const glyph=id=>'<svg aria-hidden="true"><use href="#i-'+id+'"/></svg>';
 const click=(label,action,primary=false,extra='')=>'<button type="button" data-action="'+action+'" class="'+(primary?'primary':'quiet-button')+'" '+extra+'>'+label+'</button>';
 const next=glyph('arrow');
 const heading=(micro,title,sub='')=>'<header class="page-intro"><div class="eyebrow">'+esc(micro)+'</div><h1>'+esc(title)+'</h1>'+(sub?'<p>'+esc(sub)+'</p>':'')+'</header>';
-const shelf=()=>'<div class="shelf"><button class="book-tile" data-action="enter-sensitivity"><div class="book-cover chaos"><i class="cover-shape"></i><span>混沌<br>与非线性</span></div><span class="book-copy"><strong>混沌与初值敏感性</strong><span>一个微小的差异，如何引发不同的轨迹？</span><small>物理 · 动力系统</small></span></button><button class="book-tile" data-action="enter-evo"><div class="book-cover evolution"><i class="cover-shape"></i><span>生命<br>与演化</span></div><span class="book-copy"><strong>生命与演化</strong><span>用独立实验理解模拟能告诉我们的事。</span><small>生物 · 演化模型</small></span></button></div>';
 export function logisticChart(){
  let a=.41200,b=.41201;const A=[],B=[];for(let i=0;i<66;i++){A.push(a);B.push(b);a=3.9*a*(1-a);b=3.9*b*(1-b)}
  const path=xs=>xs.map((v,i)=>(i?'L':'M')+(16+i*5.45).toFixed(1)+' '+(153-v*135).toFixed(1)).join(' ');
@@ -34,19 +33,13 @@ export function today({bridge}){
  '</div></section>'+
  '<section class="workshop-method" aria-label="知序四阶段学习方法"><div class="workshop-section-head"><div><h2>四步，把答案变成证据</h2></div></div>'+
  '<div class="method-steps"><div><b>01</b><strong>独立判断</strong><span>先表达自己的理解</span></div><div><b>02</b><strong>提出预测</strong><span>留下可验证的猜想</span></div><div><b>03</b><strong>真实验证</strong><span>运行科学计算并观察</span></div><div><b>04</b><strong>迁移理解</strong><span>到新情境再做判断</span></div></div></section>'+
- '<section class="workshop-paths"><div class="workshop-section-head"><div><h2>选择一个科学世界</h2></div>'+click('全部课程 '+next,'nav-courses')+'</div>'+
+ '<section class="workshop-paths"><div class="workshop-section-head"><div><h2>选择一个科学世界</h2></div>'+'</div>'+
  '<div class="world-grid"><button class="world-card chaos" data-action="enter-sensitivity"><span class="world-shape" aria-hidden="true"></span><strong>混沌与非线性</strong><span>为什么微小的差异会改变结果？</span><em>开始探索 ↗</em></button>'+
+ '<button class="world-card logistic" data-action="enter-logistic"><span class="world-shape" aria-hidden="true"></span><strong>非线性增长</strong><span>探索 Logistic 模型的变化规律。</span><em>开始探索</em></button>'+
  '<button class="world-card evo" data-action="enter-evo"><span class="world-shape" aria-hidden="true"></span><strong>生命与演化</strong><span>重复实验，能证明什么？</span><em>开始探索 ↗</em></button></div></section>'+
  '<section class="workshop-evidence"><div class="workshop-section-head"><div><h2>学习记录</h2></div>'+click('查看学习档案 '+next,'nav-growth')+'</div>'+
  '<div class="workshop-facts">'+countRow(explorations,'真实实验记录')+countRow(answered,'独立作答')+countRow(transfers,'迁移练习')+'</div>'+
  '<p class="workshop-trust">数据仅来自本浏览器的真实学习记录。</p></section>';
-}
-export function courses({bridge}){
- const s=bridge.summary||{},concepts=s.concepts||[];
- return heading('科学探究','课程','选择一个科学世界，从真实问题开始。')+
- shelf()+
- '<div class="section-bar"><h2>知识目录</h2><span>按照学习证据更新</span></div>'+
- (concepts.length?'<div class="simple-rows">'+concepts.map(c=>'<div class="simple-row"><div class="row-meta"><strong>'+esc(conceptNames[c.id]||c.id)+'</strong><small>'+esc(c.status)+'</small></div><span class="count-number">'+esc(c.attempts)+' 次</span></div>').join('')+'</div>':'<div class="empty-state"><strong>你的课程从这里开始</strong>第一次作答后，这里会显示真实的概念学习状态。</div>');
 }
 const steps=['独立判断','提出预测','实验与导师','迁移验证'];
 const controls=l=>{
@@ -102,11 +95,9 @@ function scienceRun(l){
 }
 export function learn({lesson}){
  const l=lesson;
- const expLabels={sensitivity:'敏感性',logistic:'非线性', 'evo-pair':'生态演化'};
  return '<div class="learning-page">'+
- '<div class="learning-header"><span class="eyebrow">科学探究</span>'+click('重新开始','reset-lesson')+'</div>'+
+ '<div class="learning-header"><span class="eyebrow">科学探究</span>'+click('退出学习','exit-focus')+'</div>'+
  '<header class="page-intro"><h1>从判断开始</h1><p>先给出自己的答案，再用实验验证。</p></header>'+
- '<div class="experiment-tabs" role="tablist" aria-label="切换实验"><span class="experiment-lens" aria-hidden="true"></span>'+Object.entries(expLabels).map(([id,label])=>'<button type="button" role="tab" data-experiment="'+id+'" class="'+(l.experiment===id?'is-active':'')+'" aria-selected="'+(l.experiment===id)+'" aria-pressed="'+(l.experiment===id)+'">'+label+'</button>').join('')+'</div>'+
  controls(l)+
  '<article class="learning-paper">'+(l.step===0?'<p class="lesson-eyebrow">01 · 独立判断</p><h2>关于这个世界，你已经知道什么？</h2>'+quiz('pre',l):l.step===1?predict(l):l.step===2?scienceRun(l):'<p class="lesson-eyebrow">04 · 独立迁移</p><h2>换一种情境，你还会判断吗？</h2>'+quiz('transfer',l))+
  '</article></div>';
@@ -150,10 +141,9 @@ export function settings({bridge,prefs}){
 }
 export function outline(route,bridge,lesson){
  if(route==='today')return '<div class="outline-caption">今日继续</div><button class="outline-row is-active" data-action="enter-sensitivity"><strong>初值敏感性</strong><small>继续科学探究</small></button><div class="outline-caption">我的空间</div><button class="outline-row" data-route="growth"><strong>学习记录</strong><small>基于真实事件</small></button>';
- if(route==='courses')return '<div class="outline-caption">科学世界</div><button class="outline-row is-active" data-action="enter-sensitivity"><strong>混沌与非线性</strong><small>物理 · 初值敏感性</small></button><button class="outline-row" data-action="enter-evo"><strong>生命与演化</strong><small>生态模拟 · 独立重复</small></button>';
  if(route==='learn')return steps.map((name,i)=>'<button class="outline-row '+(lesson.step===i?'is-active':'')+'" data-action="study-step" data-index="'+i+'" '+(i>lesson.highest?'disabled':'')+'><strong>'+String(i+1).padStart(2,'0')+' '+name+'</strong><small>'+(i===lesson.step?'正在进行':i<=lesson.highest?'可返回此阶段':'完成上一步解锁')+'</small></button>').join('');
  if(route==='library')return '<div class="outline-caption">资料分类</div><button class="outline-row is-active"><strong>待复习</strong><small>'+bridge.tasks().length+' 项任务</small></button><button class="outline-row"><strong>最近作答</strong><small>真实评分记录</small></button>';
  if(route==='growth')return '<div class="outline-caption">成长记录</div><div class="outline-empty">学习记录会随每次真实作答、科学实验和复习自动更新。</div>';
  return '<div class="outline-caption">设置</div><div class="outline-empty">原版科学引擎及学习数据存储方式保持不变。</div>';
 }
-export const screens={today,courses,learn,library,growth,settings};
+export const screens={today,learn,library,growth,settings};

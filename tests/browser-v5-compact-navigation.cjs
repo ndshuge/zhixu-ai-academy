@@ -36,7 +36,7 @@ const out=process.env.ZHIXU_QA_SHOTS;
      await p.locator('#zoom-more').click();
      assert.equal(await p.locator('#zoom-more').getAttribute('aria-expanded'),'true');
      assert.equal(await p.locator('#zoom-more-menu').evaluate(e=>e.hidden),false);
-     assert.equal(await p.locator('#zoom-more-menu [role=menuitem]').count(),3);
+     assert.equal(await p.locator('#zoom-more-menu [role=menuitem]').count(),2);
      if(out)await p.screenshot({path:path.join(out,name+'-195-more.png')});
      await p.keyboard.press('ArrowDown');
      await p.keyboard.press('Escape');
@@ -54,7 +54,7 @@ const out=process.env.ZHIXU_QA_SHOTS;
      await p.goBack({waitUntil:'domcontentloaded'}).catch(()=>null);
     }else{
      assert.equal(initial.buttons.filter(x=>x.id==='zoom-more').length,0,'More should not appear at '+width);
-     assert.equal(initial.buttons.filter(x=>x.id!=='zoom-more').length,5,'five tabs expected at '+width);
+     assert.equal(initial.buttons.filter(x=>x.id!=='zoom-more').length,4,'four tabs expected at '+width);
      for(const button of initial.buttons)assert.ok(button.w>=44&&button.h>=44,'small regular nav target '+JSON.stringify(button));
     }
     assert.deepEqual(errors,[],'page errors');assert.deepEqual(missing,[],'404 resources');

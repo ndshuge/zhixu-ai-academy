@@ -30,8 +30,10 @@ async function run(){
   page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()===404)notFound.push(r.url())});
   await page.goto(url,{waitUntil:'domcontentloaded',timeout:20000});
   await page.waitForFunction(()=>document.querySelector('#screen')?.dataset.page==='today',null,{timeout:15000});
-  await page.locator('#mobile-tabs [data-route=learn]').click();
-  if(experiment==='evo-pair')await page.locator('#screen [data-experiment=evo-pair]').click();
+  await page.locator('#screen [data-action='+(experiment==='evo-pair'?'enter-evo':'enter-sensitivity')+']').first().click();
+  await page.locator('#screen[data-page=learn] [data-action=exit-focus]').waitFor({timeout:12000});
+  assert.equal(await page.locator('#screen .experiment-tabs').count(),0);
+  assert.equal(await page.evaluate(()=>document.body.dataset.focus),'true');
   const action=async a=>{await page.locator('#screen [data-action="'+a+'"]').first().click({timeout:9000});await page.waitForTimeout(260)};
   const grade=async()=>{
    const inputs=page.locator('#quiz-form input[name=answer]');
