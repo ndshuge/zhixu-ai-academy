@@ -39,11 +39,11 @@ const server=http.createServer((req,res)=>{
         htmlWidth:document.documentElement.scrollWidth,windowWidth:innerWidth};
      });
      assert.equal(state.direction,'forward');
-     assert.match(state.animation,/zx-ios-page-enter/,'navigation should animate content rather than only swapping markup');
+     assert.match(state.animation,width===390?/zx-duo-fast-enter/:/zx-ios-page-enter/,'navigation should animate content rather than only swapping markup');
      assert.ok(state.htmlWidth<=state.windowWidth,'no horizontal overflow');
      if(width===390){
       assert.equal(state.overlayOpacity,'1','edge remains active at scroll end');
-      assert.match(state.blur,/blur\(16px\)/);
+      assert.match(state.blur,/blur\(12px\)/);
       assert.match(state.mask,/linear-gradient/);
      }
      await page.waitForTimeout(360);

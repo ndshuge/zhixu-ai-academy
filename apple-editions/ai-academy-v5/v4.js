@@ -413,7 +413,8 @@ async function activateMotion(){
  try{
   motion=await import('../ai-academy-apple/assets/motion.bundle.js');
   window.ZHIXU_V4_ENGINES={motion:'Motion',glass:!!customElements.get('lg-navbar'),nav:'single-layer',optics:glassEngine};
-  navGlass=createGlass(nav.querySelector('.nav-optics'),{
+  const mobileGlass=matchMedia('(max-width:700px)').matches;
+  if(!mobileGlass)navGlass=createGlass(nav.querySelector('.nav-optics'),{
     mode:'backdrop',fit:true,refraction:12,bezel:.83,curvature:3.4,
     chroma:.08,blur:1.8,specular:.66,specularWidth:1.5,
     mapScale:1,fallback:'blur(14px) saturate(1.35)'
@@ -473,7 +474,7 @@ async function activateMotion(){
   document.addEventListener('pointercancel',restoreTab,{passive:true});
   window.addEventListener('blur',()=>restoreTab());
   const pressed=new WeakMap();let active=null,holdTimer=null;
-  const selector='.primary,.book-tile,.menu-item,.simple-row,.doctor-launch';
+  const selector='.book-tile,.menu-item,.simple-row';
   const settle=()=>{
    clearTimeout(holdTimer);const b=active;active=null;
    const entry=b&&pressed.get(b);

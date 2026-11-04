@@ -1,0 +1,110 @@
+/* Duolingo-inspired tactile depth, still using Zhixu's own palette and avatar. */
+.toolbar-trailing .doctor-launch{
+  transform:translate3d(0,0,0);
+  border:2px solid rgba(77,148,143,.40)!important;
+  background:#f4fcf9!important;
+  box-shadow:0 4px 0 #83aaa2,0 5px 10px rgba(23,78,75,.10),inset 0 1px 0 rgba(255,255,255,.9)!important;
+  transition:transform .13s cubic-bezier(.2,.9,.26,1),
+    box-shadow .13s cubic-bezier(.2,.9,.26,1),
+    border-color .13s ease!important;
+  touch-action:manipulation;
+}
+.toolbar-trailing .doctor-launch:is(:active,[data-duo-press="true"]){
+  transform:translate3d(0,3px,0) scale(.985)!important;
+  box-shadow:0 1px 0 #83aaa2,0 2px 5px rgba(23,78,75,.075),inset 0 1px 0 rgba(255,255,255,.8)!important;
+  border-color:rgba(36,123,114,.60)!important;
+}
+.toolbar-trailing .doctor-launch[aria-expanded="true"]{
+  background:#e5f7ef!important;
+  border-color:#4cae9c!important;
+}
+#screen .workshop-actions .primary,
+#screen[data-page="learn"] .learning-page .primary{
+  transform:translate3d(0,0,0);
+  border:2px solid rgba(255,255,255,.19);
+  border-radius:15px;
+  box-shadow:0 4px 0 #11584e,0 5px 9px rgba(0,36,31,.13);
+  transition:transform .13s cubic-bezier(.2,.9,.26,1),box-shadow .13s ease;
+  touch-action:manipulation;
+}
+#screen .workshop-actions .primary:is(:active,[data-duo-press="true"]),
+#screen[data-page="learn"] .learning-page .primary:is(:active,[data-duo-press="true"]){
+  transform:translate3d(0,3px,0)!important;
+  box-shadow:0 1px 0 #11584e,0 2px 5px rgba(0,36,31,.09);
+}
+/* One continuous fixed underlay: soft blur at its top, opaque fade at viewport bottom.
+   No scroll-time JS or duplicate optical runtime on mobile. */
+@media(max-width:700px){
+  body::after{
+    bottom:-1px!important;
+    height:calc(215px + env(safe-area-inset-bottom,0px))!important;
+    opacity:1!important;
+    background:linear-gradient(to bottom,
+      rgba(var(--zx-dock-ground),0) 0%,
+      rgba(var(--zx-dock-ground),.018) 16%,
+      rgba(var(--zx-dock-ground),.065) 33%,
+      rgba(var(--zx-dock-ground),.17) 49%,
+      rgba(var(--zx-dock-ground),.39) 66%,
+      rgba(var(--zx-dock-ground),.74) 83%,
+      rgba(var(--zx-dock-ground),.93) 94%,
+      rgba(var(--zx-dock-ground),.98) 100%)!important;
+    -webkit-backdrop-filter:blur(12px) saturate(1.06)!important;
+    backdrop-filter:blur(12px) saturate(1.06)!important;
+    -webkit-mask-image:linear-gradient(to bottom,
+      transparent 0%,rgba(0,0,0,.09) 15%,rgba(0,0,0,.33) 34%,
+      rgba(0,0,0,.68) 58%,rgba(0,0,0,.91) 78%,#000 100%)!important;
+    mask-image:linear-gradient(to bottom,
+      transparent 0%,rgba(0,0,0,.09) 15%,rgba(0,0,0,.33) 34%,
+      rgba(0,0,0,.68) 58%,rgba(0,0,0,.91) 78%,#000 100%)!important;
+  }
+  .mobile-native-tabs .nav-optics{
+    -webkit-backdrop-filter:blur(9px) saturate(1.15)!important;
+    backdrop-filter:blur(9px) saturate(1.15)!important;
+  }
+  #screen[data-entering="true"] > :nth-child(-n+4){animation:none!important}
+  #screen[data-entering="true"] > :first-child{
+    animation:zx-duo-fast-enter .18s ease-out both!important;
+  }
+}
+@keyframes zx-duo-fast-enter{
+  from{opacity:.87;transform:translate3d(0,4px,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+@media(max-width:700px) and (prefers-reduced-transparency:reduce),
+       (max-width:700px) and (prefers-contrast:more){
+ body::after{
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+  -webkit-mask-image:none!important;mask-image:none!important;
+  background:linear-gradient(to bottom,transparent,rgba(var(--zx-dock-ground),.98))!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+  .toolbar-trailing .doctor-launch,#screen .workshop-actions .primary,
+  #screen[data-page="learn"] .learning-page .primary{transition:none!important;transform:none!important}
+  #screen[data-entering="true"] > :first-child{animation:none!important}
+}
+html[data-reduced="true"] .toolbar-trailing .doctor-launch,
+html[data-reduced="true"] #screen .workshop-actions .primary,
+html[data-reduced="true"] #screen[data-page="learn"] .learning-page .primary{
+  transition:none!important;transform:none!important
+}
+html[data-reduced="true"] #screen[data-entering="true"] > :first-child{animation:none!important}
+@media(prefers-color-scheme:dark){
+ .toolbar-trailing .doctor-launch{
+   background:#243a39!important;
+   border-color:#4b8c81!important;
+   box-shadow:0 4px 0 #102925,0 5px 10px rgba(0,0,0,.26),inset 0 1px 0 rgba(255,255,255,.1)!important;
+ }
+ .toolbar-trailing .doctor-launch:is(:active,[data-duo-press="true"]){
+   background:#2d4642!important;
+   box-shadow:0 1px 0 #102925,0 2px 5px rgba(0,0,0,.19)!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .toolbar-trailing .doctor-launch:is(:active,[data-duo-press="true"]),
+ #screen .workshop-actions .primary:is(:active,[data-duo-press="true"]),
+ #screen[data-page="learn"] .learning-page .primary:is(:active,[data-duo-press="true"]){transform:none!important}
+}
+html[data-reduced="true"] .toolbar-trailing .doctor-launch:is(:active,[data-duo-press="true"]),
+html[data-reduced="true"] #screen .workshop-actions .primary:is(:active,[data-duo-press="true"]),
+html[data-reduced="true"] #screen[data-page="learn"] .learning-page .primary:is(:active,[data-duo-press="true"]){transform:none!important}

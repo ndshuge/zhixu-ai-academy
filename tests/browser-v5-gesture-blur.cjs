@@ -50,11 +50,11 @@ const server=http.createServer((req,res)=>{
         mask:edge.maskImage||edge.webkitMaskImage,opacity:edge.opacity,height:parseFloat(edge.height),
         dockBlur:dock.backdropFilter||dock.webkitBackdropFilter,hasRuntimeEdge:!!document.querySelector('script[src*="v5-scroll-edge.js"]')};
       });
-      assert.ok(layers.blur.includes('blur(16px)'),layers.blur);
-      assert.ok(layers.dockBlur.includes('blur(14px)'),layers.dockBlur);
+      assert.ok(layers.blur.includes('blur(12px)'),layers.blur);
+      assert.ok(layers.dockBlur.includes('blur(9px)'),layers.dockBlur);
       assert.match(layers.mask,/linear-gradient/);
       assert.equal(layers.opacity,'1');
-      assert.ok(layers.height<=190);
+      assert.ok(layers.height<=250);
       assert.equal(layers.hasRuntimeEdge,false);
       await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));
       assert.equal(await page.evaluate(()=>getComputedStyle(document.body,'::after').opacity),'1');
