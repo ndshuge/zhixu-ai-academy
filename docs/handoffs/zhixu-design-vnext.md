@@ -1,5 +1,8 @@
 # 知序 AI 学院 · Design VNext 工程交接（2026-11-04）
 
+> **2026-11-04 用户新授权（覆盖本文件旧的“禁止自动发布”限制）**：本轮仅允许把最新 UI 独立发布至正式 Pages，功能分支绝不合入。当前 UI 代码基线 `329d21fb4052b625edcde7cf98d52fa71cbb6eb1`；发布流水线与集成交接请优先参考 `docs/ZHIXU_UI_LATEST_RELEASE_HANDOFF_20261104.md`。下文早期“不得修改 main/Pages”属于开工时的历史约束，不能据此否认此次明确的正式发布授权。冻结 Dock、保护 Original/R3/V4/PFL/Evo/学习数据、禁止覆盖并行工作树仍完整有效。
+
+
 ## 权威状态
 - 正式 GitHub `ndshuge/zhixu-ai-academy`，Pages `https://ndshuge.github.io/zhixu-ai-academy/`。
 - 最新远程 main 在开工时为 `9c8071319ef23d0b75064b9ced6facd59140fd47`，与 `git ls-remote origin refs/heads/main` 一致；较 2026-11-04 上午 `a2ebeea` 更新。
