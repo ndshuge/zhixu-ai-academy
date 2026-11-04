@@ -52,11 +52,11 @@ const server=http.createServer((req,res)=>{
         mask:getComputedStyle(layers.at(-1)).maskImage,opacity:getComputedStyle(edge).opacity,height:parseFloat(getComputedStyle(edge).height),
         dockBlur:dock.backdropFilter||dock.webkitBackdropFilter,hasRuntimeEdge:!!document.querySelector('script[src*="v5-scroll-edge.js"]')};
       });
-      assert.ok(layers.blur.includes('blur(22px)'),layers.blur);
+      assert.ok(layers.blur.includes('blur(20px)'),layers.blur);
       assert.ok(layers.dockBlur==='none',layers.dockBlur);
       assert.match(layers.mask,/linear-gradient/);
       assert.equal(layers.opacity,'1');
-      assert.ok(layers.height>=196&&layers.height<=240,'extended bottom shade must cover behind browser toolbar');
+      assert.ok(layers.height>=114&&layers.height<=160,'extended bottom shade must cover behind browser toolbar');
       assert.equal(layers.hasRuntimeEdge,false);
       await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));
       assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector('.zx-progressive-underlay')).opacity),'1');

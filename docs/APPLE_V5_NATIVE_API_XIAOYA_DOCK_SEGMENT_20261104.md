@@ -33,3 +33,11 @@
 
 ## 保持不变
 Original / R3 / V4 视觉版本，PFL/EvoWorld 科学事实数据，既有学习记录存储、实验评分及跨步迁移流程，公开评委网站入口。
+
+
+## 2026-11-04 17:26 · 小芽最新版：Dock 上方清晰度修正
+
+- 查阅小芽真正最新正式远端 `origin/main b31c961`（2026-11-04 16:58 +0800），其已提交 `little-works/xiaoya-apple/native-v4/dock-near-blur-press.css`，其中明确说明上次 196px 羽化高度使阅读内容在 Dock 上方约 117px 处开始变糊；正式新版改为 114px，高度上沿距 Dock 顶部约 35px，前 13% 的第一层遮罩透明，上半部分背景染色直到 35% 保持透明。
+- 知序针对这一个问题只新增 `v5-dock-near-clear.css`，在原 `v5-xiaoya-dock.css` 后加载。移植新版本 114px 高度和 2 / 6 / 12 / 20px 四层重叠模糊，顶部渐进透明、底部保留强模糊；延续知序颜色变量、暗色、提高对比度和减少透明度处理。没有碰 API、实验 UI、页面切换和其他业务逻辑。
+- 新 `tests/v5-dock-near-clear.test.mjs` 红→绿，3/3 PASS；`tests/browser-v5-dock-near-clear.cjs` Edge/WebKit × 320/390/430/768px 8/8 PASS：手机统一 114px，高度上沿比 Dock 顶部早 36px，4 层实际计算模糊 2/6/12/20px，无旧 body::after 层，桌面不渲染移动遮罩。原浏览器回归调整了旧 196px/22px 断言，新 WebKit Dock/动效回归 PASS，`npm test` 172/172 PASS，`npm run verify` 指纹未变化。
+- 独立 WebKit 390×844 视觉对比在同一高对比文字密集页面禁用/启用新增 CSS，截图 `E:\CHATGPT\_tmp\zhixu-v5-near-clear-preview-20261104\near-clear-BEFORE.png` / `near-clear-AFTER.png`，确认 Dock 上方约 700–730px 的文字清晰度恢复、下方继续羽化。浏览器 Safari 原生地址栏不受此网页 CSS 控制，iPhone 真机物理验收仍待用户核验。

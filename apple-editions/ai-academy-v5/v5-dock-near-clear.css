@@ -1,0 +1,42 @@
+/* Port of Xiaoya native-v4/dock-near-blur-press.css at origin/main b31c961.
+   Keep Zhixu's four composited layers, but make content ABOVE the Dock sharp.
+   Do not import Xiaoya's unrelated button/press overrides. */
+@media(max-width:700px){
+ .zx-progressive-underlay{
+  height:calc(114px + env(safe-area-inset-bottom,0px))!important;
+ }
+ .zx-progressive-underlay .zx-blur-layer:nth-child(1){
+  --zx-blur:2px;
+  --zx-mask:linear-gradient(to bottom,transparent 13%,rgba(0,0,0,.16) 23%,rgba(0,0,0,.52) 35%,rgba(0,0,0,.9) 48%,rgba(0,0,0,.7) 61%,transparent 78%);
+ }
+ .zx-progressive-underlay .zx-blur-layer:nth-child(2){
+  --zx-blur:6px;
+  --zx-mask:linear-gradient(to bottom,transparent 38%,rgba(0,0,0,.25) 48%,#000 71%,rgba(0,0,0,.64) 82%,transparent 96%);
+ }
+ .zx-progressive-underlay .zx-blur-layer:nth-child(3){
+  --zx-blur:12px;
+  --zx-mask:linear-gradient(to bottom,transparent 62%,rgba(0,0,0,.28) 70%,#000 90%,#000 100%);
+ }
+ .zx-progressive-underlay .zx-blur-layer:nth-child(4){
+  --zx-blur:20px;
+  --zx-mask:linear-gradient(to bottom,transparent 80%,rgba(0,0,0,.42) 88%,#000 100%);
+ }
+ .zx-progressive-underlay .zx-blur-scrim{
+  background:linear-gradient(to bottom,transparent 0%,transparent 35%,rgba(var(--zx-dock-ground),.014) 48%,rgba(var(--zx-dock-ground),.045) 63%,rgba(var(--zx-dock-ground),.11) 83%,rgba(var(--zx-dock-ground),.22) 100%);
+ }
+}
+@media(max-width:700px) and (prefers-color-scheme:dark){
+ .zx-progressive-underlay .zx-blur-scrim{
+  background:linear-gradient(to bottom,transparent 0%,transparent 35%,rgba(var(--zx-dock-ground),.014) 48%,rgba(var(--zx-dock-ground),.06) 63%,rgba(var(--zx-dock-ground),.16) 83%,rgba(var(--zx-dock-ground),.32) 100%);
+ }
+}
+@media(max-width:700px) and (prefers-reduced-transparency:reduce),
+       (max-width:700px) and (prefers-contrast:more){
+ .zx-progressive-underlay .zx-blur-layer{
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+ }
+ .zx-progressive-underlay .zx-blur-scrim{
+  background:linear-gradient(to bottom,transparent 0%,transparent 35%,var(--ground,#f5f5f7) 100%)!important;
+ }
+}

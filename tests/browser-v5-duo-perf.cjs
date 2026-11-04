@@ -37,10 +37,10 @@ const srv=http.createServer((req,res)=>{
           nav=getComputedStyle(document.querySelector('#mobile-tabs .nav-optics'));
        return {blur:getComputedStyle(layer).backdropFilter,background:getComputedStyle(scrim).backgroundImage,mask:getComputedStyle(layer).maskImage,height:getComputedStyle(edge).height,bottom:getComputedStyle(edge).bottom,navFilter:document.querySelector('#mobile-tabs .nav-optics').style.filter,navBlur:nav.backdropFilter||nav.webkitBackdropFilter};
       });
-      assert.ok(fade.blur.includes('blur(22px)'),fade.blur);
+      assert.ok(fade.blur.includes('blur(20px)'),fade.blur);
       assert.match(fade.background,/0\.22/,'Xiaoya scrim is 22% at its deepest point');
       assert.ok(parseFloat(fade.bottom)===0,'the deep shade must extend beneath the viewport edge');
-      assert.ok(parseFloat(fade.height)>=196,'the same shade should reach under the Dock');
+      assert.ok(parseFloat(fade.height)>=114&&parseFloat(fade.height)<=160,'the same shade should reach under the Dock');
       assert.match(fade.mask,/linear-gradient/);
       assert.ok(fade.navBlur==='none',fade.navBlur);
       assert.equal(fade.navFilter,'','mobile lens should not run SVG refraction');

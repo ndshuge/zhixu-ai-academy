@@ -39,8 +39,8 @@ if(!f.startsWith(root+path.sep))return res.writeHead(403).end();fs.readFile(f,(e
     return {bottom:getComputedStyle(c).bottom,height:parseFloat(getComputedStyle(c).height),
     blur:layers.map(el=>getComputedStyle(el).backdropFilter||getComputedStyle(el).webkitBackdropFilter),
     old:getComputedStyle(document.body,'::after').display,mask:layers.map(el=>getComputedStyle(el).maskImage||getComputedStyle(el).webkitMaskImage)}});
-   assert.equal(material.bottom,'0px');assert.ok(material.height>=196);
-   assert.deepEqual(material.blur.map(x=>x.match(/blur\((\d+)px\)/)?.[1]),['3','7','13','22']);
+   assert.equal(material.bottom,'0px');assert.ok(material.height>=114&&material.height<=160,'underlay begins only near the Dock');
+   assert.deepEqual(material.blur.map(x=>x.match(/blur\((\d+)px\)/)?.[1]),['2','6','12','20']);
    assert.equal(material.old,'none','legacy blur layer removed');
    assert.ok(material.mask.every(x=>x.includes('linear-gradient')));
   }
