@@ -43,7 +43,7 @@ const server=http.createServer((req,res)=>{
      assert.ok(state.htmlWidth<=state.windowWidth,'no horizontal overflow');
      if(width===390){
       assert.equal(state.overlayOpacity,'1','edge remains active at scroll end');
-      assert.match(state.blur,/blur\(28px\)/);
+      assert.match(state.blur,/blur\(16px\)/);
       assert.match(state.mask,/linear-gradient/);
      }
      await page.waitForTimeout(360);

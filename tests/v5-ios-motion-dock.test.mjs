@@ -20,7 +20,7 @@ test('directional route entry is interruptible and supports reduced motion',()=>
 });
 test('bottom scroll edge stays blurred even when scroll remaining is zero',()=>{
  const css=read('apple-editions/ai-academy-v5/v5-ios-continuity.css');
- assert.match(css,/backdrop-filter:\s*blur\(2[48]px\)/);
+ assert.match(css,/backdrop-filter:\s*blur\(16px\)/);
  assert.match(css,/body::after/);
  assert.match(css,/opacity:\s*1\s*!important/);
  assert.match(css,/mask-image/);

@@ -1,10 +1,28 @@
 /* V5 iPhone continuity: stable toolbar target, spatial routes and a full-height scroll edge.
    Background blur (L1) is used on WebKit; no unsupported native glass claim. */
 .toolbar-trailing button[data-route="settings"]{
-  transition:transform .22s cubic-bezier(.21,.83,.3,1),background-color .18s ease,border-color .18s ease;
+  transform:scale(1);
+  transition:transform .32s cubic-bezier(.18,1.22,.3,1),background-color .2s ease,border-color .2s ease;
   transform-origin:center;
 }
-.toolbar-trailing button[data-route="settings"]:active{transform:scale(.93)}
+.toolbar-trailing button[data-route="settings"]:active,
+.toolbar-trailing button[data-route="settings"][data-pressing="true"]{
+  transform:scale(.955);
+  transition-duration:.13s;
+}
+.toolbar-trailing button[data-route="settings"][data-holding="true"]{
+  transform:scale(.90);
+  transition-duration:.24s;
+}
+.toolbar-trailing button[data-route="settings"][data-pressing="true"]{
+  background:rgba(222,244,240,.94)!important;
+  border-color:rgba(16,124,108,.26)!important;
+}
+.toolbar-trailing button[data-route="settings"][data-holding="true"]{
+  background:rgba(204,236,229,.98)!important;
+  border-color:rgba(12,112,102,.36)!important;
+  box-shadow:inset 0 1px 5px rgba(9,102,90,.13),0 2px 12px rgba(10,87,82,.08);
+}
 .toolbar-trailing button[data-route="settings"][aria-current="page"]{
   border-color:rgba(17,112,103,.22)!important;
   background:rgba(220,241,236,.78)!important;
@@ -33,18 +51,27 @@
   /* Preserve the material all the way below the Dock, including at the end of
      a long document. The old scroll-edge controller sets zero at the bottom. */
   body::after{
-    height:calc(196px + env(safe-area-inset-bottom,0px))!important;
+    height:calc(154px + env(safe-area-inset-bottom,0px))!important;
     opacity:1!important;
     background:linear-gradient(to bottom,
       rgba(var(--zx-dock-ground,246,247,249),0) 0%,
-      rgba(var(--zx-dock-ground,246,247,249),.025) 23%,
-      rgba(var(--zx-dock-ground,246,247,249),.065) 43%,
-      rgba(var(--zx-dock-ground,246,247,249),.15) 67%,
-      rgba(var(--zx-dock-ground,246,247,249),.34) 100%)!important;
-    -webkit-backdrop-filter:blur(28px) saturate(1.16)!important;
-    backdrop-filter:blur(28px) saturate(1.16)!important;
-    -webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.12) 20%,rgba(0,0,0,.52) 48%,#000 83%)!important;
-    mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.12) 20%,rgba(0,0,0,.52) 48%,#000 83%)!important;
+      rgba(var(--zx-dock-ground,246,247,249),.008) 17%,
+      rgba(var(--zx-dock-ground,246,247,249),.032) 38%,
+      rgba(var(--zx-dock-ground,246,247,249),.115) 62%,
+      rgba(var(--zx-dock-ground,246,247,249),.30) 100%)!important;
+    -webkit-backdrop-filter:blur(16px) saturate(1.10)!important;
+    backdrop-filter:blur(16px) saturate(1.10)!important;
+    -webkit-mask-image:linear-gradient(to bottom,
+      transparent 0%,rgba(0,0,0,.04) 18%,rgba(0,0,0,.23) 39%,
+      rgba(0,0,0,.54) 61%,rgba(0,0,0,.83) 81%,#000 100%)!important;
+    mask-image:linear-gradient(to bottom,
+      transparent 0%,rgba(0,0,0,.04) 18%,rgba(0,0,0,.23) 39%,
+      rgba(0,0,0,.54) 61%,rgba(0,0,0,.83) 81%,#000 100%)!important;
+  }
+  .mobile-native-tabs .nav-optics{
+    -webkit-backdrop-filter:blur(14px) saturate(1.22)!important;
+    backdrop-filter:blur(14px) saturate(1.22)!important;
+    will-change:auto!important;
   }
   body.keyboard-visible::after,
   body:has(.doctor-panel:not([hidden]))::after{

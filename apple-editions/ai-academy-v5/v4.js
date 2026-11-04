@@ -42,6 +42,7 @@ if(![100,115,130,150].includes(prefs.textScale))prefs.textScale=100;
 document.documentElement.dataset.reduced=prefs.reduceMotion?'true':'false';
 document.documentElement.style.setProperty('--zx-type-scale',String(prefs.textScale/100));
 const state={route:'today',lesson:newLesson(),busy:false,chat:[]};
+let settingsReturnRoute='today';
 let navGlass=null,navResize=null,navAnimation=null,routeAnimation=null;
 let lastRoute='today';
 const nav=$('#mobile-tabs'),lens=nav.querySelector('.tab-lens');
@@ -93,7 +94,7 @@ const reduced=()=>prefs.reduceMotion||matchMedia('(prefers-reduced-motion:reduce
 function render(){
  const route=state.route;
  stage.dataset.page=route;
- const settingsButton=$('.toolbar-trailing button[data-route="settings"]');if(settingsButton){if(route==='settings')settingsButton.setAttribute('aria-current','page');else settingsButton.removeAttribute('aria-current');}
+ const settingsButton=$('.toolbar-trailing button[data-route="settings"]');if(settingsButton){if(route==='settings'){settingsButton.setAttribute('aria-current','page');settingsButton.setAttribute('aria-label','返回'+titles[settingsReturnRoute]);}else{settingsButton.removeAttribute('aria-current');settingsButton.setAttribute('aria-label','设置');}}
  $('#toolbar-title').textContent=titles[route];$('#outline-name').textContent=route==='learn'?'学习步骤':titles[route];
  $('#outline-content').innerHTML=outline(route,bridge,state.lesson);
  $$('.menu-item[data-route],.tab-item[data-route]').forEach(node=>{
@@ -108,8 +109,11 @@ function render(){
 }
 function goto(route,{replace=false}={}){
  if(!titles[route])route='today';
+ // A second tap on the toolbar control returns to the originating tab.
+ if(route==='settings' && state.route==='settings' && !replace)route=settingsReturnRoute;
  closeZoomMenu();
  const previous=state.route,changed=previous!==route;
+ if(route==='settings'&&previous!=='settings')settingsReturnRoute=previous;
  if(!changed&&!replace)return;
  if(changed&&window.scrollY>0)window.scrollTo(0,0);
  state.route=route;
@@ -326,7 +330,7 @@ document.addEventListener('submit',async e=>{
  try{await submit(e.target)}catch(error){console.error('[V4 submit]',error);notify(error.message||'提交失败')}
  finally{state.busy=false}
 });
-window.addEventListener('popstate',()=>{closeZoomMenu();const previous=state.route;const r=location.hash.slice(1);state.route=titles[r]?r:'today';render();animateScreen(previous,state.route)});
+window.addEventListener('popstate',()=>{closeZoomMenu();const previous=state.route;const r=location.hash.slice(1);const destination=titles[r]?r:'today';if(destination==='settings'&&previous!=='settings')settingsReturnRoute=previous;state.route=destination;render();animateScreen(previous,state.route)});
 $('#outline-toggle').onclick=()=>document.documentElement.dataset.outline='collapsed';
 $('#outline-reveal').onclick=()=>document.documentElement.dataset.outline='open';
 const panel=$('#doctor-panel'),launch=$('#doctor-launch'),question=$('#doctor-question');
@@ -412,7 +416,7 @@ async function activateMotion(){
   navGlass=createGlass(nav.querySelector('.nav-optics'),{
     mode:'backdrop',fit:true,refraction:12,bezel:.83,curvature:3.4,
     chroma:.08,blur:1.8,specular:.66,specularWidth:1.5,
-    mapScale:1,fallback:'blur(22px) saturate(1.55)'
+    mapScale:1,fallback:'blur(14px) saturate(1.35)'
   });
   syncNavSelection(true);
   navResize=new ResizeObserver(()=>syncNavSelection(true));
@@ -486,7 +490,7 @@ async function activateMotion(){
   // Release is attached to document, not the original target: pointer cancellation and
   // dragging off a control cannot strand it in a compressed visual state.
   document.addEventListener('pointerup',settle,{passive:true});
-  document.addEventListener('pointercancel',settle,{passive:true});
+   document.addEventListener('pointercancel',settle,{passive:true});
   window.addEventListener('blur',settle);
  }catch(err){window.ZHIXU_V4_ENGINES={motion:'CSS fallback',reason:String(err),glass:!!customElements.get('lg-navbar')}}
 }

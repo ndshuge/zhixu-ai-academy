@@ -11,10 +11,10 @@ test('scroll-edge strength responds to document overflow rather than always cove
  assert.equal(edgeStrength({remaining:600,scrollRange:0}),0);
  assert.equal(edgeStrength({remaining:100,scrollRange:500,keyboardVisible:true}),0);
 });
-test('V5 uses a viewport-aware scroll-edge module and a CSS strength token',()=>{
+test('V5 retains the historical scroll-edge utility but ships a static feathered iPhone edge',()=>{
  const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
  const css=fs.readFileSync(path.join(root,'v5-scroll-edge.css'),'utf8');
- assert.match(html,/v5-scroll-edge\.js/);
+ assert.doesNotMatch(html,/src="\.\/v5-scroll-edge\.js/);
  assert.match(fs.readFileSync(path.join(root,'v4.js'),'utf8'),/zhixu:content-rendered/);
  assert.match(fs.readFileSync(path.join(root,'v5-scroll-edge.js'),'utf8'),/addEventListener\('zhixu:content-rendered'/);
  assert.match(css,/--zx-edge-opacity/);
