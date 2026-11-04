@@ -32,7 +32,7 @@ async function run(){
   await page.waitForFunction(()=>document.querySelector('#screen')?.dataset.page==='today',null,{timeout:15000});
   await page.locator('#mobile-tabs [data-route=learn]').click();
   if(experiment==='evo-pair')await page.locator('#screen [data-experiment=evo-pair]').click();
-  const action=async a=>{await page.locator('#screen [data-action="'+a+'"]').first().click({timeout:9000});await page.waitForTimeout(70)};
+  const action=async a=>{await page.locator('#screen [data-action="'+a+'"]').first().click({timeout:9000});await page.waitForTimeout(260)};
   const grade=async()=>{
    const inputs=page.locator('#quiz-form input[name=answer]');
    await inputs.first().waitFor({state:'visible',timeout:14000});

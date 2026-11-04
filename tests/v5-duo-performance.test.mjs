@@ -5,8 +5,8 @@ const src=f=>readFileSync(new URL('../apple-editions/ai-academy-v5/'+f,import.me
 test('doctor and learning CTA use a single tactile raised surface with no perpetual animation',()=>{
  const css=src('v5-duo-perf.css');
  assert.match(css,/\.toolbar-trailing \.doctor-launch/);
- assert.match(src('index.html'),/v5-duo-touch\.js/);
- assert.match(src('v5-duo-touch.js'),/pointercancel/);
+ assert.match(src('index.html'),/v5-press-feedback\.js/);
+ assert.match(src('v5-press-feedback.js'),/pointercancel/);
  assert.match(css,/\[data-duo-press="true"\]/);
  assert.match(css,/\.workshop-actions \.primary/);
  assert.match(css,/translate3d\(0,3px,0\)/);

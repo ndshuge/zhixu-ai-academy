@@ -43,6 +43,7 @@ const server=http.createServer((req,res)=>{
       await page.locator('#screen .experiment-tabs button[data-experiment="evo-pair"]').click();
       const selected=page.locator('#screen .experiment-tabs button.is-active');
       await selected.waitFor();
+      await page.waitForFunction(()=>document.querySelector('#screen .experiment-tabs .is-active')?.dataset.experiment==='evo-pair',{timeout:6000});
       assert.equal(await selected.getAttribute('data-experiment'),'evo-pair');
       if(width<701){
        await page.waitForTimeout(260);
@@ -59,14 +60,16 @@ const server=http.createServer((req,res)=>{
         const edge=getComputedStyle(document.body,'::after'),dock=getComputedStyle(document.querySelector('.mobile-native-tabs .nav-optics'));
         return {edge:edge.backdropFilter||edge.webkitBackdropFilter,
                 dock:dock.backdropFilter||dock.webkitBackdropFilter,
+                parent:getComputedStyle(document.querySelector('#mobile-tabs')).backdropFilter||getComputedStyle(document.querySelector('#mobile-tabs')).webkitBackdropFilter,
                 mask:edge.maskImage||edge.webkitMaskImage,
                 background:edge.backgroundImage,opacity:edge.opacity,
                 height:parseFloat(edge.height),htmlOverflow:document.documentElement.scrollWidth-innerWidth};
        });
-       assert.ok(result.edge.includes('blur(14px)'),result.edge);
+       assert.ok(result.edge.includes('blur(24px)'),result.edge);
        assert.equal(result.dock,'none','one scroll edge backdrop, no second dock blur');
+       assert.equal(result.parent,'none','Dock container must not add an extra blur boundary');
        assert.ok(result.mask.includes('linear-gradient'));
-       assert.match(result.background,/0\.99[0-9]/);
+       assert.match(result.background,/0\.97/);
        assert.equal(result.opacity,'1');
        assert.ok(result.htmlOverflow<=1,'no document horizontal overflow');
        await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));

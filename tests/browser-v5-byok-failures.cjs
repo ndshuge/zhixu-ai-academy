@@ -48,6 +48,7 @@ async function run(){
    assert.equal(await state(),false);
    assert.equal(count,0,'must not call model without user action');
    await page.locator('.toolbar [data-route=settings]').click();
+   await page.locator('#screen[data-page="settings"] [data-action=open-ai-config]').waitFor({timeout:9000});
    await page.locator('#screen [data-action=open-ai-config]').click();
    const frame=page.frameLocator('#original-engine');
    console.log('BYOK_STEP',name,'type key');await frame.locator('#pages-ai-key').fill(fakeKey);
@@ -63,6 +64,7 @@ async function run(){
    assert.equal((await page.content()).includes(fakeKey),false,'fake token must not appear in outer DOM');
    await page.locator('#close-config').click();
    await page.locator('#doctor-launch').click();
+   await page.locator('#doctor-panel.doctor-visible').waitFor({timeout:9000});
    await page.locator('#doctor-question').fill('请解释这个科学实验的真实结果');
    responseKind='rate';
    console.log('BYOK_STEP',name,'send 429');await page.locator('#doctor-send').click();

@@ -1,0 +1,112 @@
+/* Audited mobile scroll edge: one uninterrupted, masked backdrop surface
+   from reading content to the physical bottom of the web viewport. */
+@media(max-width:700px){
+  body::after{
+    content:""!important;
+    position:fixed!important;
+    inset:auto 0 -1px 0!important;
+    height:calc(250px + env(safe-area-inset-bottom,0px))!important;
+    z-index:69!important;
+    pointer-events:none!important;
+    border:0!important;box-shadow:none!important;
+    opacity:1!important;
+    -webkit-backdrop-filter:blur(24px) saturate(1.06)!important;
+    backdrop-filter:blur(24px) saturate(1.06)!important;
+    background:linear-gradient(to bottom,
+      rgba(var(--zx-dock-ground),0) 0%,
+      rgba(var(--zx-dock-ground),.008) 15%,
+      rgba(var(--zx-dock-ground),.038) 30%,
+      rgba(var(--zx-dock-ground),.12) 46%,
+      rgba(var(--zx-dock-ground),.30) 62%,
+      rgba(var(--zx-dock-ground),.59) 77%,
+      rgba(var(--zx-dock-ground),.84) 90%,
+      rgba(var(--zx-dock-ground),.97) 100%)!important;
+    -webkit-mask-image:linear-gradient(to bottom,
+      transparent 0%,rgba(0,0,0,.035) 13%,
+      rgba(0,0,0,.18) 28%,
+      rgba(0,0,0,.45) 49%,
+      rgba(0,0,0,.78) 70%,#000 94%)!important;
+    mask-image:linear-gradient(to bottom,
+      transparent 0%,rgba(0,0,0,.035) 13%,
+      rgba(0,0,0,.18) 28%,
+      rgba(0,0,0,.45) 49%,
+      rgba(0,0,0,.78) 70%,#000 94%)!important;
+  }
+  /* No second backdrop-filter inside the dock: its frame and lens remain visible
+     as controls without resetting blur strength across their bottom edge. */
+  .mobile-native-tabs .nav-optics,
+  #mobile-tabs .nav-optics{
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+    background:linear-gradient(165deg,rgba(var(--zx-dock-ground),.57),rgba(var(--zx-dock-ground),.78))!important;
+  }
+  body.keyboard-visible::after,
+  body:has(.doctor-panel:not([hidden]))::after{opacity:0!important;visibility:hidden!important}
+}
+/* Consistent button lifecycle. Press-down is short; release eases over the next
+   250 ms, while action commits after 150 ms so the departure remains visible. */
+button[data-zx-press="down"]{
+  transform:translate3d(0,2px,0) scale(.985)!important;
+  transition-property:transform,box-shadow,background-color!important;
+  transition-duration:80ms!important;
+  transition-timing-function:cubic-bezier(.2,.75,.35,1)!important;
+}
+button[data-zx-press="release"]{
+  transform:translate3d(0,0,0) scale(1)!important;
+  transition-property:transform,box-shadow,background-color!important;
+  transition-duration:250ms!important;
+  transition-timing-function:cubic-bezier(.18,1.24,.32,1)!important;
+}
+.toolbar-trailing .doctor-launch[data-zx-press="down"],
+#screen .primary[data-zx-press="down"],
+#screen .world-card[data-zx-press="down"]{
+  transform:translate3d(0,3px,0) scale(.99)!important;
+  box-shadow:0 1px 0 rgba(9,93,82,.50),0 2px 5px rgba(0,36,31,.10)!important;
+}
+#screen .quiet-button[data-zx-press="down"],
+#screen .form-actions button[data-zx-press="down"],
+#screen button[data-action][data-zx-press="down"]{
+  filter:brightness(.965);
+}
+.mobile-native-tabs button[data-zx-press="down"],
+#screen .experiment-tabs button[data-zx-press="down"]{
+  transform:scale(.975)!important;
+  /* Apple-style horizontal and dock controls remain flat rather than raised. */
+}
+#screen .shelf .book-tile[data-zx-press="down"]{
+  transform:none!important;filter:brightness(.97);
+}
+#screen .answer-option:active{background:rgba(23,115,105,.045);border-color:rgba(23,115,105,.30)}
+/* Specificity over older duo rules: 80ms down, 250ms release. */
+.toolbar-trailing .doctor-launch[data-zx-press="down"],
+#screen .workshop-actions .primary[data-zx-press="down"],
+#screen .learning-page .primary[data-zx-press="down"]{
+ transition-duration:80ms!important;
+}
+.toolbar-trailing .doctor-launch[data-zx-press="release"],
+#screen .workshop-actions .primary[data-zx-press="release"],
+#screen .learning-page .primary[data-zx-press="release"]{
+ transition-duration:250ms!important;
+ transition-timing-function:cubic-bezier(.18,1.24,.32,1)!important;
+}
+/* The settings gear has a separate, slower long-hold tactile state. */
+.toolbar-trailing button[data-route="settings"][data-holding="true"]{
+ transform:scale(.90)!important;
+}
+
+@media(prefers-reduced-motion:reduce){
+ button[data-zx-press="down"],button[data-zx-press="release"]{
+  transform:none!important;transition-duration:0ms!important
+ }
+}
+html[data-reduced="true"] button[data-zx-press="down"],
+html[data-reduced="true"] button[data-zx-press="release"]{
+ transform:none!important;transition-duration:0ms!important
+}
+@media(max-width:700px) and (prefers-reduced-transparency:reduce),
+       (max-width:700px) and (prefers-contrast:more){
+ body::after{
+   -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+   -webkit-mask-image:none!important;mask-image:none!important;
+   background:linear-gradient(to bottom,transparent 0%,rgba(var(--zx-dock-ground),.97) 100%)!important;
+ }
+}

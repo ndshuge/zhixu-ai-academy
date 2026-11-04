@@ -50,7 +50,7 @@ const server=http.createServer((req,res)=>{
         mask:edge.maskImage||edge.webkitMaskImage,opacity:edge.opacity,height:parseFloat(edge.height),
         dockBlur:dock.backdropFilter||dock.webkitBackdropFilter,hasRuntimeEdge:!!document.querySelector('script[src*="v5-scroll-edge.js"]')};
       });
-      assert.ok(layers.blur.includes('blur(14px)'),layers.blur);
+      assert.ok(layers.blur.includes('blur(24px)'),layers.blur);
       assert.ok(layers.dockBlur==='none',layers.dockBlur);
       assert.match(layers.mask,/linear-gradient/);
       assert.equal(layers.opacity,'1');
