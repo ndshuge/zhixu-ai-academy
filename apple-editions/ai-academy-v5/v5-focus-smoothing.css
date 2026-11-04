@@ -1,0 +1,45 @@
+/* The fixed top controls become a focused-learning background layer.
+   Animate height and opacity in both directions, without changing Dock. */
+.reading-column > .toolbar{
+ transition:height .36s cubic-bezier(.24,.82,.28,1),
+   opacity .24s ease,transform .36s cubic-bezier(.24,.82,.28,1),
+   visibility 0s linear 0s;
+ transform:none;visibility:visible;
+}
+body[data-focus="true"] .reading-column > .toolbar{
+ height:0!important;min-height:0!important;padding-top:0!important;padding-bottom:0!important;
+ opacity:0;transform:translate3d(0,-62px,0);
+ overflow:hidden;pointer-events:none;visibility:hidden;
+ border-bottom-color:transparent!important;
+ transition:height .36s cubic-bezier(.24,.82,.28,1),
+   opacity .24s ease,transform .36s cubic-bezier(.24,.82,.28,1),
+   visibility 0s linear .36s;
+}
+@media(prefers-reduced-motion:reduce){
+ .reading-column > .toolbar,body[data-focus="true"] .reading-column > .toolbar{transition:none!important}
+}
+html[data-reduced="true"] .reading-column > .toolbar,
+html[data-reduced="true"] body[data-focus="true"] .reading-column > .toolbar{transition:none!important}
+/* Route entrance translations must not enlarge document scroll width. */
+.reading-column:has(#screen[data-entering="true"]){overflow-x:clip}
+/* Focus continuity only. Preserve frozen Dock geometry, lenses, label styles and blur design.
+   Existing #mobile-tabs transform/opacity is the sole Dock animator. */
+@media(max-width:700px){
+ body[data-focus="true"] .zx-progressive-underlay{
+  display:block!important;
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  transition:opacity .34s cubic-bezier(.22,.78,.28,1),visibility 0s linear .34s!important;
+ }
+ body:not([data-focus="true"]) .zx-progressive-underlay{
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transition:opacity .32s cubic-bezier(.22,.78,.28,1),visibility 0s linear 0s!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ body[data-focus] .zx-progressive-underlay{transition:none!important}
+}
+html[data-reduced="true"] body[data-focus] .zx-progressive-underlay{transition:none!important}

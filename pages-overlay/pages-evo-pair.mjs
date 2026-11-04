@@ -12,15 +12,18 @@ export async function runEvoPair(seed=73129){
   for(const cooperation of [true,false]){
    const world=new World({...common,cooperation,seed:independentSeed});
    let populationIntegral=0;
+   // Observations sampled from this World, not synthesized animation keyframes.
+   const populationSamples=[[0,world.agents.length]];
    for(let i=0;i<200;i++){
     world.step();
     populationIntegral+=world.agents.length;
+    if((i+1)%20===0)populationSamples.push([i+1,world.agents.length]);
     if(i%45===44)await yieldTask();
    }
    const end=world.metrics();
    results.push({seed:independentSeed,condition:cooperation?'合作开启':'合作关闭',
     meanPopulation:populationIntegral/200,endingPopulation:end.population,
-    balanceError:end.balanceError,digest:world.digest()});
+    balanceError:end.balanceError,digest:world.digest(),populationSamples});
   }
  }
  return {experiment:'evo-pair',engine:'EvoWorld 浏览器真实世界模拟',

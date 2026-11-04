@@ -1,6 +1,6 @@
 /* One delegated V5 press timeline: feedback survives pointerup until the action fires.
    No animation loop or layout-changing DOM. Keyboard/programmatic clicks stay immediate. */
-const actionSelector='button[data-action],button[data-route],button[data-experiment],form button[type="submit"],.toolbar-trailing .doctor-launch';
+const actionSelector='button[data-action],button[data-core-action],button[data-route],button[data-experiment],form button[type="submit"],.toolbar-trailing .doctor-launch';
 const raisedExclude='.experiment-tabs button,.shelf .book-tile';
 const waiting=new WeakMap();
 let active=null,scheduledNav=null;

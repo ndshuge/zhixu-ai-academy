@@ -12,13 +12,13 @@ export function logisticChart(){
  return '<div class="preview-paper"><div class="preview-label"><strong>初值敏感性</strong><span>Logistic · r=3.9</span></div><svg class="mini-chart" viewBox="0 0 390 178" aria-label="真实公式计算的六十六轮 Logistic 对照轨迹" role="img"><line class="gridline" x1="16" y1="52" x2="370" y2="52"/><line class="gridline" x1="16" y1="105" x2="370" y2="105"/><line class="gridline" x1="16" y1="153" x2="370" y2="153"/><path class="line-a" d="'+path(A)+'"/><path class="line-b" d="'+path(B)+'"/></svg><div class="chart-legend"><span><i></i>x₀=0.41200</span><span><i></i>x₀=0.41201</span></div></div>';
 }
 const countRow=(num,label)=>'<div class="metric"><strong>'+esc(num)+'</strong><span>'+esc(label)+'</span></div>';
-export function today({bridge,lesson}){
+export function today({bridge,lesson,core}){
  const s=bridge.summary||{},answered=s.answered||0,explorations=s.explorations||0,transfers=s.transfers||0;
- const canContinue=lesson&&((lesson.step||0)>0||lesson.question||lesson.grade||lesson.preChoice!==null&&lesson.preChoice!==undefined||(lesson.preResults||[]).length>0);
+ const canContinue=!!core||lesson&&((lesson.step||0)>0||lesson.question||lesson.grade||lesson.preChoice!==null&&lesson.preChoice!==undefined||(lesson.preResults||[]).length>0);
  const currentStep=Math.max(0,Math.min(3,Number.isInteger(lesson?.step)?lesson.step:0));
- const nextStep=['独立判断','提出预测','实验与导师','迁移验证'][currentStep];
- const worldName={'sensitivity':'混沌与非线性','logistic':'非线性增长','evo-pair':'生命与演化'}[lesson?.experiment]||'科学探究';
- const resume=canContinue?'<section class="zx-next-lesson" aria-label="继续之前的学习"><div class="zx-next-lesson__text"><span class="zx-next-lesson__eyebrow">下一站学习</span><h2>'+esc(worldName)+'</h2><p>当前阶段：'+esc(nextStep)+'。已保存本次学习进度。</p></div>'+click('继续学习 '+next,'resume-learning',true)+'</section>':'';
+ const nextStep=core?({pretest:'独立判断',predict:'提出预测',ready:'批准实验',evidence:'观察证据',reflected:'迁移理解',transfer:'迁移验证',complete:'探究完成'}[core.phase]||'科学探究'):['独立判断','提出预测','实验与导师','迁移验证'][currentStep];
+ const worldName={'sensitivity':'混沌与非线性','logistic':'非线性增长','evo-pair':'生命与演化'}[core?.experimentId||lesson?.experiment]||'科学探究';
+ const resume=canContinue?'<section class="zx-next-lesson" aria-label="继续之前的学习"><div class="zx-next-lesson__text"><span class="zx-next-lesson__eyebrow">下一站学习</span><h2>'+esc(worldName)+'</h2><p>当前阶段：'+esc(nextStep)+'。'+(core?'当前页面可继续，刷新后本轮步骤可能重新开始。':'已保存本次学习进度。')+'</p></div>'+click('继续学习 '+next,'resume-learning',true)+'</section>':'';
  return '<div class="workshop-intro"><span class="workshop-breadcrumb">今天的探索</span></div>'+resume+
  '<section class="workshop-hero" aria-label="开始深度理解之旅"><div class="workshop-hero-copy">'+
  '<div class="workshop-eyebrow"><span class="signal-dot"></span> 今日科学探究 · 开放实验</div>'+

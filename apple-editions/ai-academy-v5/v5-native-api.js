@@ -1,4 +1,5 @@
 /* Zhixu V5 native BYOK. No Original iframe UI, localStorage or cookie credentials. */
+import {enterSurface,exitSurface} from './v5-surface-continuity.js';
 const allowedModels=new Set(['deepseek-flash','deepseek-v4-pro']);
 let key='',model='deepseek-flash',connected=false,inFlight=false,count=0;
 let lastTrigger=null,dialog=null,stat=null,input=null,connectButton=null;
@@ -45,8 +46,11 @@ function revoke(){
 }
 function close(){
  if(!dialog)return;
- dialog.remove();dialog=null;stat=null;input=null;connectButton=null;
- if(lastTrigger?.isConnected)lastTrigger.focus({preventScroll:true});
+ const leaving=dialog,returnFocus=lastTrigger;
+ if(input)input.value='';
+ dialog=null;stat=null;input=null;connectButton=null;
+ exitSurface(leaving,{done:()=>{leaving.remove();if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true})}});
+ // Focus is restored only after the sheet has visibly returned.
 }
 function open(trigger){
  lastTrigger=trigger||document.activeElement;
@@ -63,11 +67,11 @@ function open(trigger){
   <div class="zx-api-actions"><button type="button" class="primary zx-api-connect">连接并验证</button><button type="button" class="secondary zx-api-revoke">断开并清除</button></div>
   <p class="zx-api-help">测试连接会向 DeepSeek 发送一条简短请求，可能产生少量 Token 费用。<a href="https://platform.deepseek.com/" target="_blank" rel="noopener noreferrer">管理密钥与余额 ↗</a></p>
  </section>`;
- document.querySelector('#dialog-layer').appendChild(shade);dialog=shade;
+ document.querySelector('#dialog-layer').appendChild(shade);dialog=shade;enterSurface(shade,lastTrigger);
  stat=shade.querySelector('.zx-api-status');input=shade.querySelector('#zx-native-key');connectButton=shade.querySelector('.zx-api-connect');
  shade.querySelector('#zx-native-model').value=model;
  renderStatus(connected?'已验证连接 · '+model+'。当前页面可向博士提问。':describe(0),'ok');
- input.focus();
+ if(innerWidth<=700)shade.querySelector('.zx-api-close').focus({preventScroll:true});else input.focus();
  shade.querySelector('.zx-api-close').addEventListener('click',close);
  shade.querySelector('.zx-api-revoke').addEventListener('click',revoke);
  shade.querySelector('#zx-native-model').addEventListener('change',e=>{model=e.target.value;connected=false;renderStatus('模型已切换，请重新验证连接。')});

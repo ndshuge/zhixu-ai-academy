@@ -1,0 +1,37 @@
+/* V6 teaching-core cards: content-scoped, keep the existing Apple V5 design/Dock immutable. */
+#screen .core-learning{max-width:100%;overflow-wrap:anywhere}
+#screen .core-learning .learning-paper{width:100%;min-width:0}
+#screen .core-learning h2{font-size:clamp(21px,3vw,29px);line-height:1.32;letter-spacing:-.035em}
+#screen .core-learning .field{display:flex;flex-direction:column;gap:9px;margin:16px 0;font-weight:600}
+#screen .core-learning textarea,#screen .core-learning input:not([type="checkbox"]):not([type="radio"]){font:inherit;box-sizing:border-box;width:100%;min-width:0;max-width:100%;border:1px solid var(--line,#dce3df);border-radius:13px;padding:13px;background:var(--card,#fff);color:var(--ink,#233)}
+#screen .core-learning textarea{min-height:104px;resize:vertical}
+#screen .core-params{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+#screen .core-learning .primary,#screen .core-learning .secondary,#screen .core-learning .quiet-button{min-height:44px;max-width:100%;white-space:normal;transition:transform .3s cubic-bezier(.18,1.35,.3,1),box-shadow .3s ease,background .24s ease}
+#screen .core-learning button[data-zx-press="down"]{transform:scale(.962)}
+#screen .core-learning button[data-zx-press="release"]{transform:scale(1.012)}
+#screen .core-kicker{font-size:12px;font-weight:700;letter-spacing:.025em;color:var(--accent,#167e70)}
+#screen .core-evidence,#screen .core-approval,#screen .core-guide,#screen .core-coaching{margin:16px 0 23px;padding:clamp(16px,3vw,24px);border-radius:18px;border:1px solid var(--line,#dce3df);background:var(--card,#fff)}
+#screen .core-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:11px}
+#screen .core-metric{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line,#e5e8e5);font-size:13px}
+#screen .core-metric span{font-variant-numeric:tabular-nums;text-align:right}
+#screen .core-figure{margin:20px 0;padding:16px 10px;border:1px solid var(--line,#dce3df);border-radius:16px;max-width:100%;overflow:hidden}
+#screen .core-figure figcaption{padding:0 10px 12px;font-weight:680}
+#screen .core-line{display:block;width:100%;height:auto;max-width:600px;margin:auto}
+#screen .core-axis{fill:none;stroke:var(--line,#bcc7c0);stroke-width:1}
+#screen .core-line-0{stroke:#247f7a}#screen .core-line-1{stroke:#dd8245}#screen .core-line-2{stroke:#916cb1}#screen .core-line-3{stroke:#648ba7}
+#screen .core-point-actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+#screen .core-point-actions button{padding:9px 11px;background:var(--card,#fff);border:1px solid var(--line,#dce3df);border-radius:12px;text-align:left;white-space:normal;min-height:44px}
+#screen .core-bar-group{padding:12px 0;border-bottom:1px solid var(--line,#dce3df)}
+#screen .core-bar-group>strong{display:block;margin-bottom:6px}
+#screen .core-bar-row{display:grid;grid-template-columns:minmax(70px,100px) minmax(40px,1fr) auto;gap:8px;align-items:center;font-size:12px;margin:9px 0}
+#screen .core-bar{height:10px;border-radius:5px;display:block;background:linear-gradient(90deg,#2e8b80 0 var(--core-bar-width),transparent var(--core-bar-width));background-size:100% 100%;border:1px solid #2e8b8022}
+#screen .core-bar-1{background:linear-gradient(90deg,#cc9866 0 var(--core-bar-width),transparent var(--core-bar-width))}
+#screen .core-check{display:flex;align-items:flex-start;gap:12px;line-height:1.5;font-size:13px;margin:14px 0}
+#screen .core-check input{margin-top:4px;accent-color:#16836e;min-width:18px;min-height:18px}
+#screen .core-selection{background:rgba(34,128,114,.07);padding:15px;border-radius:14px;line-height:1.7;margin:10px 0}
+#screen .core-warning{padding:14px;border-radius:12px;background:#ffefcd;color:#814900}
+#screen .core-guide h3,#screen .core-bars h3{margin:0 0 10px;font-size:17px}
+#screen .core-learning .form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+@media(max-width:520px){#screen .core-params{grid-template-columns:minmax(0,1fr)}#screen .core-metrics{grid-template-columns:1fr}#screen .core-bar-row{grid-template-columns:73px minmax(40px,1fr) auto}}
+@media(prefers-reduced-motion:reduce){#screen .core-learning button{transition:none!important}}
+html[data-reduced="true"] #screen .core-learning button{transition:none!important}

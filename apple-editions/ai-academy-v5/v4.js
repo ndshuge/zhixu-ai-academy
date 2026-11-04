@@ -2,10 +2,14 @@
    Only original MIT component engine + Motion, and the canonical Original science adapter. */
 import '../ai-academy-apple/assets/components.js';
 import {createGlass,engine as glassEngine} from '../ai-academy-apple/assets/liquid-glass.js';
-import {ScienceBridge,newLesson} from './bridge.js?v=20261104-native-a';
-import {screens,outline,titles,esc} from './views.js?v=20261104-ui-release-a';
+import {ScienceBridge,newLesson} from './bridge.js?v=20261104-integrate-b';
+import {screens,outline,titles,esc} from './views.js?v=20261104-integrate-b';
 import {refreshLabPreview} from './v5-lab-preview.js';
 import {settleLessonStep} from './v5-lesson-motion.js';
+import {renderCore,coreOutline,coreStep} from './v5-core-ui.js';
+import {makeCoreHost} from './v5-core-binding.js';
+import {installPageContinuity} from './v5-page-continuity.js';
+import {enterSurface,exitSurface} from './v5-surface-continuity.js';
 const $=q=>document.querySelector(q),$$=q=>Array.from(document.querySelectorAll(q));
 const stage=$('#screen'),frame=$('#original-engine'),toast=$('#toast');
 function syncToastPosition(){
@@ -37,6 +41,7 @@ const notify=message=>{
  notify.timer=setTimeout(()=>toast.classList.remove('show'),Math.min(8000,Math.max(3600,String(message).length*65)));
 };
 const bridge=new ScienceBridge(frame,notify);
+const coreHost=makeCoreHost(bridge);
 const prefKey='zx-v4-preferences';
 let prefs={reduceMotion:false,textScale:100};try{prefs={...prefs,...JSON.parse(localStorage.getItem(prefKey)||'{}')}}catch{}
 if(![100,115,130,150].includes(prefs.textScale))prefs.textScale=100;
@@ -98,18 +103,23 @@ function render(){
  stage.dataset.page=route;
  document.body.dataset.focus=route==='learn'?'true':'false';
  nav.inert=route==='learn';
+ const toolbar=document.querySelector('.reading-column > .toolbar');
+ if(toolbar){toolbar.inert=route==='learn';if(route==='learn')toolbar.setAttribute('aria-hidden','true');else toolbar.removeAttribute('aria-hidden');}
  if(route==='learn')nav.setAttribute('aria-hidden','true');else nav.removeAttribute('aria-hidden');
  const settingsButton=$('.toolbar-trailing button[data-route="settings"]');if(settingsButton){if(route==='settings'){settingsButton.setAttribute('aria-current','page');settingsButton.setAttribute('aria-label','返回'+titles[settingsReturnRoute]);}else{settingsButton.removeAttribute('aria-current');settingsButton.setAttribute('aria-label','设置');}}
  $('#toolbar-title').textContent=titles[route];$('#outline-name').textContent=route==='learn'?'学习步骤':titles[route];
- $('#outline-content').innerHTML=outline(route,bridge,state.lesson);
+ const liveCore=coreHost.snapshot();
+ const coreRoute=route==='learn'&&['sensitivity','evo-pair'].includes(state.lesson.experiment);
+  $('#outline-content').innerHTML=coreRoute?coreOutline(liveCore||{phase:'idle'}):outline(route,bridge,state.lesson);
  $$('.menu-item[data-route],.tab-item[data-route]').forEach(node=>{
   const active=node.dataset.route===route;node.classList.toggle('is-active',active);node.classList.toggle('selected',active);
   if(active)node.setAttribute('aria-current','page');else node.removeAttribute('aria-current');
  });
  const before=renderedRoute==='learn'?renderedStep:null;
- stage.innerHTML=screens[route]({bridge,lesson:state.lesson,prefs});
- if(route==='learn')settleLessonStep(stage,{before,after:state.lesson.step,reduced:reduced(),scrollTop:()=>window.scrollTo(0,0)});
- renderedRoute=route;renderedStep=state.lesson.step;
+ const step=route==='learn'&&liveCore?coreStep(liveCore):state.lesson.step;
+  stage.innerHTML=coreRoute?renderCore(liveCore||{phase:'idle',experimentId:state.lesson.experiment}):screens[route]({bridge,lesson:state.lesson,prefs,core:liveCore});
+ if(route==='learn')settleLessonStep(stage,{before,after:step,reduced:reduced(),scrollTop:()=>window.scrollTo(0,0)});
+ renderedRoute=route;renderedStep=step;
  refreshLabPreview(stage);
  window.dispatchEvent(new Event('zhixu:content-rendered'));
  save();
@@ -123,6 +133,7 @@ function goto(route,{replace=false}={}){
  const previous=state.route,changed=previous!==route;
  if(route==='settings'&&previous!=='settings')settingsReturnRoute=previous;
  if(!changed&&!replace)return;
+ if(changed)pageContinuity.prepare(previous,route);
  if(changed&&window.scrollY>0)window.scrollTo(0,0);
  state.route=route;
  if(replace)history.replaceState(null,'','#'+route);else history.pushState(null,'','#'+route);
@@ -169,7 +180,7 @@ let routeRevealTimer=null;
 function animateScreen(previous,next){
  const routes=['today','courses','learn','library','growth','settings'];
  stage.dataset.direction=routes.indexOf(next)>=routes.indexOf(previous)?'forward':'backward';
- if(reduced()){clearTimeout(routeRevealTimer);delete stage.dataset.entering;return;}
+ if(reduced()){pageContinuity.animate(previous,next);routeAnimation?.stop?.();clearTimeout(routeRevealTimer);delete stage.dataset.entering;return;}
  // No frozen page screenshots: those cause ghost text in Blink and blank midframes in WebKit.
  // Keep navigation physical and only stage the first few content groups with small,
  // opacity-safe compositor transforms. Never fade the entire reading surface.
@@ -179,12 +190,20 @@ function animateScreen(previous,next){
  stage.style.removeProperty('opacity');
  stage.style.removeProperty('translate');
  stage.dataset.entering='true';
+  pageContinuity.animate(previous,next);
  clearTimeout(routeRevealTimer);
  routeRevealTimer=setTimeout(()=>{
   delete stage.dataset.entering;
  },420);
 }
-function study(experiment='sensitivity',{restart=false}={}){if(restart||state.lesson.experiment!==experiment)state.lesson=newLesson(experiment);goto('learn')}
+async function study(experiment='sensitivity',{restart=false}={}){
+ if(experiment==='sensitivity'||experiment==='evo-pair'){
+  await awaitReady();await coreHost.start(experiment,{restart});state.lesson=newLesson(experiment);goto('learn');render();return;
+ }
+ coreHost.stop();
+ if(restart||state.lesson.experiment!==experiment)state.lesson=newLesson(experiment);
+ goto('learn');
+}
 function setStep(n){if(n<=state.lesson.highest){state.lesson.step=n;render()}}
 const awaitReady=async()=>{if(bridge.ready)return;await connecting;if(!bridge.ready)throw Error('原版科学引擎暂时不可用，请检查网络后重试。')};
 const updateLesson=(patch)=>{Object.assign(state.lesson,patch);render()};
@@ -202,9 +221,15 @@ async function act(el){
  if(a==='enter-sensitivity')return study('sensitivity');
  if(a==='enter-evo')return study('evo-pair');
  if(a==='enter-logistic')return study('logistic');
- if(a==='resume-learning')return goto('learn');
+ if(a==='resume-learning')return coreHost.snapshot()?goto('learn'):study(state.lesson.experiment);
+  if(a==='retry-core'){
+   if(!bridge.ready){await connecting;if(!bridge.ready)connecting=bridge.connect();await connecting;}
+   if(!bridge.ready)throw Error('原版科学引擎暂未连接，请检查网络并重新尝试');
+   await coreHost.start(l.experiment,{restart:true});render();return;
+  }
  if(a==='exit-focus')return goto('today');
  if(a==='reset-lesson'){
+   if(coreHost.snapshot()){await study(coreHost.snapshot().experimentId,{restart:true});return;}
   state.lesson=newLesson(state.lesson.experiment);
   if(state.route==='learn')render();else goto('learn');
   return;
@@ -289,11 +314,11 @@ function confirmModal(title,message,action,triggerEl){
  const trigger=triggerEl||document.activeElement;
  const shade=document.createElement('div');shade.className='modal-shade';
  shade.innerHTML='<div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-description"><h2 id="confirm-title">'+esc(title)+'</h2><p id="confirm-description">'+esc(message)+'</p><div class="modal-actions"><button class="secondary" id="cancel-confirm">取消</button><button class="primary" id="accept-confirm">确认</button></div></div>';
- $('#dialog-layer').append(shade);
+ $('#dialog-layer').append(shade);enterSurface(shade,trigger);
  const cancel=shade.querySelector('#cancel-confirm'),accept=shade.querySelector('#accept-confirm');
  const close=(restoreFocus=true)=>{
-  shade.remove();
-  if(restoreFocus&&trigger?.isConnected)trigger.focus({preventScroll:true});
+  exitSurface(shade,{done:()=>{shade.remove();if(restoreFocus&&trigger?.isConnected)trigger.focus({preventScroll:true})}});
+  // Trigger focus returns after the reverse motion finishes.
  };
  cancel.onclick=()=>close();
  accept.onclick=()=>{close(false);action();stage.focus({preventScroll:true});};
@@ -313,10 +338,11 @@ function confirmModal(title,message,action,triggerEl){
  cancel.focus({preventScroll:true});
 }
 document.addEventListener('click',async e=>{
- const b=e.target.closest?.('[data-route],[data-action],[data-experiment]');if(!b||state.busy||b.disabled)return;
+ const b=e.target.closest?.('[data-route],[data-action],[data-experiment],[data-core-action]');if(!b||state.busy||b.disabled)return;
  e.preventDefault();
- if(b.dataset.route){closeZoomMenu();goto(b.dataset.route);return;}
+ if(b.dataset.route){closeZoomMenu();if(b.dataset.route==='learn'&&!coreHost.snapshot()){state.busy=true;try{await study(state.lesson.experiment)}catch(error){notify(error.message)}finally{state.busy=false}}else goto(b.dataset.route);return;}
  if(b.dataset.experiment){
+   if(coreHost.snapshot())return await study(b.dataset.experiment,{restart:true});
   const exp=b.dataset.experiment;if(!['sensitivity','logistic','evo-pair'].includes(exp)||exp===state.lesson.experiment)return;
   state.lesson=newLesson(exp);render();
   const selected=stage.querySelector('.experiment-tabs .is-active');
@@ -324,10 +350,12 @@ document.addEventListener('click',async e=>{
   return;
  }
  state.busy=true;b.disabled=true;
- try{await act(b)}catch(error){console.error('[V4 action]',error);notify(error.message||'操作失败')}
+ try{if(b.dataset.coreAction){await coreHost.action(b);render();}else await act(b)}catch(error){console.error('[V4 action]',error);notify(error.message||'操作失败')}
  finally{state.busy=false;if(b.isConnected)b.disabled=false}
 });
 document.addEventListener('change',e=>{
+  if(e.target.matches('form[data-core-form] input[type=radio]')){const form=e.target.form;const submit=form?.querySelector('button[type=submit]');if(submit)submit.disabled=false;}
+
  if(e.target.matches('#quiz-form input[type=radio]')){
   const form=e.target.closest('#quiz-form');
   const key=form?.dataset.stage==='pre'?'preChoice':'transferChoice';
@@ -341,12 +369,12 @@ document.addEventListener('change',e=>{
 });
 document.addEventListener('input',e=>{if(e.target.id==='prediction'){state.lesson.prediction=e.target.value;save()}});
 document.addEventListener('submit',async e=>{
- if(!e.target.matches('#quiz-form,#prediction-form'))return;
+ if(!e.target.matches('#quiz-form,#prediction-form,form[data-core-form]'))return;
  e.preventDefault();if(state.busy)return;state.busy=true;
- try{await submit(e.target)}catch(error){console.error('[V4 submit]',error);notify(error.message||'提交失败')}
+ try{if(e.target.dataset.coreForm){await coreHost.submit(e.target);render();}else await submit(e.target)}catch(error){console.error('[V4 submit]',error);notify(error.message||'提交失败')}
  finally{state.busy=false}
 });
-window.addEventListener('popstate',()=>{closeZoomMenu();const previous=state.route;const r=location.hash.slice(1);const destination=titles[r]?r:'today';if(!titles[r])history.replaceState(null,'','#today');if(destination==='settings'&&previous!=='settings')settingsReturnRoute=previous;state.route=destination;render();animateScreen(previous,state.route)});
+window.addEventListener('popstate',()=>{closeZoomMenu();const previous=state.route;const r=location.hash.slice(1);const destination=titles[r]?r:'today';if(!titles[r])history.replaceState(null,'','#today');if(destination==='settings'&&previous!=='settings')settingsReturnRoute=previous;if(previous!==destination)pageContinuity.prepare(previous,destination);state.route=destination;render();animateScreen(previous,state.route)});
 $('#outline-toggle').onclick=()=>document.documentElement.dataset.outline='collapsed';
 $('#outline-reveal').onclick=()=>document.documentElement.dataset.outline='open';
 const panel=$('#doctor-panel'),launch=$('#doctor-launch'),question=$('#doctor-question');
@@ -368,7 +396,7 @@ function finishDoctorClose(){
  launch.focus({preventScroll:true});
 }
 panel.addEventListener('transitionend',event=>{
- if(event.target===panel && event.propertyName==='opacity')finishDoctorClose();
+ if(event.target===panel && event.propertyName==='transform')finishDoctorClose();
 });
 function closeDoctor(){
  if(launch.getAttribute('aria-expanded')==='false')return;
@@ -378,7 +406,7 @@ function closeDoctor(){
  panel.classList.remove('doctor-visible');
  clearTimeout(doctorCloseTimer);
  if(reduced()){finishDoctorClose();return;}
- doctorCloseTimer=setTimeout(finishDoctorClose,380);
+ doctorCloseTimer=setTimeout(finishDoctorClose,490);
 }
 launch.onclick=()=>{
  if(launch.getAttribute('aria-expanded')==='true'){closeDoctor();return;}
@@ -515,9 +543,13 @@ let connecting;
 async function boot(){
  const hash=location.hash.slice(1);goto(titles[hash]?hash:'today',{replace:true});activateMotion();
  connecting=bridge.connect();const okay=await connecting;
+ if(okay&&state.route==='learn'&&['sensitivity','evo-pair'].includes(state.lesson.experiment)){
+  try{await coreHost.start(state.lesson.experiment)}catch(error){notify(error.message||'实验课程暂时无法开始')}
+ }
  $('#connected-dot').classList.toggle('is-ready',okay);
  $('#engine-caption').textContent=okay?'科学引擎已连接 · 规则导师可用':'原版引擎暂未连接';
  await doctorStatus();render();
 }
+const pageContinuity=installPageContinuity({stage,getRoute:()=>state.route,navigate:route=>goto(route),reduced});
 window.ZHIXU_V4_NAVIGATE=goto;window.ZHIXU_V4_DEBUG=()=>({route:state.route,ready:bridge.ready,motion:window.ZHIXU_V4_ENGINES,summary:bridge.summary,lesson:{step:state.lesson.step,experiment:state.lesson.experiment}});
 boot();

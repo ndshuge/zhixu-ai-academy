@@ -1,0 +1,99 @@
+/* V6 non-Dock spatial continuity from Shuge Academy's interactive pop and sheet research.
+   Preserve the existing Dock DOM, glass, optics, blur and tab animations unchanged. */
+#screen{position:relative;isolation:isolate}
+#screen.zx-spatial-nav{overflow-x:clip}
+#screen.zx-spatial-nav > :not(.zx-nav-ghost){position:relative}
+#screen.zx-spatial-nav > :nth-child(-n+6):not(.zx-nav-ghost){animation:none!important}
+#screen .zx-nav-ghost{
+ position:absolute;top:0;left:0;right:0;max-height:min(100dvh,900px);
+ overflow:hidden;pointer-events:none;user-select:none;z-index:2;
+ will-change:opacity,transform;contain:paint;
+}
+#screen .zx-nav-ghost[data-from="settings"] > .page-intro{display:none}
+/* Settings: quiet, legible, grouped iOS-style rows, not a dashboard. */
+#screen[data-page="settings"] .setting-group{
+ border:1px solid var(--line,#e5e7e8);border-radius:21px;
+ box-shadow:0 3px 15px rgba(24,48,45,.035);overflow:hidden;
+}
+#screen[data-page="settings"] .setting-row{
+ min-height:78px;gap:14px;padding:16px clamp(15px,2.5vw,25px);
+ transition:background-color .25s ease;
+}
+#screen[data-page="settings"] .setting-row > div:first-child{flex:1;min-width:0}
+#screen[data-page="settings"] .setting-row > button,
+#screen[data-page="settings"] .setting-row > a{flex:none;max-width:100%;min-height:44px}
+#screen[data-page="settings"] .setting-row:has(button,a):hover{background:rgba(55,110,100,.028)}
+#screen[data-page="settings"] .setting-row:focus-within{background:rgba(33,128,107,.044)}
+#screen[data-page="settings"] .setting-row::before{
+ content:' ';display:grid;place-items:center;
+ flex:0 0 40px;width:40px;height:40px;
+ font-size:17px;font-weight:720;letter-spacing:-.07em;
+ border-radius:12px;background:#e9f1ef;color:#1b7469;
+}
+#screen[data-page="settings"] .setting-group:nth-of-type(1) .setting-row:nth-child(1)::before{content:'Aa'}
+#screen[data-page="settings"] .setting-group:nth-of-type(1) .setting-row:nth-child(2)::before{content:'◑';background:#eeebf7;color:#665baa}
+#screen[data-page="settings"] .setting-group:nth-of-type(1) .setting-row:nth-child(3)::before{content:'↻';background:#f0eee9;color:#8a765c}
+#screen[data-page="settings"] .setting-group:nth-of-type(2) .setting-row:nth-child(1)::before{content:'AI';background:#e7f0f9;color:#3a6893;font-size:15px}
+#screen[data-page="settings"] .setting-group:nth-of-type(2) .setting-row:nth-child(2)::before{content:'✓';background:#e5f2e9;color:#367b53}
+#screen[data-page="settings"] .setting-group:nth-of-type(2) .setting-row:nth-child(3)::before{content:'↥';background:#e7ecfc;color:#5066b4}
+#screen[data-page="settings"] .setting-group:nth-of-type(2) .setting-row:nth-child(4)::before{content:'×';background:#f8eeed;color:#b25a5a}
+#screen[data-page="settings"] .setting-group:nth-of-type(3) .setting-row:nth-child(1)::before{content:'i';background:#eeeef2;color:#636f77}
+#screen[data-page="settings"] .setting-group:nth-of-type(3) .setting-row:nth-child(2)::before{content:'↗';background:#e8f0f0;color:#3d7371}
+#screen[data-page="settings"] .setting-row button[data-zx-press="down"]{
+ transform:scale(.955)!important;
+}
+#screen[data-page="settings"] .setting-row button[data-zx-press="release"]{
+ transform:scale(1.015)!important;
+}
+#screen[data-page="settings"] .setting-row button[data-action]{transition:transform .33s cubic-bezier(.2,1.4,.28,1),background-color .24s ease}
+@media(max-width:520px){
+ #screen[data-page="settings"] .setting-row{gap:12px;flex-wrap:wrap}
+ #screen[data-page="settings"] .setting-row::before{flex-basis:36px;width:36px;height:36px}
+ #screen[data-page="settings"] .setting-row > div:first-child{flex:1 1 calc(100% - 66px)}
+ #screen[data-page="settings"] .setting-row > button,#screen[data-page="settings"] .setting-row > a{margin-left:48px}
+ #screen[data-page="settings"] .setting-row > .type-scale-control{flex:1 1 100%;margin-left:48px}
+}
+/* Overlay entrance uses the actual trigger rect as the transform origin; one
+   transition owner, with old DOM retained until the reverse movement ends. */
+.modal-shade.zx-surface{
+ opacity:0;background:rgba(20,28,31,.29);-webkit-backdrop-filter:blur(9px) saturate(1.08);
+ backdrop-filter:blur(9px) saturate(1.08);
+ transition:opacity .27s cubic-bezier(.24,.72,.3,1);
+}
+.modal-shade.zx-surface.zx-surface-open{opacity:1}
+.modal-shade.zx-surface .modal{
+ opacity:.92;
+ transform:translate3d(var(--zx-surface-from-x,0px),var(--zx-surface-from-y,35px),0) scale(.946);
+ transform-origin:center 75%;
+ transition:transform .39s cubic-bezier(.2,1.16,.32,1),opacity .26s ease;
+ will-change:transform,opacity;
+ max-height:min(88dvh,790px);overflow:auto;
+ overscroll-behavior:contain;
+}
+.modal-shade.zx-surface.zx-surface-open .modal{opacity:1;transform:translate3d(0,0,0) scale(1)}
+/* Opening the doctor is a spatial layer, not an instant popup.
+   Only background content softens; the Dock has no selectors in this file. */
+#screen{transition:filter .35s cubic-bezier(.2,.8,.28,1),scale .35s cubic-bezier(.2,.8,.28,1)}
+body.doctor-open #screen{filter:saturate(.92) brightness(.965);scale:.988}
+#doctor-panel{
+ transform:translate3d(0,26px,0) scale(.955);
+ transition:opacity .26s cubic-bezier(.2,.75,.28,1),
+ transform .43s cubic-bezier(.22,1.19,.3,1);
+}
+#doctor-panel.doctor-visible{transform:translate3d(0,0,0) scale(1)}
+#doctor-panel.doctor-visible .chat-log{animation:zx-doctor-content .32s cubic-bezier(.2,.8,.3,1) both}
+@keyframes zx-doctor-content{from{opacity:.82;transform:translate3d(0,7px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@media(max-width:700px){
+ .modal-shade.zx-surface{place-items:end center;padding:12px 12px calc(12px + env(safe-area-inset-bottom,0px))}
+ .modal-shade.zx-surface .modal{max-width:560px;width:100%;border-radius:26px 26px 20px 20px}
+ #doctor-panel{transform-origin:calc(100% - 30px) 100%}
+}
+@media(prefers-reduced-motion:reduce){
+ #screen,#screen .zx-nav-ghost,#doctor-panel,.modal-shade.zx-surface,.modal-shade.zx-surface .modal{transition:none!important;animation:none!important;scale:1!important}
+ body.doctor-open #screen{filter:none!important}
+}
+html[data-reduced="true"] #screen,
+html[data-reduced="true"] #doctor-panel,
+html[data-reduced="true"] .modal-shade.zx-surface,
+html[data-reduced="true"] .modal-shade.zx-surface .modal{transition:none!important;animation:none!important;scale:1!important}
+html[data-reduced="true"] body.doctor-open #screen{filter:none!important}
