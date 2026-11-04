@@ -1,0 +1,120 @@
+/* V5 horizontal controls: native WebKit momentum and soft snap, not JS-simulated dragging. */
+@media(max-width:700px){
+ #screen .experiment-tabs{
+   display:flex;
+   flex-wrap:nowrap;
+   width:100%;max-width:100%;
+   overflow-x:auto;overflow-y:hidden;
+   gap:8px;
+   padding:5px 8px 8px;
+   overscroll-behavior-inline:contain;
+   scroll-snap-type:x proximity;
+   scroll-padding-inline:8px;
+   scrollbar-width:none;
+   -webkit-overflow-scrolling:touch;
+   touch-action:pan-x pan-y;
+ }
+ #screen .experiment-tabs::-webkit-scrollbar,.shelf::-webkit-scrollbar{display:none}
+ #screen .experiment-tabs button{
+   flex:0 0 auto;min-width:128px;max-width:calc(100vw - 70px);
+   min-height:44px;padding-inline:15px;white-space:nowrap;
+   scroll-snap-align:start;
+   scroll-margin-inline:8px;
+   touch-action:pan-x pan-y;
+ }
+ #screen .experiment-tabs button.is-active{
+   box-shadow:0 1px 2px rgba(11,70,72,.1),0 2px 8px rgba(11,70,72,.055);
+ }
+ #screen .shelf{
+   scroll-snap-type:x proximity;
+   scroll-padding-inline:19px;
+   -webkit-overflow-scrolling:touch;
+   overscroll-behavior-inline:contain;
+   touch-action:pan-x pan-y;
+ }
+ #screen .shelf .book-tile{scroll-snap-align:start;scroll-snap-stop:normal}
+}
+/* One edge surface runs behind and below the Dock.
+   Previous split: body 12px mask + separate Dock blur 9px; their overlap creates
+   a discontinuity. Remove the second blur entirely on compact viewports. */
+@media(max-width:700px){
+ body::after{
+   bottom:-1px!important;
+   height:calc(210px + env(safe-area-inset-bottom,0px))!important;
+   opacity:1!important;
+   -webkit-backdrop-filter:blur(14px) saturate(1.07)!important;
+   backdrop-filter:blur(14px) saturate(1.07)!important;
+   background:linear-gradient(to bottom,
+     rgba(var(--zx-dock-ground),0) 0%,
+     rgba(var(--zx-dock-ground),.035) 16%,
+     rgba(var(--zx-dock-ground),.13) 33%,
+     rgba(var(--zx-dock-ground),.32) 51%,
+     rgba(var(--zx-dock-ground),.61) 70%,
+     rgba(var(--zx-dock-ground),.86) 87%,
+     rgba(var(--zx-dock-ground),.995) 100%)!important;
+   -webkit-mask-image:linear-gradient(to bottom,
+     transparent 0%,
+     rgba(0,0,0,.15) 13%,
+     rgba(0,0,0,.44) 32%,
+     rgba(0,0,0,.77) 52%,
+     #000 76%,#000 100%)!important;
+   mask-image:linear-gradient(to bottom,
+     transparent 0%,
+     rgba(0,0,0,.15) 13%,
+     rgba(0,0,0,.44) 32%,
+     rgba(0,0,0,.77) 52%,
+     #000 76%,#000 100%)!important;
+ }
+ .mobile-native-tabs .nav-optics{
+   -webkit-backdrop-filter:none!important;
+   backdrop-filter:none!important;
+   /* Dock gets a translucent tint; only the shared underlay bends backdrop pixels. */
+   background:linear-gradient(155deg,rgba(255,255,255,.40),rgba(236,245,246,.25))!important;
+   will-change:auto!important;
+ }
+}
+/* Duolingo-like button mechanics:
+   immediate downward stroke, small spring overshoot on release. The public
+   design references are reconstructions, not Duolingo internal source. */
+.toolbar-trailing .doctor-launch,
+#screen .workshop-actions .primary,
+#screen .learning-page .primary{
+ transition-duration:240ms!important;
+ transition-timing-function:cubic-bezier(.22,1.32,.35,1)!important;
+}
+.toolbar-trailing .doctor-launch:is(:active,[data-duo-press="true"]),
+#screen .workshop-actions .primary:is(:active,[data-duo-press="true"]),
+#screen .learning-page .primary:is(:active,[data-duo-press="true"]){
+ transition-duration:90ms!important;
+ transition-timing-function:cubic-bezier(.2,.75,.35,1)!important;
+}
+@media(max-width:700px) and (prefers-color-scheme:dark){
+ .mobile-native-tabs .nav-optics{
+  background:linear-gradient(155deg,rgba(37,53,55,.40),rgba(31,45,48,.22))!important;
+ }
+}
+@media(max-width:700px) and (prefers-reduced-transparency:reduce),
+       (max-width:700px) and (prefers-contrast:more){
+ body::after{
+   -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+   -webkit-mask-image:none!important;mask-image:none!important;
+   background:linear-gradient(to bottom,transparent 0%,rgba(var(--zx-dock-ground),.995) 100%)!important;
+ }
+ .mobile-native-tabs .nav-optics{
+  background:rgba(var(--zx-dock-ground),.96)!important;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ #screen .experiment-tabs,#screen .shelf{scroll-behavior:auto!important}
+ .toolbar-trailing .doctor-launch,
+ #screen .workshop-actions .primary,#screen .learning-page .primary{
+   transition-duration:0ms!important;
+   transition-timing-function:linear!important;
+ }
+}
+html[data-reduced="true"] .toolbar-trailing .doctor-launch,
+html[data-reduced="true"] #screen .workshop-actions .primary,
+html[data-reduced="true"] #screen .learning-page .primary{
+ transition-duration:0ms!important;transition-timing-function:linear!important;
+}

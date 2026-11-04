@@ -36,10 +36,10 @@ const srv=http.createServer((req,res)=>{
        const edge=getComputedStyle(document.body,'::after'),nav=getComputedStyle(document.querySelector('#mobile-tabs .nav-optics'));
        return {blur:edge.backdropFilter||edge.webkitBackdropFilter,background:edge.backgroundImage,mask:edge.maskImage||edge.webkitMaskImage,height:edge.height,bottom:edge.bottom,navFilter:document.querySelector('#mobile-tabs .nav-optics').style.filter,navBlur:nav.backdropFilter||nav.webkitBackdropFilter};
       });
-      assert.ok(fade.blur.includes('blur(12px)'),fade.blur);
-      assert.match(fade.background,/0\.98/);
+      assert.ok(fade.blur.includes('blur(14px)'),fade.blur);
+      assert.match(fade.background,/0\.99[0-9]/);
       assert.match(fade.mask,/linear-gradient/);
-      assert.ok(fade.navBlur.includes('blur(9px)'),fade.navBlur);
+      assert.ok(fade.navBlur==='none',fade.navBlur);
       assert.equal(fade.navFilter,'','mobile lens should not run SVG refraction');
       await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));
       assert.equal(await page.evaluate(()=>getComputedStyle(document.body,'::after').opacity),'1');

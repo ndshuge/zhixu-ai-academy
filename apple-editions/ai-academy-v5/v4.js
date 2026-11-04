@@ -311,7 +311,16 @@ document.addEventListener('click',async e=>{
  if(b.dataset.route){closeZoomMenu();goto(b.dataset.route);return;}
  if(b.dataset.experiment){
   const exp=b.dataset.experiment;if(!['sensitivity','logistic','evo-pair'].includes(exp)||exp===state.lesson.experiment)return;
-  state.lesson=newLesson(exp);render();return;
+  state.lesson=newLesson(exp);render();
+  const row=stage.querySelector('.experiment-tabs');
+  const selected=row?.querySelector('.is-active');
+  if(selected){
+   selected.focus({preventScroll:true});
+   const bounds=row.getBoundingClientRect(),item=selected.getBoundingClientRect();
+   const left=row.scrollLeft+item.left-bounds.left-(row.clientWidth-item.width)/2;
+   row.scrollLeft=Math.max(0,left);
+  }
+  return;
  }
  state.busy=true;b.disabled=true;
  try{await act(b)}catch(error){console.error('[V4 action]',error);notify(error.message||'操作失败')}
