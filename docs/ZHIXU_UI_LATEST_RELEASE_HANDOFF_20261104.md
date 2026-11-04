@@ -82,7 +82,7 @@
 
 ## 7. 正式上线状态登记
 
-> 本节在提交交接文件时写入的事实：最新 UI 已通过本地预发布打包和测试；**正式推送、Actions 与线上验证数据需以真实后续部署结果更新，不能把预发布构建当作正式上线**。
+> **真实发布核验（2026-11-04）**：通过当前隔离 UI worktree 直接执行 `git push origin HEAD:refs/heads/main`，无 force push；GitHub Actions `Deploy Zhixu Academy from original source` Run `41846376301` 对提交 `bd9adc24739c1b1b0590a9c93b6fae1f58ac2c3e` 返回 `completed / success`。正式 URL 实际访问后，Edge 与 Playwright WebKit 在手机 390px、桌面 1440px 四组独立真实 HTTPS 浏览器测试均 **exit code 0**，校验 UI 缓存版本 `20261104-ui-release-a`、新学习阶段标题/续学/减少动效/设置标题、五个 SPA 路由、同源科学 iframe ready，浏览器 JS 异常 0、HTTP >=400 缺失资源 0。截图位于本地 ignored `evidence/browser/zhixu-live-{edge,webkit}-{390,1440}.png`。**WebKit 自动化不等于真机 iPhone Safari。** 后续仅文档更新的 Git 提交可能触发另一次 Pages 工作流，不改变 UI 的权威代码 SHA。
 
 | 项目 | 状态 |
 |---|---|
@@ -91,7 +91,10 @@
 | 预发布构建 | 通过，`E:/CHATGPT/work/zhixu-ui-release-artifact-20261104` |
 | GitHub Pages workflow | `.github/workflows/deploy-pages.yml` |
 | 生产 URL | `https://ndshuge.github.io/zhixu-ai-academy/` |
-| 真正发布 commit / Actions Run / 线上验证 | **待真实发布完成后回填** |
+| 首次实际部署 commit | `bd9adc24739c1b1b0590a9c93b6fae1f58ac2c3e`（UI+交接文档） |
+| 首次 GitHub Actions | Run `41846376301` / `Deploy Zhixu Academy from original source` / **success** |
+| 实际线上证据 | Edge 390、1440 / WebKit 390、1440，**4/4 exit 0**；路由、资源缓存、科学引擎、无异常/404 均通过 |
+| 准确查询最终发布 HEAD | `git ls-remote origin refs/heads/main`，结合最新 `deploy-pages.yml` 的 `head_sha`；文档-only 补录提交不改变上述 UI 基线 |
 
 ## 8. 功能对话开工顺序
 
