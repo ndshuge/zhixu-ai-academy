@@ -3,7 +3,7 @@
 import '../ai-academy-apple/assets/components.js';
 import {createGlass,engine as glassEngine} from '../ai-academy-apple/assets/liquid-glass.js';
 import {ScienceBridge,newLesson} from './bridge.js?v=20261104-native-a';
-import {screens,outline,titles,esc} from './views.js?v=20261104-focus-a';
+import {screens,outline,titles,esc} from './views.js?v=20261104-ui-release-a';
 import {refreshLabPreview} from './v5-lab-preview.js';
 import {settleLessonStep} from './v5-lesson-motion.js';
 const $=q=>document.querySelector(q),$$=q=>Array.from(document.querySelectorAll(q));
