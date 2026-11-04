@@ -37,7 +37,9 @@ const srv=http.createServer((req,res)=>{
        return {blur:edge.backdropFilter||edge.webkitBackdropFilter,background:edge.backgroundImage,mask:edge.maskImage||edge.webkitMaskImage,height:edge.height,bottom:edge.bottom,navFilter:document.querySelector('#mobile-tabs .nav-optics').style.filter,navBlur:nav.backdropFilter||nav.webkitBackdropFilter};
       });
       assert.ok(fade.blur.includes('blur(24px)'),fade.blur);
-      assert.match(fade.background,/0\.97/);
+      assert.match(fade.background,/0\.99[56]/,'CSS color channels may quantize alpha to 8-bit');
+      assert.ok(parseFloat(fade.bottom)<=-90,'the deep shade must extend beneath the viewport edge');
+      assert.ok(parseFloat(fade.height)>=350,'the same shade should reach under the Dock');
       assert.match(fade.mask,/linear-gradient/);
       assert.ok(fade.navBlur==='none',fade.navBlur);
       assert.equal(fade.navFilter,'','mobile lens should not run SVG refraction');

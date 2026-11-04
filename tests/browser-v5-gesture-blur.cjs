@@ -54,7 +54,7 @@ const server=http.createServer((req,res)=>{
       assert.ok(layers.dockBlur==='none',layers.dockBlur);
       assert.match(layers.mask,/linear-gradient/);
       assert.equal(layers.opacity,'1');
-      assert.ok(layers.height<=250);
+      assert.ok(layers.height>=350&&layers.height<=400,'extended bottom shade must cover behind browser toolbar');
       assert.equal(layers.hasRuntimeEdge,false);
       await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));
       assert.equal(await page.evaluate(()=>getComputedStyle(document.body,'::after').opacity),'1');

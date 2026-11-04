@@ -36,6 +36,7 @@ async function run(){
     if(responseKind==='offline'){await route.abort('failed');return;}
     if(responseKind==='rate'){await route.fulfill({status:429,contentType:'application/json',body:JSON.stringify({error:{message:'synthetic rate limit'}})});return;}
     if(responseKind==='unauthorized'){await route.fulfill({status:401,contentType:'application/json',body:JSON.stringify({error:{message:'fake error'}})});return;}
+    if(responseKind==='balance'){await route.fulfill({status:402,contentType:'application/json',body:JSON.stringify({error:{message:'synthetic insufficient balance'}})});return;}
     await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({model:'deepseek-flash',choices:[{message:{content:'连接成功，虚拟回复'}}],usage:{total_tokens:5}})});
    });
    const page=await context.newPage();page.setDefaultTimeout(5000);console.log('BYOK_STEP',name,'context');
@@ -57,6 +58,8 @@ async function run(){
    await frame.locator('#pages-ai-test').click();
    await page.waitForFunction(()=>document.querySelector('#original-engine').contentWindow.ZHIXU_PAGES_AI.status(),null,{timeout:10000});
    assert.equal(count,1,'one explicit test request');
+   assert.match(await frame.locator('#v5-ai-diagnostic').innerText(),/开放平台/);
+   assert.equal(await frame.locator('#pages-ai-save').isDisabled(),true,'V5 must disallow persistent plain-text Key storage');
    let storage=await page.evaluate(()=>localStorage.getItem('zhixu-ai-academy-deepseek-key-v1'));
    assert.equal(storage,null);
    const inputAfter=await frame.locator('#pages-ai-key').inputValue();
@@ -72,6 +75,7 @@ async function run(){
    assert.equal(count,2,'one additional explicit question request');
    assert.equal(await page.locator('#doctor-send').isDisabled(),true,'doctor must disable after upstream rate limit');
    assert.match(await page.locator('#doctor-log').innerText(),/429|失[败效]|失败/);
+   await page.waitForFunction(()=>document.querySelector('#original-engine')?.contentWindow?.document.querySelector('#v5-ai-diagnostic')?.textContent?.includes('429'),null,{timeout:6000});
    await page.locator('#doctor-close').click();
    await page.waitForTimeout(450);
    assert.equal(await page.locator('#screen').getAttribute('data-page'),'settings','closing Doctor should retain Settings route');
@@ -81,11 +85,17 @@ async function run(){
    await page.waitForFunction(()=>document.querySelector('#original-engine').contentWindow.document.querySelector('#pages-ai-status')?.textContent?.includes('401'),null,{timeout:10000});
    assert.equal(await state(),false,'401 must never claim connected');
    assert.equal(count,3);
+   await frame.locator('#v5-ai-diagnostic').getByText(/401/).waitFor();
+   responseKind='balance';
+   await frame.locator('#pages-ai-test').click();
+   await frame.locator('#v5-ai-diagnostic').getByText(/402.*余额/).waitFor({timeout:6000});
+   assert.equal(count,4);
    responseKind='offline';
    await frame.locator('#pages-ai-test').click();
    await page.waitForFunction(()=>{const text=document.querySelector('#original-engine').contentWindow.document.querySelector('#pages-ai-status')?.textContent||'';return text.includes('连接失败')||text.includes('网络')},null,{timeout:10000});
    assert.equal(await state(),false,'network failure must not show a verified model');
-   assert.equal(count,4,'network failure must be one explicit request');
+   assert.equal(count,5,'network failure must be one explicit request');
+   await frame.locator('#v5-ai-diagnostic').getByText(/网络请求失败/).waitFor({timeout:6000});
    storage=await page.evaluate(()=>localStorage.getItem('zhixu-ai-academy-deepseek-key-v1'));
    assert.equal(storage,null);
    assert.deepEqual(errors,[],'browser script errors');

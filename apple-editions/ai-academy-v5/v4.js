@@ -2,7 +2,7 @@
    Only original MIT component engine + Motion, and the canonical Original science adapter. */
 import '../ai-academy-apple/assets/components.js';
 import {createGlass,engine as glassEngine} from '../ai-academy-apple/assets/liquid-glass.js';
-import {ScienceBridge,newLesson} from './bridge.js';
+import {ScienceBridge,newLesson} from './bridge.js?v=20261104-diagnostic';
 import {screens,outline,titles,esc} from './views.js';
 import {refreshLabPreview} from './v5-lab-preview.js';
 const $=q=>document.querySelector(q),$$=q=>Array.from(document.querySelectorAll(q));

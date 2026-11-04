@@ -69,7 +69,7 @@ const server=http.createServer((req,res)=>{
        assert.equal(result.dock,'none','one scroll edge backdrop, no second dock blur');
        assert.equal(result.parent,'none','Dock container must not add an extra blur boundary');
        assert.ok(result.mask.includes('linear-gradient'));
-       assert.match(result.background,/0\.97/);
+       assert.match(result.background,/0\.99[56]/,'opaque last stop survives CSS alpha quantization');
        assert.equal(result.opacity,'1');
        assert.ok(result.htmlOverflow<=1,'no document horizontal overflow');
        await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));

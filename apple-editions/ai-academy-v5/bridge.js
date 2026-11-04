@@ -21,7 +21,7 @@ export class ScienceBridge{
  }
  async loadAI(){
   const w=this.win;if(w.ZHIXU_PAGES_AI)return true;
-  return await new Promise(resolve=>{const s=w.document.createElement('script');s.src=ORIGINAL+'original-pages-byok.js';s.onload=()=>resolve(!!w.ZHIXU_PAGES_AI);s.onerror=()=>resolve(false);w.document.body.append(s);});
+  return await new Promise(resolve=>{const s=w.document.createElement('script');s.src=ORIGINAL+'apple-editions/ai-academy-v5/v5-deepseek.js?v=20261104-diagnostic';s.onload=()=>resolve(!!w.ZHIXU_PAGES_AI);s.onerror=()=>resolve(false);w.document.body.append(s);});
  }
  async request(path,body){
   if(!this.win)throw Error('科学引擎尚未连接。');
