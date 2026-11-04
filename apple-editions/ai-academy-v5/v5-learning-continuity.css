@@ -1,0 +1,21 @@
+/* VNext learning continuity: scoped to actual reading content. Dock is frozen. */
+#screen .zx-next-lesson{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:14px 0 22px;padding:20px clamp(18px,3vw,28px);background:var(--card,#fff);border:1px solid var(--line,#e2e5e6);border-radius:18px;box-shadow:0 3px 18px rgba(0,0,0,.035)}
+#screen .zx-next-lesson__text{flex:1;min-width:190px}
+#screen .zx-next-lesson__eyebrow{display:block;margin-bottom:4px;font-size:13px;font-weight:680;color:var(--accent,#21796f)}
+#screen .zx-next-lesson h2{font-size:clamp(20px,3vw,26px);line-height:1.32;margin:0 0 5px;letter-spacing:-.02em}
+#screen .zx-next-lesson p{font-size:14px;line-height:1.5;color:var(--secondary,#697275);margin:0}
+#screen .zx-next-lesson button{min-height:44px;white-space:nowrap}
+#screen #quiz-form .answer-option{position:relative;min-height:48px;align-items:center}
+#screen #quiz-form .answer-option:focus-within{outline:2px solid var(--accent,#18796f);outline-offset:2px}
+#screen #quiz-form .answer-option[data-answer-state="selected"]{border-color:#248676;background:rgba(33,136,113,.09)}
+#screen #quiz-form .answer-option[data-answer-state="correct"]{border-color:#308962;background:rgba(39,151,104,.10)}
+#screen #quiz-form .answer-option[data-answer-state="incorrect"]{border-color:#bc633e;background:rgba(193,99,52,.10)}
+#screen #quiz-form .answer-option[data-answer-state="submitted"]{border-color:var(--accent,#328c78);background:rgba(70,146,132,.08)}
+#screen #quiz-form fieldset:disabled .answer-option{cursor:default}
+#screen #quiz-form .quiz-explanation{margin-top:12px}
+#screen #quiz-form .quiz-explanation summary{cursor:pointer;padding:10px 0;min-height:44px;display:list-item;font-weight:650;outline-offset:3px;touch-action:manipulation}
+#screen #quiz-form .quiz-explanation p{padding:4px 0 9px;line-height:1.7;overflow-wrap:anywhere}
+#screen #quiz-form .feedback{overflow-wrap:anywhere}
+@media(max-width:390px){#screen .zx-next-lesson{align-items:stretch}#screen .zx-next-lesson button{width:100%;justify-content:center}}
+@media(prefers-color-scheme:dark){#screen #quiz-form .answer-option[data-answer-state="selected"],#screen #quiz-form .answer-option[data-answer-state="correct"]{background:rgba(35,155,125,.16)}#screen #quiz-form .answer-option[data-answer-state="incorrect"]{background:rgba(210,118,72,.17)}}
+@media(prefers-reduced-motion:reduce){#screen .zx-next-lesson,#screen #quiz-form .answer-option{animation:none;transition:none}}

@@ -12,9 +12,14 @@ export function logisticChart(){
  return '<div class="preview-paper"><div class="preview-label"><strong>初值敏感性</strong><span>Logistic · r=3.9</span></div><svg class="mini-chart" viewBox="0 0 390 178" aria-label="真实公式计算的六十六轮 Logistic 对照轨迹" role="img"><line class="gridline" x1="16" y1="52" x2="370" y2="52"/><line class="gridline" x1="16" y1="105" x2="370" y2="105"/><line class="gridline" x1="16" y1="153" x2="370" y2="153"/><path class="line-a" d="'+path(A)+'"/><path class="line-b" d="'+path(B)+'"/></svg><div class="chart-legend"><span><i></i>x₀=0.41200</span><span><i></i>x₀=0.41201</span></div></div>';
 }
 const countRow=(num,label)=>'<div class="metric"><strong>'+esc(num)+'</strong><span>'+esc(label)+'</span></div>';
-export function today({bridge}){
+export function today({bridge,lesson}){
  const s=bridge.summary||{},answered=s.answered||0,explorations=s.explorations||0,transfers=s.transfers||0;
- return '<div class="workshop-intro"><span class="workshop-breadcrumb">今天的探索</span></div>'+
+ const canContinue=lesson&&((lesson.step||0)>0||lesson.question||lesson.grade||lesson.preChoice!==null&&lesson.preChoice!==undefined||(lesson.preResults||[]).length>0);
+ const currentStep=Math.max(0,Math.min(3,Number.isInteger(lesson?.step)?lesson.step:0));
+ const nextStep=['独立判断','提出预测','实验与导师','迁移验证'][currentStep];
+ const worldName={'sensitivity':'混沌与非线性','logistic':'非线性增长','evo-pair':'生命与演化'}[lesson?.experiment]||'科学探究';
+ const resume=canContinue?'<section class="zx-next-lesson" aria-label="继续之前的学习"><div class="zx-next-lesson__text"><span class="zx-next-lesson__eyebrow">下一站学习</span><h2>'+esc(worldName)+'</h2><p>当前阶段：'+esc(nextStep)+'。已保存本次学习进度。</p></div>'+click('继续学习 '+next,'resume-learning',true)+'</section>':'';
+ return '<div class="workshop-intro"><span class="workshop-breadcrumb">今天的探索</span></div>'+resume+
  '<section class="workshop-hero" aria-label="开始深度理解之旅"><div class="workshop-hero-copy">'+
  '<div class="workshop-eyebrow"><span class="signal-dot"></span> 今日科学探究 · 开放实验</div>'+
  '<h1>只差十万分之一，<br>结果会有多不同？</h1>'+
@@ -52,14 +57,17 @@ function quiz(stage,l){
  if(!q)return '<p>先作答，答案稍后验证。</p>'+click(''+(isPre?'开始前测':'开始迁移练习')+' '+next,isPre?'load-question':'load-transfer',true);
  const opts=Array.isArray(q.options)?q.options:[];
  const submitted=g!==null;
- const feedback= !submitted?'':isPre?'<div class="feedback"><strong>初始判断已记录</strong><p>答案将在后续实验与迁移中再验证，不在前测阶段提前泄露。</p></div>':
- '<div class="feedback '+(g.gradedResult==='correct'?'':'warn')+'"><strong>'+(g.gradedResult==='correct'?'回答正确':'这道题需要复习')+'</strong><p>'+esc(g.feedback||g.explanation||'已由原版科学题库判定。')+'</p></div>';
+ const savedChoice=isPre?l.preChoice:l.transferChoice;
+ const chosen=submitted?selected(g.studentAnswer):selected(savedChoice);
+ const outcome=submitted?(isPre?'submitted':g.gradedResult==='correct'?'correct':'incorrect'):(chosen===undefined?'unselected':'selected');
+ const feedback= !submitted?'':isPre?'<div class="feedback" role="status"><strong>初始判断已记录</strong><p>答案将在后续实验与迁移中再验证，不在前测阶段提前泄露。</p></div>':
+ '<div class="feedback '+(g.gradedResult==='correct'?'':'warn')+'" role="status"><strong>'+(g.gradedResult==='correct'?'回答正确':'这道题需要复习')+'</strong><details class="quiz-explanation"><summary>查看解析</summary><p>'+esc(g.feedback||g.explanation||'已由原版科学题库判定。')+'</p></details></div>';
  const more=index+1<queue.length;
  return '<p class="lesson-eyebrow">第 '+(index+1)+' / '+queue.length+' 道</p><h2>'+esc(q.prompt||q.question||q.text||'请作出判断')+'</h2>'+
- '<form id="quiz-form" data-stage="'+stage+'"><fieldset class="answer-group" '+(submitted?'disabled':'')+'><legend>请选择一个答案，默认不选</legend>'+
- opts.map((o,i)=>'<label class="answer-option"><input type="radio" name="answer" value="'+i+'" required '+((submitted&&selected(g.studentAnswer)===i)?'checked':'')+'><span>'+esc(o)+'</span></label>').join('')+'</fieldset>'+
+ '<form id="quiz-form" data-stage="'+stage+'" data-quiz-state="'+outcome+'"><fieldset class="answer-group" '+(submitted?'disabled':'')+'><legend>请选择一个答案，默认不选</legend>'+
+ opts.map((o,i)=>{const active=chosen===i;const status=active?(submitted&&!isPre?(g.gradedResult==='correct'?'correct':'incorrect'):submitted?'submitted':'selected'):'unselected';return '<label class="answer-option" data-answer-state="'+status+'"><input type="radio" name="answer" value="'+i+'" required '+(active?'checked':'')+'><span>'+esc(o)+'</span></label>'}).join('')+'</fieldset>'+
  feedback+(submitted?'<div class="form-actions">'+click(more?'下一道题 '+next:isPre?'提出自己的预测 '+next:'查看学习证据 '+next,more?(isPre?'next-pre':'next-transfer-question'):(isPre?'next-prediction':'nav-growth'),true)+'</div>':
- '<div class="form-actions"><button class="primary" type="submit" disabled>提交我的判断 '+next+'</button></div>')+'</form><p class="quiet-note">前测提交后暂不显示正确答案。</p>';
+ '<div class="form-actions"><button class="primary" type="submit" '+(chosen===undefined?'disabled':'')+'>提交我的判断 '+next+'</button></div>')+'</form><p class="quiet-note">前测提交后暂不显示正确答案。</p>';
 }
 function predict(l){
  return '<p class="lesson-eyebrow">02 · 提出预测</p><h2>你认为会发生什么？</h2>'+

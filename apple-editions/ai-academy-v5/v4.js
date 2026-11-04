@@ -179,7 +179,7 @@ function animateScreen(previous,next){
   delete stage.dataset.entering;
  },420);
 }
-function study(experiment='sensitivity'){state.lesson=newLesson(experiment);goto('learn')}
+function study(experiment='sensitivity',{restart=false}={}){if(restart||state.lesson.experiment!==experiment)state.lesson=newLesson(experiment);goto('learn')}
 function setStep(n){if(n<=state.lesson.highest){state.lesson.step=n;render()}}
 const awaitReady=async()=>{if(bridge.ready)return;await connecting;if(!bridge.ready)throw Error('原版科学引擎暂时不可用，请检查网络后重试。')};
 const updateLesson=(patch)=>{Object.assign(state.lesson,patch);render()};
@@ -197,6 +197,7 @@ async function act(el){
  if(a==='enter-sensitivity')return study('sensitivity');
  if(a==='enter-evo')return study('evo-pair');
  if(a==='enter-logistic')return study('logistic');
+ if(a==='resume-learning')return goto('learn');
  if(a==='exit-focus')return goto('today');
  if(a==='reset-lesson'){
   state.lesson=newLesson(state.lesson.experiment);
@@ -208,16 +209,16 @@ async function act(el){
  if(a==='load-question'||a==='load-transfer'){
   await awaitReady();
   const pre=a==='load-question',data=await bridge.questionSet(pre?'pre':'transfer',l.experiment);
-  if(pre)Object.assign(l,{preIds:data.ids,preIndex:0,preResults:[],question:data.question,grade:null});
-  else Object.assign(l,{transferIds:data.ids,transferIndex:0,transferResults:[],transfer:data.question,transferGrade:null});
+  if(pre)Object.assign(l,{preIds:data.ids,preIndex:0,preResults:[],question:data.question,grade:null,preChoice:null});
+  else Object.assign(l,{transferIds:data.ids,transferIndex:0,transferResults:[],transfer:data.question,transferGrade:null,transferChoice:null});
   render();return;
  }
  if(a==='next-pre'||a==='next-transfer-question'){
   await awaitReady();const pre=a==='next-pre';const ids=pre?l.preIds:l.transferIds;const i=pre?l.preIndex:l.transferIndex;
   if(!ids[i+1])throw Error('没有更多原版题目。');
   const question=await bridge.getQuestion(ids[i+1]);
-  if(pre)Object.assign(l,{preIndex:i+1,question,grade:null});
-  else Object.assign(l,{transferIndex:i+1,transfer:question,transferGrade:null});
+  if(pre)Object.assign(l,{preIndex:i+1,question,grade:null,preChoice:null});
+  else Object.assign(l,{transferIndex:i+1,transfer:question,transferGrade:null,transferChoice:null});
   render();return;
  }
  if(a==='next-prediction'){
@@ -244,7 +245,7 @@ async function act(el){
  }
  if(a==='review-task'){
   const t=bridge.tasks()[Number(el.dataset.index)];if(!t)throw Error('复习任务不存在');
-  study(t.conceptId?.startsWith('evolution.')?'evo-pair':'sensitivity');notify('已进入对应课程，重新进行独立判断');return;
+  study(t.conceptId?.startsWith('evolution.')?'evo-pair':'sensitivity',{restart:true});notify('已进入对应课程，重新进行独立判断');return;
  }
  if(a==='misconfirm'||a==='misreject'){bridge.decide(el.dataset.event,a==='misconfirm');render();notify('已记录你的判断');return;}
   if(a==='set-type-scale'){
@@ -323,6 +324,12 @@ document.addEventListener('click',async e=>{
 });
 document.addEventListener('change',e=>{
  if(e.target.matches('#quiz-form input[type=radio]')){
+  const form=e.target.closest('#quiz-form');
+  const key=form?.dataset.stage==='pre'?'preChoice':'transferChoice';
+  state.lesson[key]=Number(e.target.value);
+  form.dataset.quizState='selected';
+  form.querySelectorAll('.answer-option').forEach(option=>option.dataset.answerState=option.contains(e.target)?'selected':'unselected');
+  save();
   const button=$('#quiz-form button[type=submit]');
   if(button)button.disabled=!$('#quiz-form input[type=radio]:checked');
  }
