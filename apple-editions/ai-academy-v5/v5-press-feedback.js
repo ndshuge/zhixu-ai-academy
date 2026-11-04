@@ -20,7 +20,7 @@ function settle(button){
 }
 document.addEventListener('pointerdown',event=>{
  if(event.button!==0||reduced())return;
- const button=event.target.closest?.('button');
+ const button=event.target.closest?.('button,a.primary');
  if(!button||button.disabled||!button.isConnected)return;
  reset(active);
  active=button;button.dataset.zxPress='down';
@@ -39,7 +39,7 @@ window.addEventListener('blur',()=>{reset(active);active=null;if(scheduledNav){c
 document.addEventListener('click',event=>{
  // Native keyboard activation / assistive tech / script-created clicks must not be delayed.
  if(reduced()||event.detail===0||!event.isTrusted)return;
- const button=event.target.closest?.('button');
+ const button=event.target.closest?.('button,a.primary');
  if(!button||button.disabled||!button.isConnected)return;
  // Scrollable shelves keep native swipes and are never converted into raised buttons.
  event.preventDefault();event.stopImmediatePropagation();
@@ -53,7 +53,8 @@ document.addEventListener('click',event=>{
  }
  const previous=pending.get(target);if(previous)clearTimeout(previous);
  target.dataset.zxPress='release';
- const delay=target.matches(raisedExclude)?120:target.matches(actionSelector)?190:150;
+ const isDockNavigation=target.matches('#mobile-tabs button[data-route],#zoom-more,.primary-menu button[data-route]');
+ const delay=isDockNavigation?105:target.matches(raisedExclude)?120:target.matches(actionSelector)?190:150;
  const timer=setTimeout(()=>{
   if(isNavigation&&scheduledNav?.button===target)scheduledNav=null;
   pending.delete(target);

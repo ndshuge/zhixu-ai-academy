@@ -1,0 +1,35 @@
+/* Apple-like three-part selection: one stationary control, one movable indicator. */
+#screen .experiment-tabs{
+ position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:4px;padding:4px;overflow-x:hidden;overflow-y:visible;
+ isolation:isolate;touch-action:pan-y;
+ background:rgba(123,139,151,.105);border-radius:14px;
+}
+#screen .experiment-tabs .experiment-lens{
+ position:absolute;top:4px;bottom:4px;left:4px;
+ width:calc((100% - 16px)/3);
+ background:var(--zx-segment-surface,#fff);
+ border-radius:10px;border:1px solid rgba(110,128,136,.1);
+ box-shadow:0 1px 5px rgba(20,40,45,.11);
+ transform:translate3d(calc(var(--zx-segment-index,0) * (100% + 4px)),0,0);
+ transition:transform .31s cubic-bezier(.16,.92,.26,1);
+ pointer-events:none;z-index:0;will-change:transform;
+}
+#screen .experiment-tabs button{
+ position:relative;z-index:1;min-width:0;width:100%;
+ padding:8px 3px;min-height:44px;font-size:clamp(11px,3vw,13px);
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ border-radius:10px;background:transparent!important;
+ box-shadow:none!important;transform:none!important;
+ transition:color .18s ease,opacity .18s ease;
+ touch-action:manipulation;
+}
+#screen .experiment-tabs button.is-active{color:var(--ink,#242424)!important;font-weight:720}
+#screen .experiment-tabs button:not(.is-active){color:var(--secondary,#74777b)}
+#screen .experiment-tabs button[data-zx-press="down"]{filter:brightness(.94);transform:none!important}
+@media(prefers-color-scheme:dark){
+ :root{--zx-segment-surface:#293d3d}
+ #screen .experiment-tabs .experiment-lens{border-color:rgba(255,255,255,.12);box-shadow:0 1px 5px rgba(0,0,0,.22)}
+}
+@media(prefers-reduced-motion:reduce){#screen .experiment-tabs .experiment-lens{transition:none!important;will-change:auto}}
+html[data-reduced="true"] #screen .experiment-tabs .experiment-lens{transition:none!important;will-change:auto}

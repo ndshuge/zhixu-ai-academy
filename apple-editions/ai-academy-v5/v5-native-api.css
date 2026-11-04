@@ -1,0 +1,36 @@
+/* Native V5 DeepSeek connection sheet, matching settings, not Original iframe chrome. */
+.zx-api-shade{z-index:190;padding:clamp(12px,4vw,24px);overscroll-behavior:contain}
+.zx-api-panel{
+ width:min(480px,100%);max-width:480px;
+ max-height:min(87dvh,740px);overflow:auto;
+ padding:clamp(22px,5vw,32px);
+ border:1px solid var(--line,#e3e8e5);
+ border-radius:24px;background:var(--ground,#f8faf9);
+ color:var(--ink,#212b2b);box-shadow:0 24px 75px rgba(0,0,0,.18);
+}
+.zx-api-header{display:flex;gap:12px;align-items:start;justify-content:space-between}
+.zx-api-header h2{font-size:clamp(23px,6vw,30px);letter-spacing:-.045em;margin:7px 0 10px}
+.zx-api-header p{font-size:13px;line-height:1.7;color:var(--secondary,#676e71);margin:0 0 13px}
+.zx-api-header .eyebrow{font-size:12px;color:#19776c}
+.zx-api-close{width:44px;height:44px;border:1px solid var(--line,#e0e5e2);border-radius:50%;background:var(--ground,#fff);font-size:25px;color:var(--ink,#293333);flex:none}
+.zx-api-label{display:block;margin:15px 0 7px;font-size:13px;font-weight:670}
+.zx-api-panel input,.zx-api-panel select{
+ display:block;width:100%;height:48px;min-height:48px;
+ padding:10px 14px;border-radius:13px;border:1px solid var(--line,#dce3df);
+ background:var(--paper,#fff);color:var(--ink,#24272a);
+ font:inherit;font-size:15px;
+}
+.zx-api-status{display:block;margin:17px 0;padding:12px 14px;
+ border-radius:12px;background:rgba(40,124,111,.075);color:var(--ink,#273230);
+ font-size:13px;line-height:1.7;white-space:pre-wrap}
+.zx-api-status[data-state="error"]{background:rgba(180,88,53,.085);color:#99513c}
+.zx-api-status[data-state="ok"]{background:rgba(28,126,99,.11);color:var(--ink,#273230)}
+.zx-api-actions{display:flex;gap:10px;flex-wrap:wrap}
+.zx-api-actions button{min-height:46px;flex:1 1 165px;border-radius:14px}
+.zx-api-help{font-size:12px;line-height:1.7;color:var(--secondary,#707878);margin:17px 0 0}
+.zx-api-help a{display:block;color:#16796e;font-weight:660;margin-top:6px}
+.zx-api-shade button:focus-visible,.zx-api-panel input:focus-visible,.zx-api-panel select:focus-visible{outline:2px solid #188977;outline-offset:3px}
+@media(max-width:700px){.zx-api-shade{align-items:end;padding:0 0 env(safe-area-inset-bottom,0px)}
+ .zx-api-panel{width:100%;max-width:none;max-height:88dvh;border-radius:25px 25px 0 0;padding:26px 22px calc(20px + env(safe-area-inset-bottom,0px));border-bottom:0}
+}
+@media(prefers-reduced-motion:reduce){.zx-api-shade button{transition:none!important}}

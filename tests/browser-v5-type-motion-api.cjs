@@ -45,11 +45,9 @@ const server=http.createServer((req,res)=>{
     await page.waitForTimeout(80);
     const animation=await page.locator('#mobile-tabs .tab-lens').evaluate(el=>getComputedStyle(el).transitionDuration);
     assert.ok(animation.split(',').every(n=>parseFloat(n)<0.01),'reduced motion must stop transitions');
-    const iframe=page.frameLocator('#original-engine');
-    await iframe.locator('#pages-ai-save').waitFor({state:'attached',timeout:14000});
-    assert.equal(await iframe.locator('#pages-ai-save').isDisabled(),true);
-    assert.equal(await iframe.locator('#pages-ai-save').evaluate(()=>window.ZHIXU_PAGES_AI.state()),'unconfigured','V5 must never restore legacy plaintext keys');
-    assert.equal(await iframe.locator('#pages-ai-save-row').evaluate(el=>getComputedStyle(el).display),'none');
+    await page.waitForFunction(()=>!!window.ZHIXU_NATIVE_API && document.querySelector('#original-engine')?.contentWindow?.ZHIXU_BROWSER_ADAPTER,{timeout:14000});
+    assert.equal(await page.evaluate(()=>window.ZHIXU_NATIVE_API.status()),false,'V5 does not restore plaintext keys');
+    assert.equal(await page.locator('#pages-ai-card').count(),0,'legacy setup is not visible');
     assert.equal(await page.locator('#original-engine').getAttribute('src'),'/zhixu-ai-academy/learning.html?zhixu-v5-session=1');
     assert.deepEqual(errors,[]);
     assert.deepEqual(missing,[]);

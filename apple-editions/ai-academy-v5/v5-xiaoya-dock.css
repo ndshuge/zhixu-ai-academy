@@ -1,0 +1,35 @@
+/* Ported from Xiaoya native-v4/unified-dock-and-press.css (main dc234ed).
+   One fixed underlay; four overlapping opacity-masked blur intensities.
+   Zhixu reuses the graduated mechanics, with its own Dock color tokens. */
+@media(max-width:700px){
+ body::after{content:none!important;display:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+ .zx-progressive-underlay{
+  position:fixed;left:0;right:0;bottom:0;
+  height:calc(196px + env(safe-area-inset-bottom,0px));
+  pointer-events:none;overflow:hidden;z-index:69;
+ }
+ .zx-progressive-underlay .zx-blur-layer,
+ .zx-progressive-underlay .zx-blur-scrim{position:absolute;inset:0;pointer-events:none}
+ .zx-progressive-underlay .zx-blur-layer{
+  background:transparent;
+  -webkit-backdrop-filter:blur(var(--zx-blur)) saturate(1.06);
+  backdrop-filter:blur(var(--zx-blur)) saturate(1.06);
+  -webkit-mask-image:var(--zx-mask);mask-image:var(--zx-mask)
+ }
+ .zx-blur-layer:nth-child(1){--zx-blur:3px;--zx-mask:linear-gradient(to bottom,transparent 1%,#000 28%,#000 39%,transparent 59%)}
+ .zx-blur-layer:nth-child(2){--zx-blur:7px;--zx-mask:linear-gradient(to bottom,transparent 34%,#000 53%,#000 64%,transparent 79%)}
+ .zx-blur-layer:nth-child(3){--zx-blur:13px;--zx-mask:linear-gradient(to bottom,transparent 57%,#000 74%,#000 85%,transparent 98%)}
+ .zx-blur-layer:nth-child(4){--zx-blur:22px;--zx-mask:linear-gradient(to bottom,transparent 76%,#000 97%,#000 100%)}
+ .zx-progressive-underlay .zx-blur-scrim{
+  background:linear-gradient(to bottom,transparent 0%,rgba(var(--zx-dock-ground),.012) 23%,rgba(var(--zx-dock-ground),.04) 47%,rgba(var(--zx-dock-ground),.10) 71%,rgba(var(--zx-dock-ground),.22) 100%);
+ }
+ .mobile-native-tabs .nav-optics{ -webkit-backdrop-filter:none!important;backdrop-filter:none!important }
+ body.keyboard-visible .zx-progressive-underlay,
+ body:has(.doctor-panel:not([hidden])) .zx-progressive-underlay{display:none!important}
+}
+@media(max-width:700px) and (prefers-reduced-transparency:reduce),
+       (max-width:700px) and (prefers-contrast:more){
+ .zx-progressive-underlay .zx-blur-layer{ -webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+ .zx-progressive-underlay .zx-blur-scrim{background:linear-gradient(to bottom,transparent,var(--ground,#f5f5f7))!important}
+}
+@media(min-width:701px){.zx-progressive-underlay{display:none!important}}

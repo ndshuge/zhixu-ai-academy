@@ -2,7 +2,7 @@
    Only original MIT component engine + Motion, and the canonical Original science adapter. */
 import '../ai-academy-apple/assets/components.js';
 import {createGlass,engine as glassEngine} from '../ai-academy-apple/assets/liquid-glass.js';
-import {ScienceBridge,newLesson} from './bridge.js?v=20261104-diagnostic';
+import {ScienceBridge,newLesson} from './bridge.js?v=20261104-native-a';
 import {screens,outline,titles,esc} from './views.js';
 import {refreshLabPreview} from './v5-lab-preview.js';
 const $=q=>document.querySelector(q),$$=q=>Array.from(document.querySelectorAll(q));
@@ -101,7 +101,17 @@ function render(){
   const active=node.dataset.route===route;node.classList.toggle('is-active',active);node.classList.toggle('selected',active);
   if(active)node.setAttribute('aria-current','page');else node.removeAttribute('aria-current');
  });
+ const retainedTabs=route==='learn'?stage.querySelector('.experiment-tabs'):null;
  stage.innerHTML=screens[route]({bridge,lesson:state.lesson,prefs});
+ if(retainedTabs){
+  const created=stage.querySelector('.experiment-tabs');
+  if(created){created.replaceWith(retainedTabs);
+   retainedTabs.querySelectorAll('button[data-experiment]').forEach(b=>{
+    const chosen=b.dataset.experiment===state.lesson.experiment;
+    b.classList.toggle('is-active',chosen);
+    b.setAttribute('aria-pressed',String(chosen));b.setAttribute('aria-selected',String(chosen));
+   });}
+ }
  refreshLabPreview(stage);
  window.dispatchEvent(new Event('zhixu:content-rendered'));
  save();
@@ -254,12 +264,8 @@ async function act(el){
   }
   if(a==='toggle-reduced'){prefs.reduceMotion=!prefs.reduceMotion;try{localStorage.setItem(prefKey,JSON.stringify(prefs))}catch{}document.documentElement.dataset.reduced=prefs.reduceMotion?'true':'false';render();stage.querySelector('button[data-action="toggle-reduced"]')?.focus({preventScroll:true});return;}
  if(a==='clear-data')return confirmModal('清空学习记录？','将清空本浏览器 V2 学习事件，无法直接恢复。建议先导出备份；原 V1 数据不会被删除。',()=>{bridge.clear();render();notify('V2 学习记录已清空')},el);
- if(a==='open-ai-config'){
-  await awaitReady();document.body.classList.add('show-original-engine');
-  $('#dialog-layer').innerHTML='<div class="modal-shade" id="configure-shade"><div class="modal"><h2>原版 DeepSeek 设置</h2><p>请在原版面板里配置并真实验证连接。此页面不会读取或展示你的密钥。</p><div class="modal-actions"><button id="close-config" class="secondary">关闭并返回 V5</button></div></div></div>';
-  const w=bridge.win;const d=w.document.querySelector('#pages-ai-dialog'),o=w.document.querySelector('#pages-ai-open');if(o)o.click();else if(d)d.dataset.open='true';
-  $('#close-config').onclick=async()=>{if(d)d.dataset.open='false';document.body.classList.remove('show-original-engine');$('#dialog-layer').replaceChildren();try{bridge.status=await bridge.request('/api/status')}catch{}render()};
- }
+ if(a==='open-ai-config'){window.ZHIXU_NATIVE_API.open(el);return;}
+
 }
 async function submit(form){
  await awaitReady();const l=state.lesson;
@@ -312,14 +318,8 @@ document.addEventListener('click',async e=>{
  if(b.dataset.experiment){
   const exp=b.dataset.experiment;if(!['sensitivity','logistic','evo-pair'].includes(exp)||exp===state.lesson.experiment)return;
   state.lesson=newLesson(exp);render();
-  const row=stage.querySelector('.experiment-tabs');
-  const selected=row?.querySelector('.is-active');
-  if(selected){
-   selected.focus({preventScroll:true});
-   const bounds=row.getBoundingClientRect(),item=selected.getBoundingClientRect();
-   const left=row.scrollLeft+item.left-bounds.left-(row.clientWidth-item.width)/2;
-   row.scrollLeft=Math.max(0,left);
-  }
+  const selected=stage.querySelector('.experiment-tabs .is-active');
+  selected?.focus({preventScroll:true});
   return;
  }
  state.busy=true;b.disabled=true;

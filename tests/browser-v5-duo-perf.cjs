@@ -33,18 +33,19 @@ const srv=http.createServer((req,res)=>{
      await page.locator('#doctor-panel').waitFor({state:'hidden',timeout:8000});
      if(width===390){
       const fade=await page.evaluate(()=>{
-       const edge=getComputedStyle(document.body,'::after'),nav=getComputedStyle(document.querySelector('#mobile-tabs .nav-optics'));
-       return {blur:edge.backdropFilter||edge.webkitBackdropFilter,background:edge.backgroundImage,mask:edge.maskImage||edge.webkitMaskImage,height:edge.height,bottom:edge.bottom,navFilter:document.querySelector('#mobile-tabs .nav-optics').style.filter,navBlur:nav.backdropFilter||nav.webkitBackdropFilter};
+       const edge=document.querySelector('.zx-progressive-underlay'),layer=edge.querySelector('.zx-blur-layer:nth-child(4)'),scrim=edge.querySelector('.zx-blur-scrim'),
+          nav=getComputedStyle(document.querySelector('#mobile-tabs .nav-optics'));
+       return {blur:getComputedStyle(layer).backdropFilter,background:getComputedStyle(scrim).backgroundImage,mask:getComputedStyle(layer).maskImage,height:getComputedStyle(edge).height,bottom:getComputedStyle(edge).bottom,navFilter:document.querySelector('#mobile-tabs .nav-optics').style.filter,navBlur:nav.backdropFilter||nav.webkitBackdropFilter};
       });
-      assert.ok(fade.blur.includes('blur(24px)'),fade.blur);
-      assert.match(fade.background,/0\.99[56]/,'CSS color channels may quantize alpha to 8-bit');
-      assert.ok(parseFloat(fade.bottom)<=-90,'the deep shade must extend beneath the viewport edge');
-      assert.ok(parseFloat(fade.height)>=350,'the same shade should reach under the Dock');
+      assert.ok(fade.blur.includes('blur(22px)'),fade.blur);
+      assert.match(fade.background,/0\.22/,'Xiaoya scrim is 22% at its deepest point');
+      assert.ok(parseFloat(fade.bottom)===0,'the deep shade must extend beneath the viewport edge');
+      assert.ok(parseFloat(fade.height)>=196,'the same shade should reach under the Dock');
       assert.match(fade.mask,/linear-gradient/);
       assert.ok(fade.navBlur==='none',fade.navBlur);
       assert.equal(fade.navFilter,'','mobile lens should not run SVG refraction');
       await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));
-      assert.equal(await page.evaluate(()=>getComputedStyle(document.body,'::after').opacity),'1');
+      assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector('.zx-progressive-underlay')).opacity),'1');
      }
      const cta=page.locator('#screen .workshop-actions .primary').first();
      await cta.scrollIntoViewIfNeeded();

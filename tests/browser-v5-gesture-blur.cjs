@@ -45,19 +45,21 @@ const server=http.createServer((req,res)=>{
      await gear.click();await page.locator('#screen[data-page="growth"] h1').waitFor();
      if(width===390){
       const layers=await page.evaluate(()=>{
-       const edge=getComputedStyle(document.body,'::after'),dock=getComputedStyle(document.querySelector('.nav-optics'));
-       return {blur:edge.backdropFilter||edge.webkitBackdropFilter,
-        mask:edge.maskImage||edge.webkitMaskImage,opacity:edge.opacity,height:parseFloat(edge.height),
+       const dock=getComputedStyle(document.querySelector('.nav-optics'));
+       const edge=document.querySelector('.zx-progressive-underlay');
+       const layers=[...edge.querySelectorAll('.zx-blur-layer')];
+       return {blur:layers.at(-1).style.backdropFilter||getComputedStyle(layers.at(-1)).backdropFilter,
+        mask:getComputedStyle(layers.at(-1)).maskImage,opacity:getComputedStyle(edge).opacity,height:parseFloat(getComputedStyle(edge).height),
         dockBlur:dock.backdropFilter||dock.webkitBackdropFilter,hasRuntimeEdge:!!document.querySelector('script[src*="v5-scroll-edge.js"]')};
       });
-      assert.ok(layers.blur.includes('blur(24px)'),layers.blur);
+      assert.ok(layers.blur.includes('blur(22px)'),layers.blur);
       assert.ok(layers.dockBlur==='none',layers.dockBlur);
       assert.match(layers.mask,/linear-gradient/);
       assert.equal(layers.opacity,'1');
-      assert.ok(layers.height>=350&&layers.height<=400,'extended bottom shade must cover behind browser toolbar');
+      assert.ok(layers.height>=196&&layers.height<=240,'extended bottom shade must cover behind browser toolbar');
       assert.equal(layers.hasRuntimeEdge,false);
       await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));
-      assert.equal(await page.evaluate(()=>getComputedStyle(document.body,'::after').opacity),'1');
+      assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector('.zx-progressive-underlay')).opacity),'1');
      }
      assert.deepEqual(errors,[]);
      console.log('GESTURE_BLUR_OK',name,width,'pressedScale='+pressedScale.toFixed(3),'settled');

@@ -1,5 +1,6 @@
 /* V4 ONLY: business adapter to immutable Original Pages scientific engine.
    Never implement scoring/scientific experiments or leak BYOK credentials here. */
+import {nativeApi} from './v5-native-api.js';
 const ORIGINAL='/zhixu-ai-academy/';
 export const newLesson=(experiment='sensitivity')=>({experiment,step:0,highest:0,preIds:[],preIndex:0,preResults:[],question:null,grade:null,prediction:'',run:null,mentor:null,transferIds:[],transferIndex:0,transferResults:[],transfer:null,transferGrade:null,plan:null,approvedRun:null});
 export const conceptNames={'chaos.same-rule':'相同规则下的变化','chaos.sensitivity':'初值敏感性','inquiry.control-variable':'控制变量与科学验证','evolution.independence':'独立重复','evolution.inference':'演化模拟与推断边界'};
@@ -19,10 +20,7 @@ export class ScienceBridge{
    }
    this.notify('科学引擎暂未连接；可以浏览课程，稍后重试。');return false;
  }
- async loadAI(){
-  const w=this.win;if(w.ZHIXU_PAGES_AI)return true;
-  return await new Promise(resolve=>{const s=w.document.createElement('script');s.src=ORIGINAL+'apple-editions/ai-academy-v5/v5-deepseek.js?v=20261104-diagnostic';s.onload=()=>resolve(!!w.ZHIXU_PAGES_AI);s.onerror=()=>resolve(false);w.document.body.append(s);});
- }
+ async loadAI(){return true;}
  async request(path,body){
   if(!this.win)throw Error('科学引擎尚未连接。');
   const options=body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)};
@@ -57,6 +55,6 @@ export class ScienceBridge{
  decide(id,yes){this.lib?.decideMisconception(this.store,id,yes?'confirmed':'rejected');this.refresh();}
  export(){if(!this.lib)throw Error('学习记录尚未连接');return this.lib.exportLearning(this.store);}
  clear(){if(!this.lib)throw Error('学习记录尚未连接');this.lib.clearLearning(localStorage);this.store=this.lib.loadLearning(localStorage);this.refresh();}
- async modelStatus(){if(!this.win)return false;return this.win.ZHIXU_PAGES_AI?.status?.()===true;}
- async modelAsk(messages){const model=this.win?.ZHIXU_PAGES_AI;if(!model?.status?.())throw Error('请先在设置里验证 DeepSeek 连接');return model.ask(messages,430);}
+ async modelStatus(){return nativeApi.status();}
+ async modelAsk(messages){return nativeApi.ask(messages,430);}
 }

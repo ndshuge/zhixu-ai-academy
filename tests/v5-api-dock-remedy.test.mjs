@@ -1,13 +1,14 @@
 import test from 'node:test';import assert from 'node:assert/strict';import{readFileSync}from'node:fs';
 const read=f=>readFileSync(new URL('../apple-editions/ai-academy-v5/'+f,import.meta.url),'utf8');
-test('V5 session API script is V5 scoped and shows actionable codes without storing credentials',()=>{
- const bridge=read('bridge.js'),script=read('v5-deepseek.js');
- assert.match(bridge,/v5-deepseek\.js/);
- assert.match(script,/sessionOnly/);
+test('V5 API is a native session-only connection sheet, never Original iframe setup',()=>{
+ const bridge=read('bridge.js'),script=read('v5-native-api.js');
+ assert.match(bridge,/nativeApi/);
+ assert.doesNotMatch(bridge,/v5-deepseek\.js/);
  assert.match(script,/allowedModels=new Set\(\['deepseek-flash','deepseek-v4-pro'\]\)/);
  for(const code of ['401','402','429','400','422','503'])assert.match(script,new RegExp(code));
  assert.match(script,/platform\.deepseek\.com/);
- assert.match(script,/连接诊断/);
+ assert.match(script,/zx-api-panel/);
+ assert.doesNotMatch(script,/localStorage\.(setItem|getItem)/);
 });
 test('dock bottom uses existing thick shade stretched beyond visual viewport with no second blur',()=>{
  const css=read('v5-bottom-shade.css');

@@ -30,7 +30,7 @@ const server=http.createServer((req,res)=>{
      assert.equal(await gear.isVisible(),true,'gear must remain present on settings');
      assert.equal(await gear.getAttribute('aria-current'),'page');
      const state=await page.evaluate(()=>{
-      const overlay=getComputedStyle(document.body,'::after');
+      const overlay=getComputedStyle(document.querySelector('.zx-progressive-underlay .zx-blur-layer:nth-child(4)'));
       const first=document.querySelector('#screen > :first-child');
       return {direction:document.querySelector('#screen').dataset.direction,
         animation:first?getComputedStyle(first).animationName:'',
@@ -43,7 +43,7 @@ const server=http.createServer((req,res)=>{
      assert.ok(state.htmlWidth<=state.windowWidth,'no horizontal overflow');
      if(width===390){
       assert.equal(state.overlayOpacity,'1','edge remains active at scroll end');
-      assert.match(state.blur,/blur\(24px\)/);
+      assert.match(state.blur,/blur\(22px\)/);
       assert.match(state.mask,/linear-gradient/);
      }
      await page.waitForTimeout(360);
@@ -64,7 +64,7 @@ const server=http.createServer((req,res)=>{
      assert.equal(await page.locator('#screen').getAttribute('data-entering'),null,'reduce motion should not strand active page transitions');
      assert.equal(await page.locator('#screen > :first-child').evaluate(el=>getComputedStyle(el).animationName),'none');
      await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));
-     if(width===390)assert.equal(await page.evaluate(()=>getComputedStyle(document.body,'::after').opacity),'1');
+     if(width===390)assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector('.zx-progressive-underlay')).opacity),'1');
      assert.deepEqual(errors,[],'no frontend script crashes');
      console.log('IOS_MOTION_DOCK_OK',name,width,state.direction,'backward');
      tests.push(name+':'+width);

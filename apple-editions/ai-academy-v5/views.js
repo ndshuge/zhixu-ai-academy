@@ -1,5 +1,5 @@
 /* V4 independently authored view templates: Books-like library and Notes-like reading. */
-import {conceptNames} from './bridge.js';
+import {conceptNames} from './bridge.js?v=20261104-native-a';
 export const titles={today:'今天',courses:'课程',learn:'学习',library:'资料',growth:'进度',settings:'设置'};
 export const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const glyph=id=>'<svg aria-hidden="true"><use href="#i-'+id+'"/></svg>';
@@ -106,7 +106,7 @@ export function learn({lesson}){
  return '<div class="learning-page">'+
  '<div class="learning-header"><span class="eyebrow">科学探究</span>'+click('重新开始','reset-lesson')+'</div>'+
  '<header class="page-intro"><h1>从判断开始</h1><p>先给出自己的答案，再用实验验证。</p></header>'+
- '<div class="experiment-tabs" aria-label="切换实验">'+Object.entries(expLabels).map(([id,label])=>'<button data-experiment="'+id+'" class="'+(l.experiment===id?'is-active':'')+'" aria-pressed="'+(l.experiment===id)+'">'+label+'</button>').join('')+'</div>'+
+ '<div class="experiment-tabs" role="tablist" aria-label="切换实验"><span class="experiment-lens" aria-hidden="true"></span>'+Object.entries(expLabels).map(([id,label])=>'<button type="button" role="tab" data-experiment="'+id+'" class="'+(l.experiment===id?'is-active':'')+'" aria-selected="'+(l.experiment===id)+'" aria-pressed="'+(l.experiment===id)+'">'+label+'</button>').join('')+'</div>'+
  controls(l)+
  '<article class="learning-paper">'+(l.step===0?'<p class="lesson-eyebrow">01 · 独立判断</p><h2>关于这个世界，你已经知道什么？</h2>'+quiz('pre',l):l.step===1?predict(l):l.step===2?scienceRun(l):'<p class="lesson-eyebrow">04 · 独立迁移</p><h2>换一种情境，你还会判断吗？</h2>'+quiz('transfer',l))+
  '</article></div>';
@@ -140,7 +140,7 @@ export function settings({bridge,prefs}){
   '<div class="setting-row"><div><strong>减少动态效果</strong><p>系统偏好减少动态时自动遵循；也可主动选择。</p></div><button role="switch" aria-label="减少动态效果" aria-checked="'+prefs.reduceMotion+'" class="switch" data-action="toggle-reduced"></button></div>'+
  '<div class="setting-row"><div><strong>重新开始当前课程</strong><p>重置课程步骤，不删除已经形成的学习事件。</p></div>'+click('重新开始','reset-lesson')+'</div>'+
  '</section><div class="section-bar"><h2>模型与数据</h2></div><section class="setting-group">'+
- '<div class="setting-row"><div><strong>DeepSeek 真实模型连接</strong><p>'+(bridge.modelLoaded?'原版 BYOK 配置面板；仅用户授权请求。':'原版模型配置暂不可用。')+'</p></div>'+click('连接','open-ai-config')+'</div>'+
+ '<div class="setting-row"><div><strong>DeepSeek 真实模型连接</strong><p>'+'V5 原生安全连接 · 密钥仅在当前页面使用。'+'</p></div>'+click('连接','open-ai-config')+'</div>'+
  '<div class="setting-row"><div><strong>导师运行模式</strong><p>'+esc(bridge.status?.mentorMode==='llm-configured'?'模型已配置，调用仍需逐次同意':'本地规则导师 · 不自动调用付费 API')+'</p></div></div>'+
  '<div class="setting-row"><div><strong>导出学习记录</strong><p>使用原版 V2 JSON 数据结构，文件保存在你的设备上。</p></div>'+click('导出 '+glyph('download'),'export-data')+'</div>'+
  '<div class="setting-row"><div><strong>清空 V2 学习记录</strong><p>清空前请先导出备份；保留原 V1 数据备份。</p></div><button class="link-action danger" data-action="clear-data">清空</button></div>'+
