@@ -8,7 +8,7 @@ import {refreshLabPreview} from './v5-lab-preview.js';
 import {settleLessonStep} from './v5-lesson-motion.js';
 import {renderCore,coreOutline,coreStep} from './v5-core-ui.js?v=20261105-studio-a';
 import {makeCoreHost} from './v5-core-binding.js';
-import {installPageContinuity} from './v6-paired-pages.js?v=20261105-continuous-b';
+import {installPageContinuity} from './v6-paired-pages.js?v=20261105-zoomlock-a';
 import {installExplorationScrubber} from './v6-exploration-studio.js?v=20261105-studio-a';
 import {enterSurface,exitSurface} from './v5-surface-continuity.js?v=20261105-continuous-b';
 const $=q=>document.querySelector(q),$$=q=>Array.from(document.querySelectorAll(q));

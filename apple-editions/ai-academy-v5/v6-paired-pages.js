@@ -63,7 +63,12 @@ export function installPageContinuity({stage,getRoute,navigate,reduced}){
   timer=setTimeout(finish,duration+120);
  }
  const blocked=t=>!!t?.closest?.('button,a,input,textarea,select,label,[role="slider"],[contenteditable],.shelf,.experiment-tabs,.core-point-actions,.core-bars,.core-figure');
+ // A second finger must never complete a pending edge-swipe route change.
+ document.addEventListener('touchstart',e=>{
+  if(e.touches?.length>=2){releaseDrag(false);swipe=null}
+ },{capture:true,passive:true});
  stage.addEventListener('pointerdown',e=>{
+  if(e.pointerType==='touch'&&!e.isPrimary&&swipe){releaseDrag(false);swipe=null;return}
   if(e.button!==0||e.pointerType==='mouse'||innerWidth>700||blocked(e.target))return;
   const edge=Math.min(45,innerWidth*.14);
   if(e.clientX>edge&&e.clientX<innerWidth-edge)return;

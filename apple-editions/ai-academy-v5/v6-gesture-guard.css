@@ -1,0 +1,22 @@
+/* Explicit mobile interaction geometry: page scrolls but pinch and
+   double-tap must not zoom or change the layout viewport. This is purposely
+   limited to the interactive app; reading text can still be enlarged using
+   the existing Settings type-size controls and browser accessibility UI. */
+@media (pointer: coarse) {
+ html[data-native-v4],
+ html[data-native-v4] body {
+  touch-action:pan-x pan-y;
+ }
+}
+/* iOS Safari can focus-zoom editable controls whose computed text <16px. */
+@media(max-width:700px){
+ #screen input:not([type="radio"]):not([type="checkbox"]):not([type="range"]),
+ #screen select,
+ #screen textarea,
+ #dialog-layer input:not([type="radio"]):not([type="checkbox"]):not([type="range"]),
+ #dialog-layer textarea,
+ #doctor-panel textarea,
+ #doctor-panel input:not([type="radio"]):not([type="checkbox"]):not([type="range"]){
+  font-size:max(16px,1em);
+ }
+}
