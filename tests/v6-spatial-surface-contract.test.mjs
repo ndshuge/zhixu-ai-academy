@@ -4,10 +4,12 @@ import {readFileSync} from 'node:fs';
 const dir=new URL('../apple-editions/ai-academy-v5/',import.meta.url);
 const read=f=>readFileSync(new URL(f,dir),'utf8');
 test('real route push/pop preserves old reading layer briefly but never freezes Dock',()=>{
- const controller=read('v4.js'),motion=read('v5-page-continuity.js');
+ const controller=read('v4.js'),motion=read('v6-paired-pages.js');
  assert.match(controller,/pageContinuity\.prepare\(previous,route\)/);
  assert.match(controller,/pageContinuity\.prepare\(previous,destination\)/);
- assert.match(motion,/zx-nav-ghost/);
+ assert.match(motion,/zx-route-outgoing/);
+ assert.match(motion,/zx-route-incoming/);
+ assert.doesNotMatch(motion,/cloneNode/);
  assert.match(motion,/aria-hidden/);
  assert.match(motion,/inert/);
  assert.match(motion,/\.removeAttribute\('id'\)/);

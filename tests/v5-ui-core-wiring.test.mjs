@@ -13,7 +13,7 @@ test('the latest V5 app wires the new core behind its existing learning route',(
 });
 test('the core and page motion styles remain content-scoped and preserve Dock assets',()=>{
  assert.match(html,/v5-core-learning\.css/);
- assert.match(html,/v5-page-continuity\.js/);
+ assert.match(html,/v6-paired-pages\.js/);
  assert.match(html,/v5-focus-smoothing\.css/);
  assert.match(html,/v5-xiaoya-dock\.css\?v=20261104-xiaoya-a/);
 });

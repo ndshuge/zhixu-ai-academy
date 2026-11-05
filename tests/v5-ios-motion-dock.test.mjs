@@ -6,13 +6,14 @@ const product=read('apple-editions/ai-academy-v5/v5-product-design.css');
 const runtime=read('apple-editions/ai-academy-v5/v4.js');
 const page=read('apple-editions/ai-academy-v5/index.html');
 
-test('settings toolbar control stays visible and identifies current route',()=>{
- assert.doesNotMatch(product,/\.toolbar-trailing button\[data-route="settings"\]\s*\{\s*display:\s*none/);
- assert.match(runtime,/data-route="settings"\][^\n]*aria-current/);
+test('settings is selected in the Dock and the toolbar gear is removed',()=>{
+ assert.match(page,/<button data-route="settings" class="tab-item"/);
+ assert.doesNotMatch(page,/class="icon-button" data-route="settings"/);
+ assert.match(runtime,/node\.dataset\.route===route/);
 });
 test('directional route entry is interruptible and supports reduced motion',()=>{
  assert.match(runtime,/dataset\.direction/);
- assert.match(page,/v5-ios-continuity\.css/);
+ assert.match(page,/v6-paired-pages\.css/);
  const css=read('apple-editions/ai-academy-v5/v5-ios-continuity.css');
  assert.match(css,/data-entering="true"/);
  assert.match(css,/data-direction="backward"/);

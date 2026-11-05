@@ -2,18 +2,18 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 const read=p=>readFileSync(new URL('../apple-editions/ai-academy-v5/'+p,import.meta.url),'utf8');
-test('settings toggles back to the route it was opened from',()=>{
+test('settings is a stable fifth Dock destination',()=>{
  const src=read('v4.js');
- assert.match(src,/settingsReturnRoute/);
- assert.match(src,/route==='settings'\s*&&\s*state\.route==='settings'/);
+ assert.match(src,/moreRoutes=\/\^\(library\|growth\|settings\)\$\//);
+ assert.doesNotMatch(src,/route==='settings' && state\.route==='settings'/);
+ assert.match(read('index.html'),/<button data-route="settings" class="tab-item"/);
 });
-test('settings control supports held spring feedback and cancellation',()=>{
- const src=read('v5-settings-touch.js'),css=read('v5-ios-continuity.css');
- assert.match(read('index.html'),/v5-settings-touch\.js/);
- assert.match(src,/\.toolbar-trailing button\[data-route="settings"\]/);
- assert.match(src,/dataset\.holding/);
- assert.match(src,/pointercancel.*settle/s);
- assert.match(css,/data-holding/);
+test('buttons have one native-click feedback clock; the lens remains delegated to Motion',()=>{
+ const press=read('v6-press-clock.js');
+ assert.match(read('index.html'),/v6-press-clock\.js/);
+ assert.match(press,/pointercancel/);
+ assert.match(press,/#mobile-tabs button/);
+ assert.doesNotMatch(press,/target\.click\(\)|stopImmediatePropagation/);
 });
 test('single static smooth scroll edge avoids per-scroll JS and expensive GPU radius',()=>{
  const html=read('index.html'),css=read('v5-ios-continuity.css');

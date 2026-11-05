@@ -1,0 +1,67 @@
+/* V6.2 content planes: horizontal, synchronized, no per-child jitter.
+   The two page surfaces keep their internal coordinates fixed. */
+#screen.zx-paired-moving{
+ position:relative;isolation:isolate;overflow-x:clip;
+ min-height:var(--zx-paired-height,0px);
+}
+#screen > .zx-route-incoming,#screen > .zx-route-outgoing{
+ position:absolute;top:0;left:0;width:100%;min-width:0;
+ box-sizing:border-box;
+ padding:var(--zx-paired-pad-t,0px) var(--zx-paired-pad-r,0px) 0 var(--zx-paired-pad-l,0px);
+ background:var(--white,#fff);
+ transform:translate3d(0,0,0);
+}
+#screen > .zx-route-incoming{z-index:2}
+#screen > .zx-route-outgoing{
+ z-index:1;pointer-events:none;user-select:none;overflow:clip;contain:paint;
+}
+#screen.zx-paired-moving > .zx-route-incoming *,
+#screen.zx-paired-moving > .zx-route-outgoing *{animation:none!important}
+@media(prefers-color-scheme:dark){
+ #screen > .zx-route-incoming,#screen > .zx-route-outgoing{background:#12191c}
+}
+/* The learning view remains a normal tab: its Dock, toolbar and bottom
+   gradient stay visible exactly as on Today/Library/Growth. */
+@media(max-width:700px){
+ #mobile-tabs{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+ #mobile-tabs button.tab-item{min-width:44px;min-height:44px;padding-inline:2px}
+ body[data-focus="true"] #mobile-tabs{
+  transform:translate3d(0,0,0)!important;
+  opacity:1!important;visibility:visible!important;pointer-events:auto!important;
+  transition:none!important;
+ }
+ body[data-focus="true"] .zx-progressive-underlay{
+  display:block!important;opacity:1!important;visibility:visible!important;
+  transition:none!important;pointer-events:none!important;
+ }
+ body[data-focus="true"] .reading-column > .toolbar{
+  height:67px!important;min-height:67px!important;
+  opacity:1!important;transform:none!important;
+  visibility:visible!important;overflow:visible!important;pointer-events:auto!important;
+  transition:none!important;
+ }
+ body[data-focus="true"] #screen{padding-bottom:max(116px,calc(60px + env(safe-area-inset-bottom,0px)))!important}
+}
+@media(max-width:260px){
+ #mobile-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #mobile-tabs .tab-item[data-route="settings"]{display:none!important}
+}
+/* Replace the several legacy press transforms with one small scale response.
+   Dock lens keeps its own Motion spring, separate from content buttons. */
+body #screen button[data-zx-press],body #screen a.primary[data-zx-press],
+body .toolbar-trailing .doctor-launch[data-zx-press]{
+ transform:none!important;
+ transition:scale .25s cubic-bezier(.2,1.13,.27,1),background-color .18s ease!important;
+}
+body #screen button[data-zx-press="down"],body #screen a.primary[data-zx-press="down"],
+body .toolbar-trailing .doctor-launch[data-zx-press="down"]{scale:.975!important}
+body #screen button[data-zx-press="release"],body #screen a.primary[data-zx-press="release"],
+body .toolbar-trailing .doctor-launch[data-zx-press="release"]{scale:1!important}
+@media(prefers-reduced-motion:reduce){
+ #screen.zx-paired-moving > .zx-route-incoming,
+ #screen.zx-paired-moving > .zx-route-outgoing{animation:none!important;transform:none!important}
+ body #screen button[data-zx-press],body #screen a.primary[data-zx-press]{transition:none!important;scale:1!important}
+}
+html[data-reduced="true"] #screen.zx-paired-moving > .zx-route-incoming,
+html[data-reduced="true"] #screen.zx-paired-moving > .zx-route-outgoing{animation:none!important;transform:none!important}
+html[data-reduced="true"] #screen button[data-zx-press]{transition:none!important;scale:1!important}

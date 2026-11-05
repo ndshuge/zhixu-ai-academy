@@ -30,7 +30,8 @@
 <link rel="stylesheet" href="./v5-core-learning.css?v=20261104-integrate-a">
 <link rel="stylesheet" href="./v5-focus-smoothing.css?v=20261104-integrate-a">
 <link rel="stylesheet" href="./v5-spatial-continuity.css?v=20261104-spatial-a">
-<link rel="modulepreload" href="./v5-page-continuity.js?v=20261104-integrate-a">
+<link rel="stylesheet" href="./v6-paired-pages.css?v=20261105-paired-a">
+<link rel="modulepreload" href="./v6-paired-pages.js?v=20261105-paired-a">
 <link rel="modulepreload" href="../ai-academy-apple/assets/motion.bundle.js">
 <link rel="preload" href="../ai-academy-apple/assets/zhixu-doctor/idle.webp" as="image">
 </head>
@@ -72,7 +73,7 @@
   <div class="reading-column">
     <header class="toolbar" aria-label="页面工具栏">
       <div class="toolbar-leading"><button class="icon-button outline-reveal" id="outline-reveal" aria-label="显示目录"><svg><use href="#i-collapse"/></svg></button><span class="toolbar-title" id="toolbar-title">今天</span></div>
-      <div class="toolbar-trailing"><span class="connected-dot" id="connected-dot" title="科学引擎连接状态"></span><button class="doctor-launch" id="doctor-launch" aria-label="打开知序博士" aria-expanded="false"><span class="doctor-avatar__media"><img src="./assets/doctor-avatar.webp" alt="" width="320" height="320" decoding="async"></span></button><button class="icon-button" data-route="settings" aria-label="设置"><svg><use href="#i-gear"/></svg></button></div>
+      <div class="toolbar-trailing"><span class="connected-dot" id="connected-dot" title="科学引擎连接状态"></span><button class="doctor-launch" id="doctor-launch" aria-label="打开知序博士" aria-expanded="false"><span class="doctor-avatar__media"><img src="./assets/doctor-avatar.webp" alt="" width="320" height="320" decoding="async"></span></button></div>
     </header>
     <main id="screen" data-content data-page="today" tabindex="-1" aria-live="off">
  <div class="workshop-intro"><span class="workshop-breadcrumb">今天的探索</span></div>
@@ -96,11 +97,13 @@
  <button data-route="learn" class="tab-item"><svg><use href="#i-spark"/></svg><span>学习</span></button>
  <button data-route="library" class="tab-item"><svg><use href="#i-note"/></svg><span>资料</span></button>
  <button data-route="growth" class="tab-item"><svg><use href="#i-chart"/></svg><span>进度</span></button>
+ <button data-route="settings" class="tab-item"><svg><use href="#i-gear"/></svg><span>设置</span></button>
  <button id="zoom-more" type="button" class="tab-item" data-action="toggle-more" aria-haspopup="menu" aria-controls="zoom-more-menu" aria-expanded="false"><span class="zoom-dots" aria-hidden="true">···</span><span>更多</span></button>
 </nav>
 <div id="zoom-more-menu" role="menu" aria-label="更多页面" hidden>
  <button role="menuitem" data-route="library">资料</button>
  <button role="menuitem" data-route="growth">进度</button>
+ <button role="menuitem" data-route="settings">设置</button>
 </div>
 
 <section id="doctor-panel" class="doctor-panel" role="dialog" aria-label="知序博士对话" hidden>
@@ -144,8 +147,8 @@
  if(active&&lens){lens.style.width=active.offsetWidth+'px';lens.style.transform='translate3d('+active.offsetLeft+'px,0,0)';}
 })();
 </script>
-<script type="module" src="./v5-settings-touch.js?v=20261104a"></script>
-<script type="module" src="./v5-press-feedback.js?v=20261104-integrate-b"></script>
-<script type="module" src="./v4.js?v=20261104-integrate-a"></script>
+
+<script type="module" src="./v6-press-clock.js?v=20261105-paired-a"></script>
+<script type="module" src="./v4.js?v=20261105-paired-a"></script>
 <script type="module" src="./v5-route-focus.js?v=20261103"></script>
 </body></html>

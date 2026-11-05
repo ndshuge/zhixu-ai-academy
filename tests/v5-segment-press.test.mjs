@@ -9,8 +9,8 @@ test('learning focuses without global experiment tabs while home retains model c
  assert.match(css,/body\[data-focus="true"\] #mobile-tabs/);
 });
 test('dock commits faster and API controls belong to V5, never Original iframe',()=>{
- assert.match(read('v5-press-feedback.js'),/isDockNavigation/);
- assert.match(read('v5-press-feedback.js'),/105/);
+ assert.match(read('v6-press-clock.js'),/#mobile-tabs button/);
+ assert.doesNotMatch(read('v6-press-clock.js'),/target\.click\(\)/);
  assert.match(read('v5-native-api.js'),/zx-api-panel/);
  assert.match(read('bridge.js'),/nativeApi/);
  assert.match(read('v4.js'),/ZHIXU_NATIVE_API.open/);

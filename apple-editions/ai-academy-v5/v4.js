@@ -8,7 +8,7 @@ import {refreshLabPreview} from './v5-lab-preview.js';
 import {settleLessonStep} from './v5-lesson-motion.js';
 import {renderCore,coreOutline,coreStep} from './v5-core-ui.js';
 import {makeCoreHost} from './v5-core-binding.js';
-import {installPageContinuity} from './v5-page-continuity.js';
+import {installPageContinuity} from './v6-paired-pages.js';
 import {enterSurface,exitSurface} from './v5-surface-continuity.js';
 const $=q=>document.querySelector(q),$$=q=>Array.from(document.querySelectorAll(q));
 const stage=$('#screen'),frame=$('#original-engine'),toast=$('#toast');
@@ -55,7 +55,7 @@ let lastRoute='today';
 const nav=$('#mobile-tabs'),lens=nav.querySelector('.tab-lens');
 const zoomMore=$('#zoom-more'),zoomMenu=$('#zoom-more-menu');
 const compactNav=()=>matchMedia('(max-width:260px)').matches;
-const moreRoutes=/^(library|growth)$/;
+const moreRoutes=/^(library|growth|settings)$/;
 function closeZoomMenu({returnFocus=false}={}){
  if(zoomMenu.hidden)return;
  zoomMenu.hidden=true;
@@ -100,13 +100,14 @@ let motion=null;
 const reduced=()=>prefs.reduceMotion||matchMedia('(prefers-reduced-motion:reduce)').matches;
 function render(){
  const route=state.route;
+ pageContinuity.beforeRender();
  stage.dataset.page=route;
- document.body.dataset.focus=route==='learn'?'true':'false';
- nav.inert=route==='learn';
+ document.body.dataset.focus='false'; // Learning keeps the same Dock, toolbar and page geometry as other routes.
+ nav.inert=false;
  const toolbar=document.querySelector('.reading-column > .toolbar');
- if(toolbar){toolbar.inert=route==='learn';if(route==='learn')toolbar.setAttribute('aria-hidden','true');else toolbar.removeAttribute('aria-hidden');}
- if(route==='learn')nav.setAttribute('aria-hidden','true');else nav.removeAttribute('aria-hidden');
- const settingsButton=$('.toolbar-trailing button[data-route="settings"]');if(settingsButton){if(route==='settings'){settingsButton.setAttribute('aria-current','page');settingsButton.setAttribute('aria-label','返回'+titles[settingsReturnRoute]);}else{settingsButton.removeAttribute('aria-current');settingsButton.setAttribute('aria-label','设置');}}
+ if(toolbar){toolbar.inert=false;toolbar.removeAttribute('aria-hidden');}
+ nav.removeAttribute('aria-hidden');
+
  $('#toolbar-title').textContent=titles[route];$('#outline-name').textContent=route==='learn'?'学习步骤':titles[route];
  const liveCore=coreHost.snapshot();
  const coreRoute=route==='learn'&&['sensitivity','evo-pair'].includes(state.lesson.experiment);
@@ -128,7 +129,7 @@ function render(){
 function goto(route,{replace=false}={}){
  if(!titles[route]){route='today';replace=true;}
  // A second tap on the toolbar control returns to the originating tab.
- if(route==='settings' && state.route==='settings' && !replace)route=settingsReturnRoute;
+
  closeZoomMenu();
  const previous=state.route,changed=previous!==route;
  if(route==='settings'&&previous!=='settings')settingsReturnRoute=previous;
@@ -176,29 +177,16 @@ function syncNavSelection(immediate=false){
    type:'spring',stiffness:440,damping:39,mass:.82
  });
 }
-let routeRevealTimer=null;
 function animateScreen(previous,next){
- const routes=['today','courses','learn','library','growth','settings'];
+ // Keep all route motion inside one two-plane owner; stage and children do
+ // not receive any competing animation or delayed state toggles.
+ const routes=['today','learn','library','growth','settings'];
  stage.dataset.direction=routes.indexOf(next)>=routes.indexOf(previous)?'forward':'backward';
- if(reduced()){pageContinuity.animate(previous,next);routeAnimation?.stop?.();clearTimeout(routeRevealTimer);delete stage.dataset.entering;return;}
- // No frozen page screenshots: those cause ghost text in Blink and blank midframes in WebKit.
- // Keep navigation physical and only stage the first few content groups with small,
- // opacity-safe compositor transforms. Never fade the entire reading surface.
- if(routeAnimation){routeAnimation.stop();routeAnimation=null;}
- stage.style.willChange='auto';
- stage.style.removeProperty('transform');
- stage.style.removeProperty('opacity');
- stage.style.removeProperty('translate');
- stage.dataset.entering='true';
-  pageContinuity.animate(previous,next);
- clearTimeout(routeRevealTimer);
- routeRevealTimer=setTimeout(()=>{
-  delete stage.dataset.entering;
- },420);
+ pageContinuity.animate(previous,next);
 }
 async function study(experiment='sensitivity',{restart=false}={}){
  if(experiment==='sensitivity'||experiment==='evo-pair'){
-  await awaitReady();await coreHost.start(experiment,{restart});state.lesson=newLesson(experiment);goto('learn');render();return;
+  await awaitReady();await coreHost.start(experiment,{restart});state.lesson=newLesson(experiment);if(state.route==='learn')render();else goto('learn');return;
  }
  coreHost.stop();
  if(restart||state.lesson.experiment!==experiment)state.lesson=newLesson(experiment);
@@ -550,6 +538,6 @@ async function boot(){
  $('#engine-caption').textContent=okay?'科学引擎已连接 · 规则导师可用':'原版引擎暂未连接';
  await doctorStatus();render();
 }
-const pageContinuity=installPageContinuity({stage,getRoute:()=>state.route,navigate:route=>goto(route),reduced});
+const pageContinuity=installPageContinuity({stage,getRoute:()=>state.route,navigate:route=>route==='learn'&&!coreHost.snapshot()?study(state.lesson.experiment).catch(error=>notify(error.message)):goto(route),reduced});
 window.ZHIXU_V4_NAVIGATE=goto;window.ZHIXU_V4_DEBUG=()=>({route:state.route,ready:bridge.ready,motion:window.ZHIXU_V4_ENGINES,summary:bridge.summary,lesson:{step:state.lesson.step,experiment:state.lesson.experiment}});
 boot();
