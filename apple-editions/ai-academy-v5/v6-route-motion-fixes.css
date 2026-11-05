@@ -1,0 +1,45 @@
+/* V6.3 three verified motion regressions:
+   1. Settings now belongs to Dock and keeps its selection lens.
+   2. Settings headings retain identical visibility through paired push/pop.
+   3. Doctor opens from ABOVE the toolbar and reverses the same physical path. */
+
+/* This legacy selector predates the fifth Dock destination. Keep the actual
+   optics, lens dimensions and Motion spring; only correct its selected state. */
+body:has(#screen[data-page="settings"]) #mobile-tabs .tab-lens{
+ opacity:1!important;visibility:visible!important;
+}
+body:has(#screen[data-page="settings"]) #mobile-tabs button.tab-item[data-route="settings"][aria-current="page"]{
+ color:var(--primary,#167369)!important;font-weight:670!important;
+}
+body:has(#screen[data-page="settings"]) #mobile-tabs button.tab-item[data-route="settings"][aria-current="page"] svg{
+ color:inherit!important;stroke:currentColor!important;
+}
+
+/* The doctor panel is a top-down sheet. Same panel stays mounted through
+   exit; CSS transitions remain interruptible, with no animation restart. */
+#doctor-panel{
+ opacity:1!important;
+ transform:translate3d(0,calc(-100% - 160px),0) scale(1)!important;
+ transform-origin:center top!important;
+ transition:transform .42s cubic-bezier(.25,.75,.35,1)!important;
+ will-change:transform;
+}
+#doctor-panel.doctor-visible{
+ transform:translate3d(0,0,0) scale(1)!important;
+ transition:transform .56s cubic-bezier(.20,1.13,.28,1)!important;
+}
+#doctor-panel .chat-log,
+#doctor-panel.doctor-visible .chat-log{animation:none!important}
+/* Prevent entrance/exit of the doctor from scaling the underlying page,
+   since that competes with any horizontally sliding full-page surface. */
+body.doctor-open #screen{scale:1!important}
+/* Respect both OS and user-level reduce motion. */
+@media(prefers-reduced-motion:reduce){
+ #doctor-panel,#doctor-panel.doctor-visible{
+  transition:none!important;transform:none!important;will-change:auto!important;
+ }
+}
+html[data-reduced="true"] #doctor-panel,
+html[data-reduced="true"] #doctor-panel.doctor-visible{
+ transition:none!important;transform:none!important;will-change:auto!important;
+}

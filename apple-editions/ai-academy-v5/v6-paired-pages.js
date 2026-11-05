@@ -37,6 +37,8 @@ export function installPageContinuity({stage,getRoute,navigate,reduced}){
  function animate(from,to){
   const direction=routeDirection(from,to),outgoing=pending;pending=null;
   if(!direction||reduced()){dispose();return}
+  // Snapshot final unwrapped layout, never derive page height from absolute layers.
+  const finalHeight=stage.getBoundingClientRect().height;
   const computed=getComputedStyle(stage);
   stage.style.setProperty('--zx-paired-pad-t',computed.paddingTop);
   stage.style.setProperty('--zx-paired-pad-r',computed.paddingRight);
@@ -50,7 +52,7 @@ export function installPageContinuity({stage,getRoute,navigate,reduced}){
   const startX = direction * width;
   const endX = -direction * width;
   const duration=to==='learn'?480:420,easing='cubic-bezier(.22,.78,.26,1)';
-  stage.style.setProperty('--zx-paired-height',Math.max(incoming.scrollHeight,outgoing?.scrollHeight||0)+'px');
+  stage.style.setProperty('--zx-paired-height',finalHeight+'px');
   const mySeq=seq;
   const move=(node,a,b)=>node.animate([{transform:'translate3d('+a+'px,0,0)'},{transform:'translate3d('+b+'px,0,0)'}],
    {duration,easing,fill:'both'});

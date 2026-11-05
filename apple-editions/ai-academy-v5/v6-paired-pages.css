@@ -2,6 +2,8 @@
    The two page surfaces keep their internal coordinates fixed. */
 #screen.zx-paired-moving{
  position:relative;isolation:isolate;overflow-x:clip;
+ /* Lock the measured unwrapped height throughout the transition. */
+ height:var(--zx-paired-height,auto)!important;
  min-height:var(--zx-paired-height,0px);
 }
 #screen > .zx-route-incoming,#screen > .zx-route-outgoing{
@@ -12,6 +14,10 @@
  transform:translate3d(0,0,0);
 }
 #screen > .zx-route-incoming{z-index:2}
+/* Legacy Settings heading is hidden only when directly under #screen.
+   Preserve that style during both slide directions, not just after unwrapping. */
+#screen[data-page="settings"] > .zx-route-incoming > .page-intro,
+#screen > .zx-route-outgoing[data-from="settings"] > .page-intro{display:none!important}
 #screen > .zx-route-outgoing{
  z-index:1;pointer-events:none;user-select:none;overflow:clip;contain:paint;
 }
