@@ -1,6 +1,6 @@
 /* V4 ONLY: business adapter to immutable Original Pages scientific engine.
    Never implement scoring/scientific experiments or leak BYOK credentials here. */
-import {nativeApi} from './v5-native-api.js?v=20261104-integrate-b';
+import {nativeApi} from './v5-native-api.js?v=20261105-continuous-b';
 const ORIGINAL='/zhixu-ai-academy/';
 export const newLesson=(experiment='sensitivity')=>({experiment,step:0,highest:0,preIds:[],preIndex:0,preResults:[],question:null,grade:null,prediction:'',run:null,mentor:null,transferIds:[],transferIndex:0,transferResults:[],transfer:null,transferGrade:null,plan:null,approvedRun:null});
 export const conceptNames={'chaos.same-rule':'相同规则下的变化','chaos.sensitivity':'初值敏感性','inquiry.control-variable':'控制变量与科学验证','evolution.independence':'独立重复','evolution.inference':'演化模拟与推断边界'};

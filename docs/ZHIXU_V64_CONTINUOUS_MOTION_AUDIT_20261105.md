@@ -38,6 +38,7 @@
 - V6.3 博士顶部 Sheet、V6.2 双页左右平移与学习 Dock 不隐藏：不能回归破坏。
 - PFL/EvoWorld 双引擎完整学习流程 Edge/WebKit：不能回归破坏。
 - Git worktree 隔离，非 force push，Pages Actions 完成后进行生产浏览器烟测；iPhone Safari 真机未实测时不得声称“真机完美”。
+- 缓存失效：由于 V6.4 修改了 `v4.js`、`bridge.js`、`v5-native-api.js`、`v5-surface-continuity.js` 以及两页背景 CSS，逐级升级它们的导入查询版本号至 `20261105-continuous-b`；保证 GitHub Pages 和 iPhone Safari 不会沿用旧模块。科学算法没有改动。
 
 ## 时间参数
 - 底部 Sheet 进入 ~540ms，顶部/关闭返回 ~460ms，不同视口同方向同逻辑。

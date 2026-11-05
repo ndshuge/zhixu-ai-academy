@@ -1,5 +1,5 @@
 /* Zhixu V5 native BYOK. No Original iframe UI, localStorage or cookie credentials. */
-import {enterSurface,exitSurface} from './v5-surface-continuity.js';
+import {enterSurface,exitSurface} from './v5-surface-continuity.js?v=20261105-continuous-b';
 const allowedModels=new Set(['deepseek-flash','deepseek-v4-pro']);
 let key='',model='deepseek-flash',connected=false,inFlight=false,count=0;
 let lastTrigger=null,dialog=null,stat=null,input=null,connectButton=null,closingDialog=false;
