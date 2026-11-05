@@ -6,12 +6,14 @@ import {ScienceBridge,newLesson} from './bridge.js?v=20261105-continuous-b';
 import {screens,outline,titles,esc} from './views.js?v=20261104-integrate-b';
 import {refreshLabPreview} from './v5-lab-preview.js';
 import {settleLessonStep} from './v5-lesson-motion.js';
-import {renderCore,coreOutline,coreStep} from './v5-core-ui.js';
+import {renderCore,coreOutline,coreStep} from './v5-core-ui.js?v=20261105-studio-a';
 import {makeCoreHost} from './v5-core-binding.js';
 import {installPageContinuity} from './v6-paired-pages.js?v=20261105-continuous-b';
+import {installExplorationScrubber} from './v6-exploration-studio.js?v=20261105-studio-a';
 import {enterSurface,exitSurface} from './v5-surface-continuity.js?v=20261105-continuous-b';
 const $=q=>document.querySelector(q),$$=q=>Array.from(document.querySelectorAll(q));
 const stage=$('#screen'),frame=$('#original-engine'),toast=$('#toast');
+installExplorationScrubber(stage);
 function syncToastPosition(){
  const dock=document.querySelector('#mobile-tabs');
  if(!dock||!matchMedia('(max-width:700px)').matches){
