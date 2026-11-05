@@ -1,0 +1,53 @@
+/* V6.4: in-place settings controls, no rerender or press-scale jolt.
+   A setting switch only animates its track tint and knob X translation. */
+#screen[data-page="settings"] .setting-row .switch{
+ position:relative;overflow:visible;
+ transform:none!important;scale:1!important;
+}
+#screen[data-page="settings"] .setting-row .switch::before{
+ transform:translate3d(0,0,0)!important;
+ transition:transform .28s cubic-bezier(.22,.88,.30,1)!important;
+ will-change:transform;
+}
+#screen[data-page="settings"] .setting-row .switch[aria-checked="true"]::before{
+ transform:translate3d(19px,0,0)!important;
+}
+#screen[data-page="settings"] .setting-row .switch::after{
+ transition:background-color .28s cubic-bezier(.3,.72,.3,1)!important;
+}
+#screen[data-page="settings"] .setting-row .switch[data-zx-press]{
+ transform:none!important;scale:1!important;
+}
+#screen[data-page="settings"] .type-scale-control button{
+ transition:background-color .24s ease,color .24s ease,
+ border-color .24s ease!important;
+ transform:none!important;scale:1!important;
+}
+/* Settings CTA buttons should never overgrow to 1.015x on release:
+   retain tiny tactile compression then settle at exactly 1x. */
+#screen[data-page="settings"] .setting-row button:not(.switch)[data-zx-press]{
+ transform:none!important;
+ transition:scale .24s cubic-bezier(.25,.9,.30,1),
+ background-color .20s ease,color .20s ease!important;
+}
+#screen[data-page="settings"] .setting-row button:not(.switch)[data-zx-press="down"]{scale:.985!important}
+#screen[data-page="settings"] .setting-row button:not(.switch)[data-zx-press="release"]{scale:1!important}
+#screen[data-page="settings"] .setting-row input,
+#screen[data-page="settings"] .setting-row select{
+ transition:border-color .2s ease,background-color .2s ease!important;
+}
+/* Manual reduction disables non-essential travel globally but keeps the tiny
+   control itself tactile; system-level OS reduced motion is authoritative. */
+html[data-reduced="true"] #screen[data-page="settings"] .setting-row .switch::before{
+ transition:transform .28s cubic-bezier(.22,.88,.30,1)!important;
+}
+html[data-reduced="true"] #screen[data-page="settings"] .setting-row .switch::after{
+ transition:background-color .28s ease!important;
+}
+@media(prefers-reduced-motion:reduce){
+ #screen[data-page="settings"] .setting-row .switch::before,
+ #screen[data-page="settings"] .setting-row .switch::after,
+ #screen[data-page="settings"] .type-scale-control button{
+  transition:none!important;will-change:auto!important;
+ }
+}

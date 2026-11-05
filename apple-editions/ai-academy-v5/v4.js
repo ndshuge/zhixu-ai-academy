@@ -272,11 +272,22 @@ async function act(el){
    prefs.textScale=size;
    document.documentElement.style.setProperty('--zx-type-scale',String(size/100));
    try{localStorage.setItem(prefKey,JSON.stringify(prefs))}catch{}
-   render();
-   stage.querySelector('button[data-action="set-type-scale"][data-scale="'+size+'"]')?.focus({preventScroll:true});
+   stage.querySelectorAll('button[data-action="set-type-scale"]').forEach(button=>{
+    const selected=Number(button.dataset.scale)===size;
+    button.setAttribute('aria-pressed',String(selected));
+   });
+   el.focus({preventScroll:true});
    return;
   }
-  if(a==='toggle-reduced'){prefs.reduceMotion=!prefs.reduceMotion;try{localStorage.setItem(prefKey,JSON.stringify(prefs))}catch{}document.documentElement.dataset.reduced=prefs.reduceMotion?'true':'false';render();stage.querySelector('button[data-action="toggle-reduced"]')?.focus({preventScroll:true});return;}
+  if(a==='toggle-reduced'){
+   prefs.reduceMotion=!prefs.reduceMotion;
+   try{localStorage.setItem(prefKey,JSON.stringify(prefs))}catch{}
+   el.setAttribute('aria-checked',String(prefs.reduceMotion));
+   document.documentElement.dataset.reduced=prefs.reduceMotion?'true':'false';
+   // Preserve the same physical knob and track so the browser interpolates.
+   el.focus({preventScroll:true});
+   return;
+  }
  if(a==='clear-data')return confirmModal('清空学习记录？','将清空本浏览器 V2 学习事件，无法直接恢复。建议先导出备份；原 V1 数据不会被删除。',()=>{bridge.clear();render();notify('V2 学习记录已清空')},el);
  if(a==='open-ai-config'){window.ZHIXU_NATIVE_API.open(el);return;}
 

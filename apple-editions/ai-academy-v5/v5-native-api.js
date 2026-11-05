@@ -2,7 +2,7 @@
 import {enterSurface,exitSurface} from './v5-surface-continuity.js';
 const allowedModels=new Set(['deepseek-flash','deepseek-v4-pro']);
 let key='',model='deepseek-flash',connected=false,inFlight=false,count=0;
-let lastTrigger=null,dialog=null,stat=null,input=null,connectButton=null;
+let lastTrigger=null,dialog=null,stat=null,input=null,connectButton=null,closingDialog=false;
 const endpoint='https://api.deepseek.com/chat/completions';
 const describe=(status,err)=>{
  if(status===401)return '401 · API Key 无效或被撤销。请在 DeepSeek 开放平台重新生成。';
@@ -45,16 +45,27 @@ function revoke(){
  renderStatus('已断开连接；当前页面内存中的 API Key 已清除。','neutral');
 }
 function close(){
- if(!dialog)return;
+ if(!dialog||closingDialog)return;
  const leaving=dialog,returnFocus=lastTrigger;
  if(input)input.value='';
- dialog=null;stat=null;input=null;connectButton=null;
- exitSurface(leaving,{done:()=>{leaving.remove();if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true})}});
- // Focus is restored only after the sheet has visibly returned.
+ closingDialog=true;
+ exitSurface(leaving,{done:()=>{
+  if(dialog!==leaving||!closingDialog)return;
+  leaving.remove();dialog=null;stat=null;input=null;connectButton=null;
+  closingDialog=false;
+  if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true});
+ }});
 }
 function open(trigger){
  lastTrigger=trigger||document.activeElement;
- if(dialog){input?.focus();return}
+ if(dialog){
+  if(closingDialog){
+   closingDialog=false;
+   enterSurface(dialog);
+   dialog.querySelector('.zx-api-close')?.focus({preventScroll:true});
+  }else dialog.querySelector('.zx-api-close')?.focus({preventScroll:true});
+  return;
+ }
  const shade=document.createElement('div');shade.className='modal-shade zx-api-shade';
  shade.innerHTML=`<section class="modal zx-api-panel" role="dialog" aria-modal="true" aria-labelledby="zx-api-title" aria-describedby="zx-api-subtitle">
   <div class="zx-api-header"><div><p class="eyebrow">模型与数据</p><h2 id="zx-api-title">连接 DeepSeek</h2>

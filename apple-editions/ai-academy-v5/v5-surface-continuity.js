@@ -1,36 +1,42 @@
-/* Reversible sheet lifecycle shared by native BYOK and safety confirmations.
-   The content remains mounted until the closing animation completes.
-   Does not animate Dock or use its stacking context. */
-const reduced=()=>document.documentElement.dataset.reduced==='true'||window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-const clocks=new WeakMap();
-export function enterSurface(shade,trigger){
+/* One reversible, interruptible bottom-sheet lifecycle for DeepSeek and
+   every safety confirmation. No trigger-based zoom or duplicate Motion owner. */
+const reduced=()=>document.documentElement.dataset.reduced==='true'||matchMedia('(prefers-reduced-motion:reduce)').matches;
+const closing=new WeakMap();
+function cancelClosing(shade){
+ const pending=closing.get(shade);
+ if(!pending)return;
+ clearTimeout(pending.timer);
+ pending.panel?.removeEventListener('transitionend',pending.ended);
+ closing.delete(shade);
+}
+export function enterSurface(shade){
  if(!shade?.isConnected)return;
- const old=clocks.get(shade);if(old){clearTimeout(old);clocks.delete(shade)}
- shade.inert=false;shade.classList.add('zx-surface');
- const panel=shade.querySelector('.modal');
- if(trigger?.isConnected&&panel){
-  const source=trigger.getBoundingClientRect(),dest=panel.getBoundingClientRect();
-  const x=Math.max(-92,Math.min(92,(source.left+source.width/2-dest.left-dest.width/2)*.27));
-  const y=Math.max(-95,Math.min(95,(source.top+source.height/2-dest.top-dest.height/2)*.23));
-  panel.style.setProperty('--zx-surface-from-x',x.toFixed(1)+'px');
-  panel.style.setProperty('--zx-surface-from-y',y.toFixed(1)+'px');
- }
+ cancelClosing(shade);
+ shade.inert=false;
+ shade.classList.add('zx-surface');
  if(reduced()){shade.classList.add('zx-surface-open');return}
- // A first painted state is essential for mobile Safari to interpolate rather than pop.
- void shade.offsetWidth;
- requestAnimationFrame(()=>{if(shade.isConnected&&!shade.inert)shade.classList.add('zx-surface-open')});
+ // Ensure the fully below-viewport position is committed before interpolation.
+ void shade.offsetHeight;
+ requestAnimationFrame(()=>{
+  if(shade.isConnected&&!shade.inert)shade.classList.add('zx-surface-open');
+ });
 }
 export function exitSurface(shade,{done}={}){
  if(!shade)return;
- const old=clocks.get(shade);if(old){clearTimeout(old);clocks.delete(shade)}
- shade.inert=true;shade.classList.remove('zx-surface-open');
+ cancelClosing(shade);
+ shade.inert=true;
+ const panel=shade.querySelector('.modal');
+ let finished=false;
  const finish=()=>{
-  const timer=clocks.get(shade);if(timer){clearTimeout(timer);clocks.delete(shade)}
-  shade.removeEventListener('transitionend',ended);
+  if(finished)return;
+  finished=true;
+  cancelClosing(shade);
   if(typeof done==='function')done();
  };
- const ended=e=>{if(e.target===shade&&e.propertyName==='opacity')finish()};
+ const ended=e=>{if(e.target===panel&&e.propertyName==='transform')finish()};
+ // Start the exact reverse path. Remove the element only after it has left.
+ shade.classList.remove('zx-surface-open');
  if(reduced()||!shade.isConnected){finish();return}
- shade.addEventListener('transitionend',ended);
- clocks.set(shade,setTimeout(finish,360));
+ panel?.addEventListener('transitionend',ended);
+ closing.set(shade,{panel,ended,timer:setTimeout(finish,740)});
 }

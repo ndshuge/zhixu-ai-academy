@@ -10,7 +10,7 @@
  position:absolute;top:0;left:0;width:100%;min-width:0;
  box-sizing:border-box;
  padding:var(--zx-paired-pad-t,0px) var(--zx-paired-pad-r,0px) 0 var(--zx-paired-pad-l,0px);
- background:var(--white,#fff);
+ background:var(--ground,#f6f6f8);
  transform:translate3d(0,0,0);
 }
 #screen > .zx-route-incoming{z-index:2}
